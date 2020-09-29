@@ -1,5 +1,5 @@
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Resource, Api, reqparse
 from flask_sqlalchemy import SQLAlchemy
 from flaskext.mysql import MySQL
@@ -40,13 +40,21 @@ class Documents(Resource):
             query = "SELECT * FROM documents WHERE uuid_id = %s"
             documents = cursor.execute(query, [args['key']])
             
-
-            return {"value": cursor.fetchall()}
+            if(documents > 0):
+                
+                return jsonify(cursor.fetchall())
+            else:
+                return "invalid key", 400
         else:
             return "no key offered", 400
+
+    def put(self):
+        pass
+
 
 
 api.add_resource(home, '/')
 api.add_resource(Documents, '/documents')
 
-app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
