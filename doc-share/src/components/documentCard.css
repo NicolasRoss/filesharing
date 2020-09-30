@@ -30,7 +30,8 @@
 .uuidContent{
     margin-left: 20px;
     margin-top: 10px;
-    font-size: 50px;
+    font-size: 38px;
+    text-transform: uppercase;
 }
 
 .docSubtitle{
@@ -43,4 +44,8 @@
 
 .marginLeft{
     margin-left: 3vw;
+}
+
+a{
+    text-decoration: none !important;
 }
