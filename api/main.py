@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Resource, Api, reqparse
 from flask_sqlalchemy import SQLAlchemy
 from flaskext.mysql import MySQL
@@ -10,8 +10,8 @@ api = Api(app)
 mysql = MySQL()
 
 #setup for mysql database local testing
-app.config['MYSQL_DATABASE_USER'] = 'docs'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'docs'
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
 app.config['MYSQL_DATABASE_DB'] = 'docs'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
