@@ -5,7 +5,6 @@ import DocumentCard from './documentCard';
 
 export default class DocCardContainer extends React.Component {
 
-
     render() {
         return(
             <div>
