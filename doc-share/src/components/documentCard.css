@@ -7,7 +7,7 @@
     height: 150px;
     border-radius: 20px;
     font-family: 'Raleway', sans-serif;
-    font-weight: 700;
+    font-weight: 800;
 
 
 }
@@ -33,6 +33,14 @@
     font-size: 50px;
 }
 
+.docSubtitle{
+    font-weight: 800;
+    font-size: 21px;
+    letter-spacing: 0.3px;
+    color: black;
+}
+
+
 .marginLeft{
-    margin-left: 30px;
+    margin-left: 3vw;
 }
