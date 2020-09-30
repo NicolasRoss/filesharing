@@ -1,4 +1,3 @@
-
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
 from flask_sqlalchemy import SQLAlchemy
@@ -31,7 +30,6 @@ class home(Resource):
 
 
 class Documents(Resource):
-    
     def get(self):
         args = parser.parse_args()
         if(args['key'] is not None):
@@ -39,7 +37,6 @@ class Documents(Resource):
             cursor = conn.cursor()
             query = "SELECT * FROM documents WHERE uuid_id = %s"
             documents = cursor.execute(query, [args['key']])
-            
 
             return {"value": cursor.fetchall()}
         else:
