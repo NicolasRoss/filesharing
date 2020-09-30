@@ -1,2 +1,3 @@
-__pycache__/
-env/
+devenv
+__pycache__
+.vscode
