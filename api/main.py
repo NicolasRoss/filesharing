@@ -1,9 +1,8 @@
-
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template, make_response, request
 from flask_restful import Resource, Api, reqparse
 from flask_sqlalchemy import SQLAlchemy
 from flaskext.mysql import MySQL
-
+import os
 
 app = Flask(__name__)
 api = Api(app)
@@ -11,8 +10,8 @@ api = Api(app)
 mysql = MySQL()
 
 #setup for mysql database local testing
-app.config['MYSQL_DATABASE_USER'] = 'docs'
-app.config['MYSQL_DATABASE_PASSWORD'] = 'docs'
+app.config['MYSQL_DATABASE_USER'] = 'root'
+app.config['MYSQL_DATABASE_PASSWORD'] = 'root'
 app.config['MYSQL_DATABASE_DB'] = 'docs'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 mysql.init_app(app)
@@ -23,7 +22,7 @@ conn = mysql.connect()
 # db = SQLAlchemy(app)
 
 parser = reqparse.RequestParser()
-parser.add_argument('key', type=str, help="key is needed to access documents")
+# parser.add_argument('key', type=str, help="key is needed to access documents")
 
 class home(Resource):
     def get(self):
@@ -31,7 +30,6 @@ class home(Resource):
 
 
 class Documents(Resource):
-    
     def get(self):
         parser.add_argument('key', type=str, help="key is needed to access documents")
         args = parser.parse_args()
@@ -106,10 +104,33 @@ class Users(Resource):
 
 
 
+app.config["UPLOADS"] = "static/server"
+
+class upload(Resource):
+    def get(self):
+        return make_response(render_template('upload_page.html'))
+
+    # add files to server
+    def post(self):
+        file_to_upload = request.files["file"]
+
+        #add text based files
+        if file_to_upload.content_type.startswith("text/"):
+            file_to_upload.save(os.path.join(app.config["UPLOADS"], 'text/' + file_to_upload.filename))
+
+            return {
+                    'data': file_to_upload.filename,
+                    'message': 'file uploaded'
+                   }
+        else:
+
+            return 'invalid file type', 400
 
 api.add_resource(home, '/')
 api.add_resource(Documents, '/documents')
+api.add_resource(upload, '/upload')
 api.add_resource(Users, '/users')
+
 
 if __name__ == "__main__":
     app.run(debug=True)
