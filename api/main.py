@@ -83,11 +83,33 @@ class Users(Resource):
             return {"request": "success"}
         else:
             return "no user_id submitted", 400
+        
+    def post(self):
+        parser.add_argument('user', type=str)
+        parser.add_argument('pass', type=str)
+        args = parser.parse_args()
+        print(args['pass'])
+        print(args['user'])
+        if(args['user'] is not None and args['pass'] is not None):
+            #validate email and pass here
+            cursor = conn.cursor()
+            query = "INSERT INTO users (email, password) VALUES (%s,SHA(%s))"
+            tup = (args['user'], args['pass'])
+            print(tup)
+            print(query.format(tup))
+            d = cursor.execute(query, tup)
+            conn.commit()
+            cursor.close()
+            return {"request": "success"}
+        else:
+            return "user and pass not submitted", 400
+
 
 
 
 api.add_resource(home, '/')
 api.add_resource(Documents, '/documents')
+api.add_resource(Users, '/users')
 
 if __name__ == "__main__":
     app.run(debug=True)
