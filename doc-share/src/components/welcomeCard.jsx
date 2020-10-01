@@ -30,7 +30,7 @@ export default class welcomeCard extends React.Component{
                 <Row>
                     <Col className="signInContainer" xs={{span: 10, offset:1}}>
                         <div>
-                            <div className="signInHeader">Sign In</div>
+                            <div className="signInHeader">Login</div>
                             
                             <form autoComplete="off">
                                 <label className="signInSubHeader">

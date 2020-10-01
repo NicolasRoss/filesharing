@@ -5,13 +5,49 @@ import DocumentCard from './documentCard';
 
 export default class DocCardContainer extends React.Component {
 
+    constructor(props){
+        super(props);
+        this.getDocIDFunc = this.getDocIDFunc.bind(this);
+        this.state = {
+            isFetching: false, //later for loading animation
+            user: 4,
+            doc_ids: []
+        }
+    }
+
+
+    
+
+
+    async componentDidMount() { 
+        try {
+            await this.getDocIDFunc();
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+
+        
+    getDocIDFunc(){
+        var url = "http://localhost:5000/documents?user=4";
+        fetch(url)
+        .then(res => res.json())
+        .then(
+            (result) => {
+                this.setState({ doc_ids: result})
+            }
+        )
+    }
+
+
     render() {
+        const cards = this.state.doc_ids.map((doc) => 
+            <DocumentCard key={doc.doc_id[0]} doc_id={doc.doc_id}/>   
+        );
         return(
             <div>
-                <DocumentCard/>
-                <DocumentCard/>
-                <DocumentCard/>
-                <DocumentCard/>
+                {cards}
             </div>
         );
     }

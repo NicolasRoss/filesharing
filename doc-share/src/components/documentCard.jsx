@@ -6,21 +6,47 @@ export default class documentCard extends React.Component{
 
     constructor(props){
         super(props);
+        this.getDocInfo = this.getDocInfo.bind(this);
         this.state = {
-            uuid: '',
+            uuid: this.props.doc_id,
             name: '',
-            date: ''
+            date: '',
         };
     }
 
-    componentDidMount() {
+
+    getDocInfo(){
+        try {
+            var url = "http://localhost:5000/documents?key=" + this.state.uuid;
+            fetch(url)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    console.log(result[0]["directory_loc"]);
+                    this.setState({ name: result[0]["directory_loc"]})
+                }
+            )
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+
+    async componentDidMount() {
         //load data here i think
+        try {
+            await this.getDocInfo();
+        }
+        catch(error){
+            console.log(error);
+        }
     }
 
 
 
 
     render(){
+        console.log(this.state.name)
         return(
             
                 <Container className="docContainer box-shadow">
@@ -29,12 +55,12 @@ export default class documentCard extends React.Component{
                             <Col xs={10}>
                                 
                                 <div className="uuidContainer">
-                                    <div className="uuidContent">5ec48ca8-029e-11eb-b3d9-04d4c40327b5</div>
+                                    <div className="uuidContent">{this.state.uuid}</div>
                                 </div>
                             </Col>
                             <Col xs={8}>
                                 <div>
-                                    <div className="docSubtitle marginLeft">ExampleDocument.txt</div>
+                                    <div className="docSubtitle marginLeft">{this.state.name}</div>
                                 </div>
                             </Col>
                             <Col className="buffer" xs={4}>
