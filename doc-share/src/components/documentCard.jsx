@@ -1,6 +1,6 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
-import './documentCard.css';
+import '../css/documentCard.css';
 
 export default class documentCard extends React.Component{
 

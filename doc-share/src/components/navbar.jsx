@@ -1,6 +1,6 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
-import './navbar.css';
+import '../css/navbar.css';
 
 //this should be a func
 export default class Navbar extends React.Component{
