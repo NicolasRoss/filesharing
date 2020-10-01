@@ -14,14 +14,14 @@ class documents(Resource):
         if(args['key'] is not None):
             
             cursor = conn.cursor()
-            query = "SELECT doc_id, directory_loc, uuid_id FROM documents WHERE uuid_id = %s"
+            query = "SELECT document_name, date, uuid_id FROM documents WHERE uuid_id = %s"
             documents = cursor.execute(query, args['key'])
             
             if(documents > 0):
                 payload = []
                 resp = cursor.fetchall()
                 for result in resp:
-                    content = {"doc_id": result[0], "directory_loc": result[1], "uuid_id": result[2]}
+                    content = {"document_name": result[0], "date": result[1], "uuid_id": result[2]}
                     payload.append(content)
                 return jsonify(payload)
             else:
@@ -45,15 +45,15 @@ class documents(Resource):
             return "no user or key submitted", 400
 
     def post(self):
-        parser.add_argument('text', type=str)
+        parser.add_argument('doc_name', type=str)
         args = parser.parse_args()
 
-        if(args['text'] is not None):
+        if(args['doc_name'] is not None):
             cursor = conn.cursor()
-            query = "INSERT INTO documents (text) VALUES (%s)"
+            query = "INSERT INTO documents (directory_loc,document_name,date) VALUES (%s,%s,NOW())"
             
-            d = cursor.execute(query, [args['text']])
-            print(args['text'])
+            d = cursor.execute(query, ["test_loc", args['doc_name']])
+            print(args['doc_name'])
             print(d)
             conn.commit()
             cursor.close()

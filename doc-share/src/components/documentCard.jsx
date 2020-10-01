@@ -9,8 +9,8 @@ export default class documentCard extends React.Component{
         this.getDocInfo = this.getDocInfo.bind(this);
         this.state = {
             uuid: this.props.doc_id,
-            name: '',
-            date: '',
+            name: 'placeholder',
+            date: 'placeholder',
         };
     }
 
@@ -18,12 +18,15 @@ export default class documentCard extends React.Component{
     getDocInfo(){
         try {
             var url = "http://localhost:5000/documents?key=" + this.state.uuid;
+            console.log(url);
             fetch(url)
             .then(res => res.json())
             .then(
                 (result) => {
-                    console.log(result[0]["directory_loc"]);
-                    this.setState({ name: result[0]["directory_loc"]})
+                    // console.log(result[0]["document_name"]);
+                    
+                    this.setState({ name: result[0]["document_name"]})
+                    this.setState({date: result[0]["date"]})
                 }
             )
         }
@@ -65,7 +68,7 @@ export default class documentCard extends React.Component{
                             </Col>
                             <Col className="buffer" xs={4}>
                                 <div>
-                                    <div className="docSubtitle">September 21st, 2020 11:59 am</div>
+                                    <div className="docSubtitle">{this.state.date}</div>
                                 </div>
                                 
                             </Col>

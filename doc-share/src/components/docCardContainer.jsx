@@ -30,14 +30,19 @@ export default class DocCardContainer extends React.Component {
 
         
     getDocIDFunc(){
-        var url = "http://localhost:5000/documents?user=4";
-        fetch(url)
-        .then(res => res.json())
-        .then(
-            (result) => {
-                this.setState({ doc_ids: result})
-            }
-        )
+        try {
+            var url = "http://localhost:5000/documents?user=4";
+            fetch(url)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({ doc_ids: result})
+                }
+            )
+        }
+        catch(error){
+            console.log(error);
+        }
     }
 
 
