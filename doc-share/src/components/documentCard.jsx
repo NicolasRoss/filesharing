@@ -24,7 +24,7 @@ export default class documentCard extends React.Component{
         return(
             
                 <Container>
-                    <a href="#">
+                    {/* <a href="#"> */}
                         <Row className="docContainer box-shadow">
                             <Col xs={10}>
                                 
@@ -39,13 +39,13 @@ export default class documentCard extends React.Component{
                             </Col>
                             <Col xs={4}>
                                 <div>
-                                    <div className="docSubtitle">September 21st, 2020</div>
+                                    <div className="docSubtitle">September 21st, 2020 11:59 am</div>
                                 </div>
                                 
                             </Col>
                             
                         </Row>
-                    </a>
+                    {/* </a> */}
                 </Container>
             
         );
