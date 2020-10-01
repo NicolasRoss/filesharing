@@ -1,6 +1,6 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
-import './welcomeCard.css';
+import '../css/welcomeCard.css';
 export default class welcomeCard extends React.Component{
 
     constructor(props){
@@ -34,11 +34,11 @@ export default class welcomeCard extends React.Component{
                             
                             <form autoComplete="off">
                                 <label className="signInSubHeader">
-                                    Email
+                                    <div className="tab">Email</div>
                                     <input className="input-form" type="text" name="email" onChange={this.emailChangeHandler}/>
                                 </label>
                                 <label className="signInSubHeader">
-                                    Password
+                                    <div className="tab">Password</div>
                                     <input className="input-form" type="text" name="password" onChange={this.passwordChangeHandler}/>
                                 </label>
                                 

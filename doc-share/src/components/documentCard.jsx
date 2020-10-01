@@ -23,9 +23,9 @@ export default class documentCard extends React.Component{
     render(){
         return(
             
-                <Container>
+                <Container className="docContainer box-shadow">
                     {/* <a href="#"> */}
-                        <Row className="docContainer box-shadow">
+                        <Row >
                             <Col xs={10}>
                                 
                                 <div className="uuidContainer">
@@ -37,7 +37,7 @@ export default class documentCard extends React.Component{
                                     <div className="docSubtitle marginLeft">ExampleDocument.txt</div>
                                 </div>
                             </Col>
-                            <Col xs={4}>
+                            <Col className="buffer" xs={4}>
                                 <div>
                                     <div className="docSubtitle">September 21st, 2020 11:59 am</div>
                                 </div>
