@@ -16,27 +16,25 @@
 
 
 .signInHeader{
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 800;
     font-size: 52px;
     color: white;
     margin-left: 5vw;
     margin-top: 2vh;
     margin-bottom: 1vh;
+    margin-top: 4vh;
+
 }
 
 
-.signInSubHeader{
-    width: 100%;
-    color: white;
-    font-family: 'Raleway', sans-serif;
-    font-weight: 800;
-    font-size: 26px;
-    margin-top: 20px;
 
+
+.tab{
+    margin-left: 1.5vw;
 }
 .input-form{
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
     font-size: 26px;
     width: 100%;

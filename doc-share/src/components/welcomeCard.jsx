@@ -2,6 +2,7 @@ import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import '../css/welcomeCard.css';
 
+
 export default class welcomeCard extends React.Component{
     constructor(props){
         super(props);
@@ -30,16 +31,16 @@ export default class welcomeCard extends React.Component{
                 <Row>
                     <Col className="signInContainer" xs={{span: 10, offset:1}}>
                         <div>
-                            <div className="signInHeader">Sign In</div>
+                            <div className="signInHeader">Login</div>
                             
                             <form autoComplete="off">
                                 
                                 <label className="signInSubHeader">
-                                    Email
+                                    <div className="tab">Email</div>
                                     <input className="input-form" type="text" name="email" onChange={this.emailChangeHandler}/>
                                 </label>
                                 <label className="signInSubHeader">
-                                    Password
+                                    <div className="tab">Password</div>
                                     <input className="input-form" type="text" name="password" onChange={this.passwordChangeHandler}/>
                                 </label>
                                 

@@ -6,40 +6,69 @@ export default class documentCard extends React.Component{
 
     constructor(props){
         super(props);
+        this.getDocInfo = this.getDocInfo.bind(this);
         this.state = {
-            uuid: '',
-            name: '',
-            date: ''
+            uuid: this.props.doc_id,
+            name: 'placeholder',
+            date: 'placeholder',
         };
     }
 
-    componentDidMount() {
+
+    getDocInfo(){
+        try {
+            var url = "http://localhost:5000/documents?key=" + this.state.uuid;
+            console.log(url);
+            fetch(url)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    // console.log(result[0]["document_name"]);
+                    
+                    this.setState({ name: result[0]["document_name"]})
+                    this.setState({date: result[0]["date"]})
+                }
+            )
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+
+    async componentDidMount() {
         //load data here i think
+        try {
+            await this.getDocInfo();
+        }
+        catch(error){
+            console.log(error);
+        }
     }
 
 
 
 
     render(){
+        console.log(this.state.name)
         return(
             
-                <Container>
+                <Container className="docContainer box-shadow">
                     {/* <a href="#"> */}
-                        <Row className="docContainer box-shadow">
+                        <Row >
                             <Col xs={10}>
                                 
                                 <div className="uuidContainer">
-                                    <div className="uuidContent">5ec48ca8-029e-11eb-b3d9-04d4c40327b5</div>
+                                    <div className="uuidContent">{this.state.uuid}</div>
                                 </div>
                             </Col>
                             <Col xs={8}>
                                 <div>
-                                    <div className="docSubtitle marginLeft">ExampleDocument.txt</div>
+                                    <div className="docSubtitle marginLeft">{this.state.name}</div>
                                 </div>
                             </Col>
-                            <Col xs={4}>
+                            <Col className="buffer" xs={4}>
                                 <div>
-                                    <div className="docSubtitle">September 21st, 2020 11:59 am</div>
+                                    <div className="docSubtitle">{this.state.date}</div>
                                 </div>
                                 
                             </Col>

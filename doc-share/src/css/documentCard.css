@@ -1,15 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap');
 
 .docContainer{
     color: white;
     background: linear-gradient(45deg, #ff5f6d, #ffc371);
     margin-top: 10px;
-    height: 150px;
+    min-height: 100px;
     border-radius: 20px;
     font-family: 'Raleway', sans-serif;
     font-weight: 800;
-
-
 }
 
 .box-shadow{
@@ -20,30 +19,43 @@
 }
 
 .uuidContainer{
+
     color: white;
     margin-left: 10px;
     /* background-color: white; */
     border-radius: 10px;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .uuidContent{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
     margin-left: 20px;
     margin-top: 10px;
-    font-size: 38px;
+    font-size: min(calc(21px + 1vw), 38px);
     text-transform: uppercase;
+    height: 80px;
 }
 
 .docSubtitle{
-    font-weight: 800;
-    font-size: 21px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: calc(16px + 0.1vw);
     letter-spacing: 0.3px;
     color: black;
+    margin-bottom: 10px;
+    margin-top: auto;
+    /* height: 80px; */
 }
 
 
 .marginLeft{
     margin-left: 3vw;
+}
+
+.buffer{
+    margin-bottom: 10px;
 }
 
 a{
