@@ -1,8 +1,8 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
-import './welcomeCard.css';
-export default class welcomeCard extends React.Component{
+import '../css/welcomeCard.css';
 
+export default class welcomeCard extends React.Component{
     constructor(props){
         super(props);
         this.state = {
@@ -33,6 +33,7 @@ export default class welcomeCard extends React.Component{
                             <div className="signInHeader">Sign In</div>
                             
                             <form autoComplete="off">
+                                
                                 <label className="signInSubHeader">
                                     Email
                                     <input className="input-form" type="text" name="email" onChange={this.emailChangeHandler}/>
