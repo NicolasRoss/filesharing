@@ -1,9 +1,10 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import '../css/welcomeCard.css';
-import { withRouter } from 'react-router-dom';
-class welcomeCard extends React.Component{
 
+import { withRouter } from 'react-router-dom';
+
+class welcomeCard extends React.Component{
     constructor(props){
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -58,6 +59,7 @@ class welcomeCard extends React.Component{
                             <div className="signInHeader">Login</div>
                             
                             <form autoComplete="off">
+                                
                                 <label className="signInSubHeader">
                                     <div className="tab">Email</div>
                                     <input className="input-form" type="text" name="email" onChange={this.emailChangeHandler}/>
