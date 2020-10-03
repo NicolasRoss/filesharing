@@ -1,10 +1,12 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import '../css/welcomeCard.css';
-export default class welcomeCard extends React.Component{
+import { withRouter } from 'react-router-dom';
+class welcomeCard extends React.Component{
 
     constructor(props){
         super(props);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
             username: '',
             password: ''
@@ -18,10 +20,33 @@ export default class welcomeCard extends React.Component{
         this.setState({password: event.target.value})
     }
 
-    handleSubmit = () => {
+    async handleSubmit() {
         console.log("submit button pressed")
         console.log(this.state.username)
         console.log(this.state.password)
+        var url = "http://localhost:5000/users?email=user@gmail.com&pass=testing123"
+        fetch(url, {
+            method: 'GET',
+            mode:'cors',
+            
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result)
+                if(result !== undefined && result["user_id"] !== undefined){
+                    console.log("check success");
+                    //go to welcome page here
+                    console.log(result["user_id"])
+                    this.props.history.push({
+                        pathname: '/Home',
+                        state: {user_id: result["user_id"]}
+                    });
+                }
+                
+            }
+        )
+
     }
 
     render(){
@@ -39,7 +64,7 @@ export default class welcomeCard extends React.Component{
                                 </label>
                                 <label className="signInSubHeader">
                                     <div className="tab">Password</div>
-                                    <input className="input-form" type="text" name="password" onChange={this.passwordChangeHandler}/>
+                                    <input className="input-form" type="password" name="password" onChange={this.passwordChangeHandler}/>
                                 </label>
                                 
                             </form>
@@ -54,3 +79,5 @@ export default class welcomeCard extends React.Component{
 
 
 }
+
+export default withRouter(welcomeCard);

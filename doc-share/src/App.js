@@ -4,14 +4,18 @@ import DocumentCard from './components/documentCard';
 import DocCardContainer from './components/docCardContainer'
 import Navbar from './components/navbar';
 import WelcomeCard from './components/welcomeCard';
+import Login from './pages/Login';
+import Home from './pages/Home';
+import Document from './pages/Document';
+import {Route, Link, Switch } from 'react-router-dom';
 function App() {
   return (
-    <div>
-      <Navbar/>
-      <DocCardContainer/>
-      <WelcomeCard/>
-    </div>
-    
+    <Switch>
+      <Route path="/" exact component={Login}/>
+      <Route path="/Home" component={Home}/>
+      <Route path="/Document" component={Document}/>
+
+    </Switch>
   );
 }
 

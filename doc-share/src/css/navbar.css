@@ -11,7 +11,8 @@
     font-size: 20px;
     vertical-align: middle;
     text-align: center;
-    list-style-type: none !important
+    list-style-type: none !important;
+    color: black;
 }
 
 .logo{
@@ -29,4 +30,8 @@
 .img{
     height: 30px;
     width: 30px;
+}
+
+a{
+    text-decoration: none !important;
 }
