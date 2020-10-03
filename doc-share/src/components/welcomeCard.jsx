@@ -67,7 +67,7 @@ class welcomeCard extends React.Component{
         const LoginPage = (
             <Container>
                 <Row>
-                    <Col className="signInContainer" xs={{span: 10, offset:1}}>
+                    <Col className="signInContainer" xs={{span: 12, offset:0}}>
                         <div>
                             <div className="signInHeader">Login</div>
                             
@@ -94,7 +94,7 @@ class welcomeCard extends React.Component{
         const SignUpPage = (
             <Container>
                 <Row>
-                    <Col className="signInContainer" xs={{span: 10, offset: 1}}>
+                    <Col className="signInContainer" xs={{span: 12, offset:0}}>
                         <div>
                             <div className="signInHeader">Sign Up</div>
                             <form autocomplete="off" onSubmit={this.handleSubmit}>

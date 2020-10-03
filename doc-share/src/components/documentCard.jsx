@@ -9,6 +9,7 @@ import { withRouter } from 'react-router-dom';
         this.getDocInfo = this.getDocInfo.bind(this);
         this.goDocPage = this.goDocPage.bind(this);
         this.downloadClick = this.downloadClick.bind(this);
+        this.noContainerClick = this.noContainerClick.bind(this);
         this.state = {
             uuid: this.props.doc_id,
             name: '',
@@ -54,8 +55,14 @@ import { withRouter } from 'react-router-dom';
         //     pathname: '/Document',
         //     state: {uuid: this.state.uuid, date: this.state.date, name: this.state.name}
         // });
+
         this.setState({clickToggle: !this.state.clickToggle})
         // console.log("click toggle:" + this.state.clickToggle);
+    }
+
+    noContainerClick = function(e) {
+        e.stopPropagation();
+
     }
 
     async componentDidMount() {
@@ -68,7 +75,8 @@ import { withRouter } from 'react-router-dom';
         }
     }
 
-    downloadClick(){
+    downloadClick = function(e) {
+        e.stopPropagation();
         if(this.state.uuid !== undefined){
             console.log("clicked the download button for doc_id:" + this.state.uuid);
             //this is where download function will be implemented
@@ -82,11 +90,15 @@ import { withRouter } from 'react-router-dom';
     render(){
         const dropDown = (
             <Row>
-                <Col>
+                <Col xs={4}>
                     <button className="downloadButton" onClick={this.downloadClick}> Download File</button>
+                </Col>
+                <Col xs={{span: 4, offset: 3}}>
+                    <button className="shareButton">Share file</button>
                 </Col>
             </Row>
         )
+        
         // console.log(this.state.name)
         return(
                 <div>
@@ -94,28 +106,28 @@ import { withRouter } from 'react-router-dom';
                     
                     <div onClick={this.goDocPage} style={{"pointerEvents": "all", "cursor": "pointer"}}>
                         <Row >
-                            <Col xs={10}>
+                            <Col xs={11}>
                                 
-                                <div className="uuidContainer">
-                                    <div className="uuidContent">{this.state.uuid}</div>
+                                <div onClick={this.downloadClick}  className="uuidContainer">
+                                    <div style={{"pointerEvents": "none", "cursor": "initial"}} className="uuidContent">{this.state.uuid}</div>
                                 </div>
                             </Col>
-                            <Col xs={8}>
+                            <Col xs={6} >
                                 <div>
-                                    <div className="docSubtitle marginLeft">{this.state.name}</div>
+                                    <div className="docSubtitle marginLeft noselect">{this.state.name}</div>
                                 </div>
                             </Col>
-                            <Col className="buffer" xs={4}>
+                            <Col className="buffer" xs={5}>
                                 <div>
-                                    <div className="docSubtitle">{this.state.date}</div>
+                                    <div className="docSubtitle floatRight noselect">{this.state.date}</div>
                                 </div>
                                 
                             </Col>
                             
                         </Row>
-                        
+                        {this.state.clickToggle && dropDown}
                     </div>
-                    {this.state.clickToggle && dropDown}
+                    
                     
                     
                 </Container>

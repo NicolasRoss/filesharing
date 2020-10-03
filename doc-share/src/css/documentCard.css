@@ -4,7 +4,7 @@
 .docContainer{
     color: white;
     background: linear-gradient(45deg, #ff5f6d, #ffc371);
-    margin-top: 10px;
+    margin-top: 15px;
     min-height: 100px;
     border-radius: 20px;
     font-family: 'Raleway', sans-serif;
@@ -25,9 +25,10 @@
     color: white;
     margin-left: 10px;
     /* background-color: white; */
+    cursor: initial !important;
     border-radius: 10px;
     margin-top: 20px;
-    margin-bottom: 20px;
+    
 }
 
 .uuidContent{
@@ -37,18 +38,26 @@
     margin-top: 10px;
     font-size: min(calc(21px + 1vw), 38px);
     text-transform: uppercase;
-    height: 80px;
+    height: 800%;
 }
 
 .docSubtitle{
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
+    height: inherit;
     font-size: calc(16px + 0.1vw);
     letter-spacing: 0.3px;
     color: black;
     margin-bottom: 10px;
-    margin-top: auto;
-    /* height: 80px; */
+    margin-top: 40px;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 
@@ -58,6 +67,12 @@
 
 .buffer{
     margin-bottom: 10px;
+    /* float: right; */
+    margin-right: 20px;
+}
+
+.floatRight{
+    float:right;
 }
 
 .test{
@@ -83,13 +98,36 @@
     font-size: 22px;
     border-radius: 20px;
     border: 1px solid black;
-    min-width: 20%;
-    margin-left: 4vw;
-    margin-top: 10px;
-    margin-bottom: 5px;
+    width: 100%;
+    margin-left: 2vw;
+    /* margin-top: 10px; */
+    margin-bottom: 15px;
+    z-index: 5;
 }
 
 .downloadButton:focus{
+    outline: none;
+}
+
+/* need to restyle this later */
+.shareButton{
+    font-family: 'Raleway', sans-serif;
+    color:black;
+    /* background-color: transparent !important; */
+    background-color: white;
+    font-weight: 800;
+    min-height: 50px;
+    font-size: 22px;
+    border-radius: 20px;
+    border: 4px solid white;
+    width: 100%;
+    margin-left: 2vw;
+    /* margin-top: 10px; */
+    margin-bottom: 15px;
+    z-index: 5;
+}
+
+.shareButton:focus{
     outline: none;
 }
 
