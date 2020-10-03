@@ -8,10 +8,12 @@ import { withRouter } from 'react-router-dom';
         super(props);
         this.getDocInfo = this.getDocInfo.bind(this);
         this.goDocPage = this.goDocPage.bind(this);
+        this.downloadClick = this.downloadClick.bind(this);
         this.state = {
             uuid: this.props.doc_id,
             name: '',
             date: '',
+            clickToggle: false
         };
     }
 
@@ -46,12 +48,14 @@ import { withRouter } from 'react-router-dom';
         }
     }
 
-    async goDocPage(){
-        await(this.getDocInfo);
-        this.props.history.push({
-            pathname: '/Document',
-            state: {uuid: this.state.uuid, date: this.state.date, name: this.state.name}
-        });
+     goDocPage(){
+        // await(this.getDocInfo);
+        // this.props.history.push({
+        //     pathname: '/Document',
+        //     state: {uuid: this.state.uuid, date: this.state.date, name: this.state.name}
+        // });
+        this.setState({clickToggle: !this.state.clickToggle})
+        // console.log("click toggle:" + this.state.clickToggle);
     }
 
     async componentDidMount() {
@@ -64,17 +68,31 @@ import { withRouter } from 'react-router-dom';
         }
     }
 
+    downloadClick(){
+        if(this.state.uuid !== undefined){
+            console.log("clicked the download button for doc_id:" + this.state.uuid);
+            //this is where download function will be implemented
+        }
+    }
+
+
 
 
 
     render(){
-        
+        const dropDown = (
+            <Row>
+                <Col>
+                    <button className="downloadButton" onClick={this.downloadClick}> Download File</button>
+                </Col>
+            </Row>
+        )
         // console.log(this.state.name)
         return(
                 <div>
                 <Container className="docContainer box-shadow">
                     
-                    <a onClick={this.goDocPage} style={{"pointerEvents": "all", "cursor": "pointer"}}>
+                    <div onClick={this.goDocPage} style={{"pointerEvents": "all", "cursor": "pointer"}}>
                         <Row >
                             <Col xs={10}>
                                 
@@ -95,16 +113,12 @@ import { withRouter } from 'react-router-dom';
                             </Col>
                             
                         </Row>
-                    </a>
+                        
+                    </div>
+                    {this.state.clickToggle && dropDown}
+                    
                     
                 </Container>
-                {/* <Container>
-                    <Row>
-                        <Col xs={12}> 
-                            <div className="test"></div>
-                        </Col>
-                    </Row>
-                </Container> */}
                 
                 </div>
                 

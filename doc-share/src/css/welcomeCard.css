@@ -30,8 +30,18 @@
 
 
 
+
+
 .tab{
     margin-left: 1.5vw;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 32px;
+    color: white;
+    margin-left: 2vw;
+    margin-top: 2vh;
+    margin-bottom: 1vh;
+
 }
 .input-form{
     font-family: 'Montserrat', sans-serif;
@@ -40,11 +50,15 @@
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
-    display: inline-block;
+    display: inline-block !important;
     border: 1px solid white;
     border-radius: 15px;
     box-sizing: border-box;
     transform: scale(0.99)
+}
+
+.signInSubHeader{
+    width: 100% !important;
 }
 
 .input-form:focus{
