@@ -10,8 +10,8 @@ import {Route, Link, Switch } from 'react-router-dom';
 function App() {
   return (
     <Switch>
-      <Route path="/" exact component={Login}/>
-      <Route path="/Home" component={Home}/>
+      <Route path="/" exact component={Home}/>
+      <Route path="/Login" component={Login}/>
       <Route path="/Document" component={Document}/>
 
     </Switch>

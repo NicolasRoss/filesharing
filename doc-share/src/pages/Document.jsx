@@ -13,7 +13,6 @@ export default class Home extends React.Component{
     }
 
     componentDidMount(){
-        console.log("HEREERE")
         if(this.props.location.state !== undefined){
             console.log("DATE:"+this.props.location.state.date)
             console.log("NAME:"+this.props.location.state.name)

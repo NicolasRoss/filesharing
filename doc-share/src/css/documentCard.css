@@ -109,6 +109,10 @@
     outline: none;
 }
 
+.downloadButton:active {
+    transform: scale(0.96);
+}
+
 /* need to restyle this later */
 .shareButton{
     font-family: 'Raleway', sans-serif;
@@ -129,6 +133,10 @@
 
 .shareButton:focus{
     outline: none;
+}
+
+.shareButton:active{
+    transform: scale(0.96);
 }
 
 a{

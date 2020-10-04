@@ -91,10 +91,10 @@ import { withRouter } from 'react-router-dom';
         const dropDown = (
             <Row>
                 <Col xs={4}>
-                    <button className="downloadButton" onClick={this.downloadClick}> Download File</button>
+                    <button className="downloadButton noselect" onClick={this.downloadClick}> Download File</button>
                 </Col>
                 <Col xs={{span: 4, offset: 3}}>
-                    <button className="shareButton">Share file</button>
+                    <button className="shareButton noselect">Share file</button>
                 </Col>
             </Row>
         )
@@ -106,9 +106,9 @@ import { withRouter } from 'react-router-dom';
                     
                     <div onClick={this.goDocPage} style={{"pointerEvents": "all", "cursor": "pointer"}}>
                         <Row >
-                            <Col xs={11}>
+                            <Col xs={10}>
                                 
-                                <div onClick={this.downloadClick}  className="uuidContainer">
+                                <div onClick={this.noContainerClick}  className="uuidContainer">
                                     <div style={{"pointerEvents": "none", "cursor": "initial"}} className="uuidContent">{this.state.uuid}</div>
                                 </div>
                             </Col>

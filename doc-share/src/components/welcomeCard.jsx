@@ -1,7 +1,7 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import '../css/welcomeCard.css';
-
+import Cookies from "js-cookie";
 import { withRouter } from 'react-router-dom';
 
 class welcomeCard extends React.Component{
@@ -49,9 +49,10 @@ class welcomeCard extends React.Component{
                     console.log("check success");
                     //go to welcome page here
                     console.log(result["user_id"])
+                    Cookies.set("user_id", result["user_id"], {expires: 7})
                     this.props.history.push({
-                        pathname: '/Home',
-                        state: {user_id: result["user_id"]}
+                        pathname: '/'
+                        // state: {user_id: result["user_id"]}
                     });
                 }
                 
