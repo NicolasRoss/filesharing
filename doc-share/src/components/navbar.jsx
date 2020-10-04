@@ -10,6 +10,9 @@ class Navbar extends React.Component{
     constructor(props){
         super();
         this.toHome = this.toHome.bind(this);
+        this.toLogin = this.toLogin.bind(this);
+        this.toSignUp = this.toSignUp.bind(this);
+
         
         this.state= {
             user_id: -1
@@ -26,7 +29,36 @@ class Navbar extends React.Component{
     toHome(){
         console.log("toHome");
         Cookies.remove("user_id");
-        this.props.rerenderHome();
+        if(this.props.rerenderHome !== undefined){
+            this.props.rerenderHome();
+        }else{
+            Cookies.remove("user_id");
+            this.props.history.push("/");
+        }
+        
+    }
+
+    toLogin(e){
+        console.log("toLogin")
+        console.log(e);
+        if(this.props !== undefined && this.props.rerenderHome !== undefined){
+            this.props.rerenderHome();
+        }else{
+            Cookies.remove("user_id");
+            this.props.history.push("/Login");
+        }
+    }
+
+    toSignUp(){
+        if(this.props !== undefined && this.props.rerenderHome !== undefined){
+            this.props.rerenderHome();
+        }else{
+            Cookies.remove("user_id");
+            this.props.history.push({
+                pathname: '/Login',
+                state: {containerToggle: false}
+            });
+        }
     }
 
     render(){
@@ -36,9 +68,9 @@ class Navbar extends React.Component{
                 <Row>
                     <Col xs = {12}>
                         <ul>
-                            <a href="#"><li className="nav-item logo">Doc</li></a>
-                            <a href="#"><li className="nav-item right">Sign up</li></a>
-                            <a href="#"><li className="nav-item right">Log in</li></a>
+                            <a onClick={this.toHome}><li className="nav-item logo">Doc</li></a>
+                            <a onClick={this.toSignUp}><li className="nav-item right">Sign up</li></a>
+                            <a onClick={this.toLogin}><li className="nav-item right">Log in</li></a>
                             
                         </ul>
                     </Col>

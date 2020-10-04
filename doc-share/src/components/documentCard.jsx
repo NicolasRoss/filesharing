@@ -39,6 +39,7 @@ import { withRouter } from 'react-router-dom';
                             console.log(result[0]);
                             this.setState({ name: result[0]["document_name"]})
                             this.setState({date: result[0]["date"]})
+                            
                         }
                     }
                 )
@@ -105,13 +106,21 @@ import { withRouter } from 'react-router-dom';
                 <Container className="docContainer box-shadow">
                     
                     <div onClick={this.goDocPage} style={{"pointerEvents": "all", "cursor": "pointer"}}>
-                        <Row >
-                            <Col xs={10}>
+                        <Row>
+                            <Col sm={12} lg={10}>
                                 
                                 <div onClick={this.noContainerClick}  className="uuidContainer">
                                     <div style={{"pointerEvents": "none", "cursor": "initial"}} className="uuidContent">{this.state.uuid}</div>
                                 </div>
                             </Col>
+                            <Col  sm={12} lg={2}>
+                                <div className="popContainer noselect">
+                                    <div  className="publicOrPrivate">Public</div>
+                                </div>
+                                
+                            </Col>
+                        </Row>
+                        <Row>
                             <Col xs={6} >
                                 <div>
                                     <div className="docSubtitle marginLeft noselect">{this.state.name}</div>
@@ -123,8 +132,9 @@ import { withRouter } from 'react-router-dom';
                                 </div>
                                 
                             </Col>
-                            
                         </Row>
+                            
+                        
                         {this.state.clickToggle && dropDown}
                     </div>
                     

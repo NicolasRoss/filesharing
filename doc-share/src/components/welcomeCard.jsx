@@ -61,6 +61,13 @@ class welcomeCard extends React.Component{
 
     }
 
+    componentDidMount(){
+        console.log("welcome did mount")
+        console.log(this.props.history.containerToggle)
+        if(this.props.location.state !== undefined && this.props.location.state.containerToggle !== undefined){
+            this.setState({containerToggle: this.props.containerToggle})
+        }
+    }
 
 
     render(){

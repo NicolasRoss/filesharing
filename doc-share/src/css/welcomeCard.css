@@ -88,6 +88,9 @@
 .submit-form:focus{
     outline: none;
 }
+.submit-form:active{
+    transform: scale(0.96);
+}
 
 .signUpLinkContainer{
     width: 100%;

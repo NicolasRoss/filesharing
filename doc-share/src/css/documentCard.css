@@ -35,8 +35,8 @@
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
     margin-left: 20px;
-    margin-top: 10px;
-    font-size: min(calc(21px + 1vw), 38px);
+    /* margin-top: 10px; */
+    font-size: min(calc(18px + 1vw), 38px);
     text-transform: uppercase;
     height: 800%;
 }
@@ -50,6 +50,8 @@
     color: black;
     margin-bottom: 10px;
     margin-top: 40px;
+    /* white-space: nowrap; */
+    text-overflow: ellipsis;
 }
 
 .noselect {
@@ -137,6 +139,22 @@
 
 .shareButton:active{
     transform: scale(0.96);
+}
+
+.publicOrPrivate{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    /* margin-top: 10px; */
+    font-size: min(calc(16px + 1vw), 32px);
+    height: 800%;
+    margin-left: 20px;
+}
+
+.popContainer{
+    color: white;
+    margin-left: 10px;
+    border-radius: 10px;
+    margin-top: 20px;
 }
 
 a{
