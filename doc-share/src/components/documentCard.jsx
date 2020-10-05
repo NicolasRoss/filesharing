@@ -21,7 +21,7 @@ import { withRouter } from 'react-router-dom';
 
     async getDocInfo(){
         try {
-            var key = "6909a899-044f-11eb-9446-00155d4ec2f4";
+            
             console.log("id: " + this.props.doc_id);
             if(this.props.doc_id !== undefined){
                 var url = "http://localhost:5000/documents?key=" + this.props.doc_id;
@@ -36,7 +36,7 @@ import { withRouter } from 'react-router-dom';
                     (result) => {
                         
                         if(result !== undefined && result[0] !== undefined){
-                            console.log(result[0]);
+                            // console.log(result[0]);
                             this.setState({ name: result[0]["document_name"]})
                             this.setState({date: result[0]["date"]})
                             

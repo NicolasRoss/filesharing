@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../components/navbar';
 import DocCardContainer from '../components/docCardContainer';
+import Intro from '../components/Intro';
 import { withRouter } from 'react-router-dom';
 import Cookies from "js-cookie";
 class Home extends React.Component{
@@ -50,9 +51,9 @@ class Home extends React.Component{
         }else{
             return(
                 <div>
-                    <Navbar/>
-                    <div>You seem to not be logged in.</div>
-                    <button onClick={this.toLogin}>go to log in</button>
+                    <Navbar />
+                    <Intro toLogin={this.toLogin}/>
+                    
                 </div>
             )
         }

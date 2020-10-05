@@ -21,15 +21,15 @@ class Navbar extends React.Component{
 
 
     componentDidMount(){
-        console.log("rendering nav")
         if(Cookies.get("user_id") !== undefined){
             this.setState({user_id: Cookies.get("user_id")})
         }
     }
+
     toHome(){
-        console.log("toHome");
         Cookies.remove("user_id");
         if(this.props.rerenderHome !== undefined){
+            this.setState({user_id: -1})
             this.props.rerenderHome();
         }else{
             Cookies.remove("user_id");
@@ -39,9 +39,8 @@ class Navbar extends React.Component{
     }
 
     toLogin(e){
-        console.log("toLogin")
-        console.log(e);
         if(this.props !== undefined && this.props.rerenderHome !== undefined){
+            this.setState({user_id: '-1'})
             this.props.rerenderHome();
         }else{
             Cookies.remove("user_id");
@@ -62,15 +61,14 @@ class Navbar extends React.Component{
     }
 
     render(){
-
         const notLoggedIn = (
             <Container fluid>
                 <Row>
                     <Col xs = {12}>
                         <ul>
-                            <a onClick={this.toHome}><li className="nav-item logo">Doc</li></a>
-                            <a onClick={this.toSignUp}><li className="nav-item right">Sign up</li></a>
-                            <a onClick={this.toLogin}><li className="nav-item right">Log in</li></a>
+                            <a href="/" onClick={this.toHome}><li className="nav-item logo">Doc</li></a>
+                            <a href="/Login" onClick={this.toSignUp}><li className="nav-item right">Sign up</li></a>
+                            <a href="/Login" onClick={this.toLogin}><li className="nav-item right">Log in</li></a>
                             
                         </ul>
                     </Col>
@@ -83,9 +81,9 @@ class Navbar extends React.Component{
             <Row>
                 <Col xs = {12}>
                     <ul>
-                        <a onClick={this.toHome}><li className="nav-item logo">Doc</li></a>
-                        <a href="#"><li className="nav-item right"><img className="img" src="https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"></img></li></a>
-                        <a href="#"><li className="nav-item right">Hello, {this.state.user_id}</li></a>
+                        <a href="/" onClick={this.toHome}><li className="nav-item logo">Doc</li></a>
+                        <a href="/"><li className="nav-item right"><img className="img" alt="uhoh" src="https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"></img></li></a>
+                        <a href="/"><li className="nav-item right">Hello, {this.state.user_id}</li></a>
                         
                     </ul>
                 </Col>

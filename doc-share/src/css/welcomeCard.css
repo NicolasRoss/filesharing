@@ -21,8 +21,8 @@
     font-size: 52px;
     color: white;
     margin-left: 5vw;
-    margin-top: 2vh;
-    margin-bottom: 1vh;
+    margin-top: 1vh;
+    /* margin-bottom: 1vh; */
     margin-top: 4vh;
 
 }
@@ -49,7 +49,8 @@
     font-size: 26px;
     width: 100%;
     padding: 12px 20px;
-    margin: 8px 0;
+    /* margin-bottom: 20px; */
+    margin: 0px 0;
     display: inline-block !important;
     border: 1px solid white;
     border-radius: 15px;

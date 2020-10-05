@@ -32,7 +32,7 @@ export default class DocCardContainer extends React.Component {
         
     getDocIDFunc(){
         try {
-            var url = "http://localhost:5000/documents?user=14";
+            var url = "http://localhost:5000/documents?user="+this.props.user_id;
             fetch(url)
             .then(res => res.json())
             .then(

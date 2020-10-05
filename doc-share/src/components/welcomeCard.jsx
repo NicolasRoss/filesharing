@@ -11,8 +11,10 @@ class welcomeCard extends React.Component{
         
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
-            username: '',
+            email: '',
+            name: '',
             password: '',
+            confirmPassword: '',
             containerToggle: true
         };
     }
@@ -92,7 +94,7 @@ class welcomeCard extends React.Component{
                                 <button type="submit" className="submit-form">Submit</button>
                             </form>
                             
-                            <div className="signUpLinkContainer"><a style={{"pointerEvents": "all", "cursor": "pointer"}} className="signUpLink" onClick={this.toggleContainer}>Don't have an account? Sign up</a></div>
+                            <div className="signUpLinkContainer"><a href="/Login" style={{"pointerEvents": "all", "cursor": "pointer"}} className="signUpLink" onClick={this.toggleContainer}>Don't have an account? Sign up</a></div>
                         </div>
                     </Col>
                 </Row>
@@ -105,10 +107,14 @@ class welcomeCard extends React.Component{
                     <Col className="signInContainer" xs={{span: 12, offset:0}}>
                         <div>
                             <div className="signInHeader">Sign Up</div>
-                            <form autocomplete="off" onSubmit={this.handleSubmit}>
+                            <form autoComplete="off" onSubmit={this.handleSubmit}>
                                 <label className="signInSubHeader">
                                     <div className="tab">Email</div>
                                     <input className="input-form" type="text" name="email" onChange={this.emailChangeHandler}/>
+                                </label>
+                                <label className="signInSubHeader">
+                                    <div className="tab">Name</div>
+                                    <input className="input-form" type="text" name="name" onChange={this.emailChangeHandler}/>
                                 </label>
                                 <label className="signInSubHeader">
                                     <div className="tab">Password</div>
@@ -120,7 +126,7 @@ class welcomeCard extends React.Component{
                                 </label>
                                 <button type="submit" className="submit-form">Submit</button>
                             </form>
-                            <div className="signUpLinkContainer"><a style={{"pointerEvents": "all", "cursor": "pointer"}} className="signUpLink" onClick={this.toggleContainer}>Already have an account? Log in</a></div>
+                            <div className="signUpLinkContainer"><a  style={{"pointerEvents": "all", "cursor": "pointer"}} className="signUpLink" onClick={this.toggleContainer}>Already have an account? Log in</a></div>
                         </div>
                     </Col>
                 </Row>
