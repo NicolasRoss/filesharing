@@ -1,7 +1,7 @@
 import React from 'react';
 import DocumentCard from './documentCard';
 import NewDocCard from './newDocCard';
-
+import Cookies from "js-cookie";
 
 export default class DocCardContainer extends React.Component {
 
@@ -9,7 +9,7 @@ export default class DocCardContainer extends React.Component {
         super(props);
         this.getDocIDFunc = this.getDocIDFunc.bind(this);
         this.state = {
-            isFetching: false, //later for loading animation
+            isFetching: true, //later for loading animation
             user_id: -1,
             doc_ids: []
         }
@@ -20,24 +20,30 @@ export default class DocCardContainer extends React.Component {
 
 
     async componentDidMount() { 
-        console.log("container: " + this.props.user_id)
-        try {
-            await this.getDocIDFunc();
+        // console.log("container: " + this.props.user_id)
+        if(Cookies.get("user_id") !== undefined){
+
+            this.setState({user_id: Cookies.get("user_id")})
+            try {
+                await this.getDocIDFunc();
+            }
+            catch(error){
+                console.log(error);
+            }
         }
-        catch(error){
-            console.log(error);
-        }
+
     }
 
         
     getDocIDFunc(){
         try {
-            var url = "http://localhost:5000/documents?user="+this.props.user_id;
+            var url = "http://localhost:5000/documents?user="+this.state.user_id;
             fetch(url)
             .then(res => res.json())
             .then(
                 (result) => {
                     this.setState({ doc_ids: result})
+                    this.setState({isFetching: false})
                 }
             )
         }
@@ -48,9 +54,19 @@ export default class DocCardContainer extends React.Component {
 
 
     render() {
-        const cards = this.state.doc_ids.map((doc) => 
+        var cards;
+        if(this.state.doc_ids !== -1 && this.state.isFetching !== true){
+            console.log("in check" + this.state.user_id);
+            console.log(this.state.doc_ids);
+            cards = this.state.doc_ids.map((doc) => 
             <DocumentCard key={doc["doc_id"]} doc_id={doc["doc_id"]}/>   
         );
+        }else{
+            cards = (
+                <div>uh oh</div>
+            )
+        }
+
         return(
             <div>
                 {cards}

@@ -20,7 +20,7 @@ export default class Intro extends React.Component{
                         <div >
                             <div>
                                 <div className="introTitle">
-                                    DropDocs
+                                    Dropdocs
                                 </div>
                                 <div className="introStatement"> hello this is a pretty trash website
                                 
