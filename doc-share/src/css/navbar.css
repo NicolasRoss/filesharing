@@ -8,7 +8,8 @@
     font-size: 20px;
     vertical-align: middle;
     text-align: center;
-    list-style-type: none !important
+    list-style-type: none !important;
+    color: white;
 }
 
 .logo{
@@ -26,4 +27,15 @@
 .img{
     height: 30px;
     width: 30px;
+    background-color: white;
+}
+
+a{
+    text-decoration: none !important;
+}
+
+
+/* something dark like this or white */
+body{
+    background-color: #1d1a2a !important;
 }

@@ -1,19 +1,17 @@
 import React from 'react';
 import './css/App.css';
-import DocCardContainer from './components/docCardContainer';
-import Navbar from './components/navbar';
-import WelcomeCard from './components/welcomeCard';
-import SignUpCard from './components/signUpCard'
-
+import Login from './pages/Login';
+import Home from './pages/Home';
+import Document from './pages/Document';
+import {Route, Switch } from 'react-router-dom';
 function App() {
   return (
-    <div>
-      <Navbar/>
-      <DocCardContainer/>
-      <WelcomeCard/>
-      <SignUpCard/>
-    </div>
-    
+    <Switch>
+      <Route path="/" exact component={Home}/>
+      <Route path="/Login" component={Login}/>
+      <Route path="/Document" component={Document}/>
+
+    </Switch>
   );
 }
 

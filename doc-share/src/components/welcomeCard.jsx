@@ -1,14 +1,21 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import '../css/welcomeCard.css';
+import Cookies from "js-cookie";
+import { withRouter } from 'react-router-dom';
 
-
-export default class welcomeCard extends React.Component{
+class welcomeCard extends React.Component{
     constructor(props){
         super(props);
+        this.toggleContainer = this.toggleContainer.bind(this);
+        
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
-            username: '',
-            password: ''
+            email: '',
+            name: '',
+            password: '',
+            confirmPassword: '',
+            containerToggle: true
         };
     }
 
@@ -19,21 +26,62 @@ export default class welcomeCard extends React.Component{
         this.setState({password: event.target.value})
     }
 
-    handleSubmit = () => {
+    toggleContainer(){
+        console.log("toggle pressed")
+        this.setState({containerToggle: !this.state.containerToggle});
+        console.log(this.state.containerToggle)
+    }
+
+    handleSubmit = e => {
+        e.preventDefault();
         console.log("submit button pressed")
         console.log(this.state.username)
         console.log(this.state.password)
+        var url = "http://localhost:5000/users?email=user@gmail.com&pass=testing123"
+        fetch(url, {
+            method: 'GET',
+            mode:'cors',
+            
+        })
+        .then(res => res.json())
+        .then(
+            (result) => {
+                console.log(result)
+                if(result !== undefined && result["user_id"] !== undefined){
+                    console.log("check success");
+                    //go to welcome page here
+                    console.log(result["user_id"])
+                    Cookies.set("user_id", result["user_id"], {expires: 7})
+                    this.props.history.push({
+                        pathname: '/'
+                        // state: {user_id: result["user_id"]}
+                    });
+                }
+                
+            }
+        )
+
     }
 
+    componentDidMount(){
+        console.log("welcome did mount")
+        console.log(this.props.history.containerToggle)
+        if(this.props.location.state !== undefined && this.props.location.state.containerToggle !== undefined){
+            this.setState({containerToggle: this.props.containerToggle})
+        }
+    }
+
+
     render(){
-        return(
+
+        const LoginPage = (
             <Container>
                 <Row>
-                    <Col className="signInContainer" xs={{span: 10, offset:1}}>
+                    <Col className="signInContainer" xs={{span: 12, offset:0}}>
                         <div>
                             <div className="signInHeader">Login</div>
                             
-                            <form autoComplete="off">
+                            <form autoComplete="off" onSubmit={this.handleSubmit}>
                                 
                                 <label className="signInSubHeader">
                                     <div className="tab">Email</div>
@@ -41,18 +89,59 @@ export default class welcomeCard extends React.Component{
                                 </label>
                                 <label className="signInSubHeader">
                                     <div className="tab">Password</div>
-                                    <input className="input-form" type="text" name="password" onChange={this.passwordChangeHandler}/>
+                                    <input className="input-form" type="password" name="password" onChange={this.passwordChangeHandler}/>
                                 </label>
-                                
+                                <button type="submit" className="submit-form">Submit</button>
                             </form>
-                            <button className="submit-form" onClick={this.handleSubmit}>Submit</button>
-                            <div className="signUpLinkContainer"><a className="signUpLink" href="#">Don't have an account? Sign up</a></div>
+                            
+                            <div className="signUpLinkContainer"><a href="/Login" style={{"pointerEvents": "all", "cursor": "pointer"}} className="signUpLink" onClick={this.toggleContainer}>Don't have an account? Sign up</a></div>
+                        </div>
+                    </Col>
+                </Row>
+            </Container>
+        )
+
+        const SignUpPage = (
+            <Container>
+                <Row>
+                    <Col className="signInContainer" xs={{span: 12, offset:0}}>
+                        <div>
+                            <div className="signInHeader">Sign Up</div>
+                            <form autoComplete="off" onSubmit={this.handleSubmit}>
+                                <label className="signInSubHeader">
+                                    <div className="tab">Email</div>
+                                    <input className="input-form" type="text" name="email" onChange={this.emailChangeHandler}/>
+                                </label>
+                                <label className="signInSubHeader">
+                                    <div className="tab">Name</div>
+                                    <input className="input-form" type="text" name="name" onChange={this.emailChangeHandler}/>
+                                </label>
+                                <label className="signInSubHeader">
+                                    <div className="tab">Password</div>
+                                    <input className="input-form" type="password" name="password" onChange={this.passwordChangeHandler}/>
+                                </label>
+                                <label className="signInSubHeader">
+                                    <div className="tab">Confirm Password</div>
+                                    <input className="input-form" type="password" name="password2" onChange={this.passwordChangeHandler}/>
+                                </label>
+                                <button type="submit" className="submit-form">Submit</button>
+                            </form>
+                            <div className="signUpLinkContainer"><a  style={{"pointerEvents": "all", "cursor": "pointer"}} className="signUpLink" onClick={this.toggleContainer}>Already have an account? Log in</a></div>
                         </div>
                     </Col>
                 </Row>
             </Container>
         );
+
+        if(this.state.containerToggle){
+            return(LoginPage);
+        }else{
+            return(SignUpPage);
+        }
+
     }
 
 
 }
+
+export default withRouter(welcomeCard);

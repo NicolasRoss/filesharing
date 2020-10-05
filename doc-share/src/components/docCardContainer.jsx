@@ -1,5 +1,6 @@
 import React from 'react';
 import DocumentCard from './documentCard';
+import NewDocCard from './newDocCard';
 
 
 export default class DocCardContainer extends React.Component {
@@ -9,7 +10,7 @@ export default class DocCardContainer extends React.Component {
         this.getDocIDFunc = this.getDocIDFunc.bind(this);
         this.state = {
             isFetching: false, //later for loading animation
-            user: 4,
+            user_id: -1,
             doc_ids: []
         }
     }
@@ -19,6 +20,7 @@ export default class DocCardContainer extends React.Component {
 
 
     async componentDidMount() { 
+        console.log("container: " + this.props.user_id)
         try {
             await this.getDocIDFunc();
         }
@@ -30,7 +32,7 @@ export default class DocCardContainer extends React.Component {
         
     getDocIDFunc(){
         try {
-            var url = "http://localhost:5000/documents?user=4";
+            var url = "http://localhost:5000/documents?user="+this.props.user_id;
             fetch(url)
             .then(res => res.json())
             .then(
@@ -47,11 +49,12 @@ export default class DocCardContainer extends React.Component {
 
     render() {
         const cards = this.state.doc_ids.map((doc) => 
-            <DocumentCard key={doc.doc_id[0]} doc_id={doc.doc_id}/>   
+            <DocumentCard key={doc["doc_id"]} doc_id={doc["doc_id"]}/>   
         );
         return(
             <div>
                 {cards}
+                <NewDocCard/>
             </div>
         );
     }

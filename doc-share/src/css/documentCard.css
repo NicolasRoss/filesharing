@@ -4,11 +4,13 @@
 .docContainer{
     color: white;
     background: linear-gradient(45deg, #ff5f6d, #ffc371);
-    margin-top: 10px;
+    margin-top: 15px;
     min-height: 100px;
     border-radius: 20px;
     font-family: 'Raleway', sans-serif;
     font-weight: 800;
+    z-index: 200 !important;
+    position:relative;
 }
 
 .box-shadow{
@@ -23,30 +25,41 @@
     color: white;
     margin-left: 10px;
     /* background-color: white; */
+    cursor: initial !important;
     border-radius: 10px;
     margin-top: 20px;
-    margin-bottom: 20px;
+    
 }
 
 .uuidContent{
     font-family: 'Montserrat', sans-serif;
     font-weight: 800;
     margin-left: 20px;
-    margin-top: 10px;
-    font-size: min(calc(21px + 1vw), 38px);
+    /* margin-top: 10px; */
+    font-size: min(calc(18px + 1vw), 38px);
     text-transform: uppercase;
-    height: 80px;
+    height: 800%;
 }
 
 .docSubtitle{
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
+    height: inherit;
     font-size: calc(16px + 0.1vw);
     letter-spacing: 0.3px;
     color: black;
     margin-bottom: 10px;
-    margin-top: auto;
-    /* height: 80px; */
+    margin-top: 40px;
+    /* white-space: nowrap; */
+    text-overflow: ellipsis;
+}
+
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 
@@ -56,8 +69,97 @@
 
 .buffer{
     margin-bottom: 10px;
+    /* float: right; */
+    margin-right: 20px;
+}
+
+.floatRight{
+    float:right;
+}
+
+.test{
+    width: 715px;
+    height: 180px !important;
+    background-color: black;
+    z-index: 1 !important;
+    margin-top: -185px;
+    border: solid;
+    border-radius: 20px;
+}
+
+.test:hover{
+    margin-left: 30px;
+}
+
+.downloadButton{
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    background-color: black;
+    font-weight: 800;
+    min-height: 50px;
+    font-size: 22px;
+    border-radius: 20px;
+    border: 1px solid black;
+    width: 100%;
+    margin-left: 2vw;
+    /* margin-top: 10px; */
+    margin-bottom: 15px;
+    z-index: 5;
+}
+
+.downloadButton:focus{
+    outline: none;
+}
+
+.downloadButton:active {
+    transform: scale(0.96);
+}
+
+/* need to restyle this later */
+.shareButton{
+    font-family: 'Raleway', sans-serif;
+    color:black;
+    /* background-color: transparent !important; */
+    background-color: white;
+    font-weight: 800;
+    min-height: 50px;
+    font-size: 22px;
+    border-radius: 20px;
+    border: 4px solid white;
+    width: 100%;
+    margin-left: 2vw;
+    /* margin-top: 10px; */
+    margin-bottom: 15px;
+    z-index: 5;
+}
+
+.shareButton:focus{
+    outline: none;
+}
+
+.shareButton:active{
+    transform: scale(0.96);
+}
+
+.publicOrPrivate{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    /* margin-top: 10px; */
+    font-size: min(calc(16px + 1vw), 32px);
+    margin-left: 20px;
+    /* color: linear-gradient(45deg, #ff5f6d, #ffc371); */
+}
+
+.popContainer{
+    color: white;
+    margin-left: 10px;
+    border-radius: 10px;
+    margin-top: 20px;
+    background-image: linear-gradient( -45deg,  rgba(62,5,116,1) -5.2%, rgba(41,14,151,1) -5.2%, rgba(216,68,148,1) 103.3% );
 }
 
 a{
     text-decoration: none !important;
+    border: none;
+    background: inherit;
 }
