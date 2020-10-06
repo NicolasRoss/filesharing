@@ -86,50 +86,58 @@ class documents(Resource):
 
         try:
             conn = db.mysql.connect()
-            cursor = conn.cursor()
+            
+            try:
+                cursor = conn.cursor()
 
-            if args['user'] is not None:
-                file_to_upload = request.files["file"]
-                file_name = file_to_upload.filename
+                if args['user'] is not None:
+                    file_to_upload = request.files["file"]
+                    file_name = file_to_upload.filename
 
-                # check if the file is a supported type and save to folder
-                if supported_file(file_name):
-                    ext = file_ext(file_name)
-                    folder = supported_file_types[ext]
-                    location = upload_path + '/' + folder
-                    
-                    # INSERT file data into DB to generate uuid
-                    insert = 'INSERT INTO documents (directory_loc, document_name, date, public) VALUES (%s, %s, NOW(), %s)'
-                    values = (location, file_name, 1)
-                    cursor.execute(insert, values)
-                    conn.commit()
+                    # check if the file is a supported type and save to folder
+                    if supported_file(file_name):
+                        ext = file_ext(file_name)
+                        folder = supported_file_types[ext]
+                        location = upload_path + '/' + folder
+                        
+                        # INSERT file data into DB to generate uuid
+                        insert = 'INSERT INTO documents (directory_loc, document_name, date, public) VALUES (%s, %s, NOW(), %s)'
+                        values = (location, file_name, 1)
+                        cursor.execute(insert, values)
+                        conn.commit()
 
-                    # SELECT for the uuid
-                    query = 'SELECT uuid_id FROM documents WHERE (directory_loc = %s AND document_name = %s)'
-                    values = (location, file_name)
-                    cursor.execute(query, values)
-                    response = cursor.fetchall()[0]
-                    uuid = response[0]
+                        # SELECT for the uuid
+                        query = 'SELECT uuid_id FROM documents WHERE (directory_loc = %s AND document_name = %s)'
+                        values = (location, file_name)
+                        cursor.execute(query, values)
+                        response = cursor.fetchall()[0]
+                        uuid = response[0]
 
-                    # save file to server
-                    file_to_upload.save(os.path.join(upload_path, folder + uuid + '.' + ext))
-                    
-                    return {
-                            'data': uuid + '.' + ext,
-                            'location': upload_path + '/' + folder,
-                            'message': 'file uploaded'
-                        }
+                        # save file to server
+                        file_to_upload.save(os.path.join(upload_path, folder + uuid + '.' + ext))
+                        
+                        return {
+                                'data': uuid + '.' + ext,
+                                'location': upload_path + '/' + folder,
+                                'message': 'file uploaded'
+                            }
 
+                    else:
+
+                        return 'unsupported file type', 400
+                
                 else:
+                    return 'no user submitted', 400
+                    
+            except:
+                print('QUERY FAILED')
+            
+            finally:
+                conn.close()
 
-                    return 'unsupported file type', 400
-
-            else:
-                return 'no user submitted', 400
+            
 
         except Exception as e:
             print(e)
 
-        finally:
-            cursor.close()
-            conn.close()
+        
