@@ -6,7 +6,6 @@ from resources.users import users
 
 api = Api(app)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-
 api.add_resource(documents, '/documents')
 api.add_resource(users, '/users')
 

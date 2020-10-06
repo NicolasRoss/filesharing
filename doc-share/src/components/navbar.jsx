@@ -38,13 +38,16 @@ class Navbar extends React.Component{
         
     }
 
-    toLogin(e){
+    toLogin(){
         if(this.props !== undefined && this.props.rerenderHome !== undefined){
             this.setState({user_id: '-1'})
             this.props.rerenderHome();
         }else{
             Cookies.remove("user_id");
-            this.props.history.push("/Login");
+            this.props.history.push({
+                pathname: '/Login',
+                state: {containerToggle: true}
+            });
         }
     }
 

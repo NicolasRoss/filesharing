@@ -6,6 +6,7 @@ parser = reqparse.RequestParser()
 # cursor = conn.cursor()
 
 class users(Resource):
+    
     def get(self):
         parser.add_argument('email', type=str)
         parser.add_argument('pass', type=str)

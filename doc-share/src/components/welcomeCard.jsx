@@ -50,12 +50,15 @@ class welcomeCard extends React.Component{
                 if(result !== undefined && result["user_id"] !== undefined){
                     console.log("check success");
                     //go to welcome page here
-                    console.log(result["user_id"])
-                    Cookies.set("user_id", result["user_id"], {expires: 7})
-                    this.props.history.push({
-                        pathname: '/'
-                        // state: {user_id: result["user_id"]}
-                    });
+                    console.log("result is:"+result["user_id"] )
+                    if(result["user_id"] !== "-1"){
+                        console.log("somehow passed the check")
+                        Cookies.set("user_id", result["user_id"], {expires: 7})
+                        this.props.history.push({
+                            pathname: '/'
+                            // state: {user_id: result["user_id"]}
+                        });
+                    }
                 }
                 
             }
@@ -67,15 +70,18 @@ class welcomeCard extends React.Component{
 
     componentDidMount(){
         console.log("welcome did mount")
-        console.log(this.props.history.containerToggle)
-        if(this.props.location.state !== undefined && this.props.location.state.containerToggle !== undefined){
-            this.setState({containerToggle: this.props.containerToggle})
+        
+        if(this.props.location !== undefined && this.props.location.state !== undefined && this.props.location.state.containerToggle !== undefined){
+            // console.log("props:"+ this.props.location.state.containerToggle)
+            this.setState({containerToggle: this.props.location.state.containerToggle})
+            this.props.location.state.containerToggle = undefined;
+            // console.log("props:" + this.props.location.state.containerToggle);
         }
     }
 
 
     render(){
-
+        
         const LoginPage = (
             <Container>
                 <Row>
@@ -96,7 +102,7 @@ class welcomeCard extends React.Component{
                                 <button type="submit" className="submit-form">Submit</button>
                             </form>
                             
-                            <div className="signUpLinkContainer"><a href="/Login" style={{"pointerEvents": "all", "cursor": "pointer"}} className="signUpLink" onClick={this.toggleContainer}>Don't have an account? Sign up</a></div>
+                            <div className="signUpLinkContainer"><a  style={{"pointerEvents": "all", "cursor": "pointer"}} className="signUpLink" onClick={this.toggleContainer}>Don't have an account? Sign up</a></div>
                         </div>
                     </Col>
                 </Row>

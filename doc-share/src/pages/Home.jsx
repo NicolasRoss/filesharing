@@ -44,7 +44,7 @@ class Home extends React.Component{
             return(
                 <div>
                     <Navbar rerenderHome={this.rerenderHome}/>
-                    <DocCardContainer user_id={this.state.user_id}/>
+                    <DocCardContainer/>
                 </div>
 
             )
