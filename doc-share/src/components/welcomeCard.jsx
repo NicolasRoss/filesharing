@@ -37,7 +37,7 @@ class welcomeCard extends React.Component{
         console.log("submit button pressed")
         console.log(this.state.username)
         console.log(this.state.password)
-        var url = "http://localhost:5000/users?email=user@gmail.com&pass=testing123"
+        var url = "http://localhost:5000/users?email=user@gmail.com&pass=testing1234"
         fetch(url, {
             method: 'GET',
             mode:'cors',

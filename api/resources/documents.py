@@ -49,7 +49,7 @@ class documents(Resource):
                         payload.append(content)
 
                     # cursor.close()
-
+                    print(payload)
                     return jsonify(payload)
                 else:
                     # cursor.close()

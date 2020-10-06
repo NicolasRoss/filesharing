@@ -64,7 +64,7 @@ export default class documentCard extends React.Component{
                     <div className="form-group">   
                         <Row>
                             <Col>
-                                <div className="dottedBorder newDocPlus">
+                                <div className=" newDocPlus">
                                     +
                                     <input
                                         name="file" 
