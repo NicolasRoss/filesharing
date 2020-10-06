@@ -20,6 +20,7 @@ class users(Resource):
                 user_id = cursor.execute(query, tup)
                 if(user_id > 0):
                     resp = cursor.fetchall()
+                    
                     return {"user_id": resp[0][0]}
                 else:
                     return {"user_id": "-1"}

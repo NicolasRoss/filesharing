@@ -59,7 +59,9 @@ class welcomeCard extends React.Component{
                 }
                 
             }
-        )
+        ).catch(error => {
+            alert(error.message)
+        })
 
     }
 
