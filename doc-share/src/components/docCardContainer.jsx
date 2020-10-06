@@ -10,7 +10,7 @@ export default class DocCardContainer extends React.Component {
         this.getDocIDFunc = this.getDocIDFunc.bind(this);
         this.state = {
             isFetching: true, //later for loading animation
-            user_id: -1,
+            user_id: this.props.user_id,
             doc_ids: []
         }
     }
@@ -21,6 +21,7 @@ export default class DocCardContainer extends React.Component {
 
     async componentDidMount() { 
         // console.log("container: " + this.props.user_id)
+        
         if(Cookies.get("user_id") !== undefined){
 
             this.setState({user_id: Cookies.get("user_id")})
@@ -37,11 +38,13 @@ export default class DocCardContainer extends React.Component {
         
     getDocIDFunc(){
         try {
+            console.log(this.state.user_id)
             var url = "http://localhost:5000/documents?user="+this.state.user_id;
             fetch(url)
             .then(res => res.json())
             .then(
                 (result) => {
+                    console.log(result)
                     this.setState({ doc_ids: result})
                     this.setState({isFetching: false})
                 }
@@ -55,7 +58,8 @@ export default class DocCardContainer extends React.Component {
 
     render() {
         var cards;
-        if(this.state.doc_ids !== -1 && this.state.isFetching !== true){
+        console.log(this.state.doc_ids);
+        if(this.state.user_id !== -1 && this.state.isFetching !== true){
             console.log("in check" + this.state.user_id);
             console.log(this.state.doc_ids);
             cards = this.state.doc_ids.map((doc) => 
