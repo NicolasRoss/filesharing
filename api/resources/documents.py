@@ -25,72 +25,62 @@ def file_ext(file_name):
 
 class documents(Resource):
     def get(self):
-
-
-        parser.add_argument('key', type=str, help="key is needed to access documents")
-        parser.add_argument('user', type=str)
-        args = parser.parse_args()
-
-        try:
-
-            conn = db.mysql.connect()
-            cursor = conn.cursor()
-
-            if(args['key'] is not None):
-                # cursor = conn.cursor()
-                query = "SELECT document_name, date, uuid_id FROM documents WHERE uuid_id = %s"
-                documents = cursor.execute(query, args['key'])
-                
-                if(documents > 0):
-                    payload = []
-                    resp = cursor.fetchall()
-                    for result in resp:
-                        content = {"document_name": result[0], "date": result[1], "uuid_id": result[2]}
-                        payload.append(content)
-
-                    # cursor.close()
-                    print(payload)
-                    return jsonify(payload)
-                else:
-                    # cursor.close()
-                    return "invalid key", 400
-            elif(args['user'] is not None):
-                #get all documents owned by user id
-                # cursor = conn.cursor()
-                query = "SELECT doc_uuid FROM user_documents WHERE user_id = %s"
-                doc_ids = cursor.execute(query, args['user'])
-
-                if(doc_ids > 0):
-                    print(doc_ids)
-                    payload = []
-                    resp = cursor.fetchall()
-                    for result in resp:
-                        content = {"doc_id": result[0]}
-                        payload.append(content)
-                    
-                    # cursor.close()
-
-                    return jsonify(payload)
-            else:
-                
-                return "no user or key submitted", 400
-        except Exception as e:
-            print(e)
-        finally:
-            cursor.close()
-            conn.close()
-
-    def post(self):
-        parser.add_argument('user', type=str)
-        args = parser.parse_args()
-
         try:
             conn = db.mysql.connect()
-            
+
             try:
                 cursor = conn.cursor()
+                parser.add_argument('user', type=str)
+                args = parser.parse_args()
+                user_id = args['user']
 
-                if args['user'] is not None:
+                if(user_id is not None):
+                    # get all documents owned by user id
+                    query = "SELECT uuid_id, directory_loc, document_name, date, public FROM documents WHERE user_id = %s"
+                    doc_ids = cursor.execute(query, user_id)
+
+                    if(doc_ids > 0):
+                        payload = []
+                        resp = cursor.fetchall()
+
+                        for result in resp:
+                            print(result)
+                            content = {
+                                "doc_id": result[0],
+                                "location": result[1],
+                                "file_name": result[2],
+                                "date": result[3],
+                                "status": result[4]
+                                }
+                            payload.append(content)
+
+                        return jsonify(payload)
+                        
+                else:
+                    return "no user or key submitted", 400
+
+            except:
+                print('QUERY FAILED')
+
+            finally:
+                conn.close()
+            
+        except Exception as e:
+            print(e)
+
+
+
+    def post(self):
+        try:
+            conn = db.mysql.connect()
+
+            try:
+                cursor = conn.cursor()
+                parser.add_argument('user', type=str)
+                args = parser.parse_args()
+                user_id = args['user']
+                
+                if user_id is not None:
                     file_to_upload = request.files["file"]
                     file_name = file_to_upload.filename
 
@@ -99,10 +89,10 @@ class documents(Resource):
                         ext = file_ext(file_name)
                         folder = supported_file_types[ext]
                         location = upload_path + '/' + folder
-                        
+
                         # INSERT file data into DB to generate uuid
-                        insert = 'INSERT INTO documents (directory_loc, document_name, date, public) VALUES (%s, %s, NOW(), %s)'
-                        values = (location, file_name, 1)
+                        insert = 'INSERT INTO documents (user_id, directory_loc, document_name, date, public) VALUES (%s, %s, %s, NOW(), %s)'
+                        values = (user_id, location, file_name, 1)
                         cursor.execute(insert, values)
                         conn.commit()
 
@@ -134,8 +124,6 @@ class documents(Resource):
             
             finally:
                 conn.close()
-
-            
 
         except Exception as e:
             print(e)
