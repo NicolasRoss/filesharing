@@ -6,93 +6,62 @@ import { withRouter } from 'react-router-dom';
 
     constructor(props){
         super(props);
-        this.getDocInfo = this.getDocInfo.bind(this);
         this.goDocPage = this.goDocPage.bind(this);
         this.downloadClick = this.downloadClick.bind(this);
         this.noContainerClick = this.noContainerClick.bind(this);
+
         this.state = {
             uuid: this.props.doc_id,
-            name: '',
-            date: '',
+            name: this.props.name,
+            date: this.props.date,
+            path: this.props.path,
+            status: this.props.status, // for public or private
             clickToggle: false
         };
     }
 
-
-    async getDocInfo(){
-        try {
-            
-            console.log("id: " + this.props.doc_id);
-            if(this.props.doc_id !== undefined){
-                var url = "http://localhost:5000/documents?key=" + this.props.doc_id;
-                // console.log(url);
-                fetch(url, {
-                    method: 'GET',
-                    mode:'cors',
-                    
-                })
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        
-                        if(result !== undefined && result[0] !== undefined){
-                            // console.log(result[0]);
-                            this.setState({ name: result[0]["document_name"]})
-                            this.setState({date: result[0]["date"]})
-                            
-                        }
-                    }
-                )
-            }
-        }
-        catch(error){
-            console.log(error);
-        }
-    }
-
-     goDocPage(){
-        // await(this.getDocInfo);
-        // this.props.history.push({
-        //     pathname: '/Document',
-        //     state: {uuid: this.state.uuid, date: this.state.date, name: this.state.name}
-        // });
-
+    goDocPage(){
         this.setState({clickToggle: !this.state.clickToggle})
-        // console.log("click toggle:" + this.state.clickToggle);
     }
 
     noContainerClick = function(e) {
         e.stopPropagation();
-
-    }
-
-    async componentDidMount() {
-        try { 
-            this.setState({uuid: this.props.doc_id})
-            await this.getDocInfo();
-        }
-        catch(error){
-            console.log(error);
-        }
     }
 
     downloadClick = function(e) {
         e.stopPropagation();
+        console.log(this.state.path)
         if(this.state.uuid !== undefined){
-            console.log("clicked the download button for doc_id:" + this.state.uuid);
-            //this is where download function will be implemented
+            console.log("clicked the download button for doc_id: " + this.state.uuid);
+            var url = "http://localhost:5000/download?doc_id=" + this.state.uuid + "&name=" + this.state.name + "&path=" + this.state.path;
+            fetch(url, {
+                method: 'GET',
+                mode: 'cors'
+            })
+            .then(res => res.blob())
+            .then((blob) => {
+                const url = window.URL.createObjectURL(new Blob([blob]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', this.state.name);
+
+                document.body.appendChild(link);
+                link.click();
+
+                link.parentNode.removeChild(link);
+             
+                
+            }).catch((error) => {
+                console.log(error);
+            });
         }
     }
-
-
-
-
 
     render(){
         const dropDown = (
             <Row>
                 <Col xs={4}>
-                    <button className="downloadButton noselect" onClick={this.downloadClick}> Download File</button>
+                    <button className="downloadButton noselect" onClick={this.downloadClick} download> Download File</button>
                 </Col>
                 <Col xs={{span: 4, offset: 3}}>
                     <button className="shareButton noselect">Share file</button>
@@ -100,7 +69,6 @@ import { withRouter } from 'react-router-dom';
             </Row>
         )
         
-        // console.log(this.state.name)
         return(
                 <div>
                 <Container className="docContainer box-shadow">
