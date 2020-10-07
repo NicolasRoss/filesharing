@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from flask import send_from_directory, jsonify
+from flask import send_from_directory
 from common import db
 import os
 
