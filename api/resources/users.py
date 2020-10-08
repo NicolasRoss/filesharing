@@ -19,13 +19,14 @@ class users(Resource):
                 cursor = conn.cursor()
                 
                 if(args['email'] is not None and args['pass'] is not None):
-                    query = "SELECT user_id FROM users WHERE email = %s AND password = SHA2(%s, 256)"
+                    query = "SELECT user_id, name FROM users WHERE email = %s AND password = SHA2(%s, 256)"
                     tup = (args['email'], args['pass'])
                     user_id = cursor.execute(query, tup)
 
                     if(user_id > 0):
                         resp = cursor.fetchall()
-                        return {"user_id": resp[0][0]}
+                        print(resp[0][1])
+                        return {"user_id": resp[0][0], "name": resp[0][1]}
 
                     else:
                         return {"user_id": "-1"}

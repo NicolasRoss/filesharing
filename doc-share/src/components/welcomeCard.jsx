@@ -37,7 +37,7 @@ class welcomeCard extends React.Component{
         console.log("submit button pressed")
         console.log(this.state.username)
         console.log(this.state.password)
-        var url = "http://localhost:5000/users?email=user@gmail.com&pass=testing1234"
+        var url = "http://localhost:5000/users?email=user@gmail.com&pass=testing123"
         fetch(url, {
             method: 'GET',
             mode:'cors',
@@ -47,18 +47,24 @@ class welcomeCard extends React.Component{
         .then(
             (result) => {
                 console.log(result)
-                if(result !== undefined && result["user_id"] !== undefined){
-                    console.log("check success");
-                    //go to welcome page here
-                    console.log("result is:"+result["user_id"] )
-                    if(result["user_id"] !== "-1"){
-                        console.log("somehow passed the check")
-                        Cookies.set("user_id", result["user_id"], {expires: 7})
-                        this.props.history.push({
-                            pathname: '/'
-                            // state: {user_id: result["user_id"]}
-                        });
+                if(result !== undefined){
+                    if(result["user_id"] !== undefined){
+                        console.log("check success");
+                        //go to welcome page here
+                        console.log("result is:"+result["user_id"] )
+                        if(result["user_id"] !== "-1"){
+                            console.log("somehow passed the check")
+                            Cookies.set("user_id", result["user_id"], {expires: 7})
+                            if(result["name"] !== undefined){
+                                Cookies.set("name", result["name"], {expires: 7})
+                            }
+                            this.props.history.push({
+                                pathname: '/'
+                                // state: {user_id: result["user_id"]}
+                            });
+                        }
                     }
+                    
                 }
                 
             }

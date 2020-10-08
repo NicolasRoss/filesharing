@@ -15,7 +15,8 @@ class Navbar extends React.Component{
 
         
         this.state= {
-            user_id: -1
+            user_id: -1,
+            name: ""
         }
     }
 
@@ -23,6 +24,9 @@ class Navbar extends React.Component{
     componentDidMount(){
         if(Cookies.get("user_id") !== undefined){
             this.setState({user_id: Cookies.get("user_id")})
+        }
+        if(Cookies.get("name") !== undefined){
+            this.setState({name: Cookies.get("name")})
         }
     }
 
@@ -64,6 +68,7 @@ class Navbar extends React.Component{
     }
 
     render(){
+        // console.log("name:" + this.state.name)
         const notLoggedIn = (
             <Container fluid>
                 <Row>
@@ -86,7 +91,7 @@ class Navbar extends React.Component{
                     <ul>
                         <a href="/" onClick={this.toHome}><li className="nav-item logo">Doc</li></a>
                         <a href="/"><li className="nav-item right"><img className="img" alt="uhoh" src="https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"></img></li></a>
-                        <a href="/"><li className="nav-item right">Hello, {this.state.user_id}</li></a>
+                        <a href="/"><li className="nav-item right">Hello, {this.state.name}</li></a>
                         
                     </ul>
                 </Col>

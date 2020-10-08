@@ -45,6 +45,7 @@ export default class documentCard extends React.Component{
                 .then(res => res.json())
                 .then(result => {
                     console.log(result)
+                    this.props.rerenderContainer();
                     
                 }).catch((error) => {
                     console.log(error);

@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom';
         super(props);
         this.goDocPage = this.goDocPage.bind(this);
         this.downloadClick = this.downloadClick.bind(this);
+        this.deleteClick = this.deleteClick.bind(this);
         this.noContainerClick = this.noContainerClick.bind(this);
 
         this.state = {
@@ -16,12 +17,19 @@ import { withRouter } from 'react-router-dom';
             date: this.props.date,
             path: this.props.path,
             status: this.props.status, // for public or private
-            clickToggle: false
+            clickToggle: false,
         };
     }
 
     goDocPage(){
-        this.setState({clickToggle: !this.state.clickToggle})
+        
+        if(this.state.uuid === this.props.active){
+            this.props.setActiveId(-1);
+            this.setState({clickToggle: false})
+        }else if (this.state.uuid !== this.props.active){
+            this.props.setActiveId(this.state.uuid);
+            this.setState({clickToggle: true})
+        }
     }
 
     noContainerClick = function(e) {
@@ -57,17 +65,40 @@ import { withRouter } from 'react-router-dom';
         }
     }
 
+    deleteClick = function(e){
+        e.stopPropagation();
+        console.log("delete, path:" + this.state.path);
+    }
+
+    // componentDidMount(){
+    //     if(this.state.uuid === this.props.active){
+    //         this.setState({clickToggle: true})
+    //     }else{
+    //         this.setState({clickToggle: false})
+    //     }
+    // }
+
     render(){
-        const dropDown = (
-            <Row>
-                <Col xs={4}>
-                    <button className="downloadButton noselect" onClick={this.downloadClick} download> Download File</button>
-                </Col>
-                <Col xs={{span: 4, offset: 3}}>
-                    <button className="shareButton noselect">Share file</button>
-                </Col>
-            </Row>
-        )
+        var dropDown;
+        if(this.state.uuid === this.props.active){
+            dropDown = (
+                <Row>
+                    <Col xs={4}>
+                        <button className="downloadButton noselect" onClick={this.downloadClick} download> Download File</button>
+                    </Col>
+                    <Col xs={{span: 4}}>
+                        <button className="shareButton noselect">Share file</button>
+                    </Col>
+                    <Col>
+                        <button className="downloadButton noselect" onClick={this.deleteClick}>Delete file</button>
+                    </Col>
+                </Row>
+            )
+        }else{
+            dropDown = (<div></div>);
+        }
+
+        
         
         return(
                 <div>
