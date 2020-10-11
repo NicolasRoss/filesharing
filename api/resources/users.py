@@ -17,11 +17,13 @@ class users(Resource):
 
             try:
                 cursor = conn.cursor()
+                print("test1")
                 
                 if(args['email'] is not None and args['pass'] is not None):
                     query = "SELECT user_id, name FROM users WHERE email = %s AND password = SHA2(%s, 256)"
                     tup = (args['email'], args['pass'])
                     user_id = cursor.execute(query, tup)
+                    print("curs executed")
 
                     if(user_id > 0):
                         resp = cursor.fetchall()
@@ -43,12 +45,15 @@ class users(Resource):
         except Exception as e:
             print(e)
 
+        return({"get":"success"})
+
         
 
         
     def post(self):
         parser.add_argument('email', type=str)
         parser.add_argument('pass', type=str)
+        parser.add_argument('name', type=str)
         args = parser.parse_args()
 
         try:
@@ -56,10 +61,10 @@ class users(Resource):
             cursor = conn.cursor()
             print(args['pass'])
             print(args['email'])
-            if(args['email'] is not None and args['pass'] is not None):
+            if(args['email'] is not None and args['pass'] is not None and args['name'] is not None):
                 #validate email and pass here
-                query = "INSERT INTO users (email, password) VALUES (%s, SHA2(%s, 256))"
-                tup = (args['email'], args['pass'])
+                query = "INSERT INTO users (email, password, name) VALUES (%s, SHA2(%s, 256), %s)"
+                tup = (args['email'], args['pass'], args['name'])
                 print(tup)
                 print(query.format(tup))
                 d = cursor.execute(query, tup)
@@ -67,7 +72,7 @@ class users(Resource):
                 # cursor.close()
                 return {"request": "success"}
             else:
-                return "user and pass not submitted", 400
+                return "user pass, name not submitted", 400
         except Exception as e:
             print(e)
         finally:

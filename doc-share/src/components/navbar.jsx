@@ -90,7 +90,7 @@ class Navbar extends React.Component{
                 <Col xs = {12}>
                     <ul>
                         <a href="/" onClick={this.toHome}><li className="nav-item logo">Doc</li></a>
-                        <a href="/"><li className="nav-item right"><img className="img" alt="uhoh" src="https://i.pinimg.com/originals/0c/3b/3a/0c3b3adb1a7530892e55ef36d3be6cb8.png"></img></li></a>
+                        <a href="/"><li className="nav-item right"><i className="fas fa-user"></i></li></a>
                         <a href="/"><li className="nav-item right">Hello, {this.state.name}</li></a>
                         
                     </ul>

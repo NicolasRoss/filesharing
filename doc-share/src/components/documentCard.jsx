@@ -2,6 +2,7 @@ import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import '../css/documentCard.css';
 import { withRouter } from 'react-router-dom';
+import { API } from './api';
  class documentCard extends React.Component{
 
     constructor(props){
@@ -41,7 +42,7 @@ import { withRouter } from 'react-router-dom';
         console.log(this.state.path)
         if(this.state.uuid !== undefined){
             console.log("clicked the download button for doc_id: " + this.state.uuid);
-            var url = "http://localhost:5000/download?doc_id=" + this.state.uuid + "&name=" + this.state.name + "&path=" + this.state.path;
+            var url = API + "/download?doc_id=" + this.state.uuid + "&name=" + this.state.name + "&path=" + this.state.path;
             fetch(url, {
                 method: 'GET',
                 mode: 'cors'
@@ -83,16 +84,21 @@ import { withRouter } from 'react-router-dom';
         if(this.state.uuid === this.props.active){
             dropDown = (
                 <Row>
-                    <Col xs={4}>
-                        <button className="downloadButton noselect" onClick={this.downloadClick} download> Download File</button>
+                    <Col xs={8}>
+                        <i className="icon black fas fa-arrow-alt-circle-down fa-3x" onClick={this.downloadClick}></i>
+                        <i className="icon black fas fa-share-alt-square fa-3x" onClick={this.deleteClick}></i>
+                        <i className="icon black fas fa-trash-alt fa-3x" onClick={this.deleteClick}></i>
+                        {/* <button className="downloadButton noselect" onClick={this.downloadClick} download> Download File</button> */}
                     </Col>
-                    <Col xs={{span: 4}}>
-                        <button className="shareButton noselect">Share file</button>
-                    </Col>
-                    <Col>
-                        <button className="downloadButton noselect" onClick={this.deleteClick}>Delete file</button>
-                    </Col>
+                    {/* <Col xs={{span: 4}}> */}
+                        
+                    {/* </Col> */}
+                    {/* <Col> */}
+                        
+                        {/* <button className="downloadButton noselect" onClick={this.deleteClick}>Delete file</button> */}
+                    {/* </Col> */}
                 </Row>
+                
             )
         }else{
             dropDown = (<div></div>);
@@ -135,6 +141,7 @@ import { withRouter } from 'react-router-dom';
                             
                         
                         {this.state.clickToggle && dropDown}
+                        
                     </div>
                     
                     

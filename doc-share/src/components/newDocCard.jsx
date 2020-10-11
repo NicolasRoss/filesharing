@@ -2,6 +2,7 @@ import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import '../css/newDocCard.css'
 import Cookies from 'js-cookie'
+import { API } from './api';
 
 export default class documentCard extends React.Component{
     constructor(props){
@@ -35,7 +36,7 @@ export default class documentCard extends React.Component{
             data.append('file', this.state.selectedFile);
             
             if (this.state.selectedFile["size"] < 16 * 1024 * 1024) {
-                var url = "http://localhost:5000/documents?user=" + this.state.user_id;
+                var url = API + "/documents?user=" + this.state.user_id;
                 fetch(url, {
                     method: 'POST',
                     mode:'cors',

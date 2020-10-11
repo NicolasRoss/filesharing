@@ -2,7 +2,7 @@ import React from 'react';
 import DocumentCard from './documentCard';
 import NewDocCard from './newDocCard';
 import Cookies from "js-cookie";
-
+import { API } from './api';
 export default class DocCardContainer extends React.Component {
 
     constructor(props){
@@ -33,7 +33,7 @@ export default class DocCardContainer extends React.Component {
         
     getDocInfo(){
         // console.log(this.state.user_id)
-        var url = "http://localhost:5000/documents?user="+this.state.user_id;
+        var url = API + "/documents?user="+this.state.user_id;
         fetch(url, {
             method: 'GET',
             mode: 'cors'
