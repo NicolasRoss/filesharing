@@ -3,24 +3,29 @@ import {Container, Row, Col} from 'react-bootstrap';
 import '../css/welcomeCard.css';
 import Cookies from "js-cookie";
 import { withRouter } from 'react-router-dom';
-
+import { API } from './api';
 class welcomeCard extends React.Component{
     constructor(props){
         super(props);
         this.toggleContainer = this.toggleContainer.bind(this);
+        this.checkPasswords =  this.checkPasswords.bind(this);
+        this.checkEmail = this.checkEmail.bind(this);
         
         this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
             email: '',
             name: '',
             password: '',
-            confirmPassword: '',
+            password2: '',
             containerToggle: true
         };
     }
 
-    emailChangeHandler = (event) => {
-        this.setState({username: event.target.value})
+    changeHandler = (evt) =>{
+        const value = evt.target.value;
+        // console.log("name: " + evt.target.name)
+        // console.log("value:" + value)
+        this.setState({[evt.target.name]: value})
     }
     passwordChangeHandler = (event) => {
         this.setState({password: event.target.value})
@@ -32,40 +37,124 @@ class welcomeCard extends React.Component{
         console.log(this.state.containerToggle)
     }
 
-    handleSubmit = e => {
-        e.preventDefault();
-        console.log("submit button pressed")
-        console.log(this.state.username)
-        console.log(this.state.password)
-        var url = "http://localhost:5000/users?email=user@gmail.com&pass=testing1234"
-        fetch(url, {
-            method: 'GET',
-            mode:'cors',
-            
-        })
-        .then(res => res.json())
-        .then(
-            (result) => {
-                console.log(result)
-                if(result !== undefined && result["user_id"] !== undefined){
-                    console.log("check success");
-                    //go to welcome page here
-                    console.log("result is:"+result["user_id"] )
-                    if(result["user_id"] !== "-1"){
-                        console.log("somehow passed the check")
-                        Cookies.set("user_id", result["user_id"], {expires: 7})
-                        this.props.history.push({
-                            pathname: '/'
-                            // state: {user_id: result["user_id"]}
-                        });
-                    }
-                }
-                
-            }
-        ).catch(error => {
-            alert(error.message)
-        })
+    checkEmail(){
+        const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        const emailCheck = re.test(this.state.email);
+        console.log("emailCheck:"+ emailCheck);
+        if(emailCheck === false){
+            alert("please check if your email is correct");
+        }
+        return emailCheck;
+    }
+    checkPasswords(){
+        if(this.state.password !== this.state.password2){
+            alert("passwords aren't the same")
+            return false;
+        }
+        const posPass = this.state.password;
+        var passCheck = false;
+        var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+        if(passw.test(posPass)){
+            passCheck = true;
+        }
+        if(passCheck === false){
+            alert("password must contain uppercase, lowercase, numbers and be longer than 8 characters");
+        }
+        console.log("pass check:" + passCheck);
+        return passCheck;
+    }
 
+    //testing automated build
+
+    handleSubmit = (event) => {
+        event.preventDefault();
+        console.log("submit button pressed")
+        const submitRequest = event.target.getAttribute('name');
+        var url;
+        if(submitRequest === "login"){
+            if(this.state.email !== '' && this.state.password !== ''){
+                url = API + "/users?email=" + this.state.email + "&pass=" + this.state.password;
+                fetch(url, {
+                    method: 'GET',
+                    mode:'cors',
+                    
+                })
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        console.log(result)
+                        if(result !== undefined){
+                            if(result["user_id"] !== undefined){
+                                console.log("check success");
+                                //go to welcome page here
+                                console.log("result is:"+result["user_id"] )
+                                if(result["user_id"] !== "-1"){
+                                    console.log("somehow passed the check")
+                                    Cookies.remove("user_id");
+                                    Cookies.set("user_id", result["user_id"], {expires: 7})
+                                    if(result["name"] !== undefined){
+                                        Cookies.set("name", result["name"], {expires: 7})
+                                    }
+                                    this.props.history.push({
+                                        pathname: '/'
+                                        // state: {user_id: result["user_id"]}
+                                    });
+                                }
+                            }
+                            
+                        }
+                        
+                    }
+            
+                ).catch(error => {
+                    alert(error.message)
+                })
+            }else{
+                alert("Please check your email and password")
+            }
+        }else if(submitRequest === "signup"){
+
+            if(this.checkEmail() === true && this.checkPasswords() === true && this.state.name !== ''){
+                console.log("create user request")
+                url = API + "/users?email=" + this.state.email + "&pass=" + this.state.password + "&name=" + this.state.name
+                fetch(url, {
+                    method: 'POST',
+                    mode:'cors',
+                    
+                })
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        console.log(result)
+                        if(result !== undefined){
+                            if(result["user_id"] !== undefined){
+                                console.log("check success");
+                                //go to welcome page here
+                                console.log("result is:"+result["user_id"] )
+                                if(result["user_id"] !== "-1"){
+                                    console.log("somehow passed the check")
+                                    Cookies.remove("user_id");
+                                    Cookies.set("user_id", result["user_id"], {expires: 7})
+                                    if(result["name"] !== undefined){
+                                        Cookies.set("name", result["name"], {expires: 7})
+                                    }
+                                    this.props.history.push({
+                                        pathname: '/'
+                                        // state: {user_id: result["user_id"]}
+                                    });
+                                }
+                            }
+                            
+                        }
+                        
+                    }
+                ).catch(error =>{
+                    alert(error.message)
+                })
+            }
+            
+        }
+        
     }
 
     componentDidMount(){
@@ -89,15 +178,15 @@ class welcomeCard extends React.Component{
                         <div>
                             <div className="signInHeader">Login</div>
                             
-                            <form autoComplete="off" onSubmit={this.handleSubmit}>
+                            <form autoComplete="off" name="login" onSubmit={this.handleSubmit}>
                                 
                                 <label className="signInSubHeader">
                                     <div className="tab">Email</div>
-                                    <input className="input-form" type="text" name="email" onChange={this.emailChangeHandler}/>
+                                    <input className="input-form" type="text" name="email" onChange={this.changeHandler}/>
                                 </label>
                                 <label className="signInSubHeader">
                                     <div className="tab">Password</div>
-                                    <input className="input-form" type="password" name="password" onChange={this.passwordChangeHandler}/>
+                                    <input className="input-form" type="password" name="password" onChange={this.changeHandler}/>
                                 </label>
                                 <button type="submit" className="submit-form">Submit</button>
                             </form>
@@ -115,22 +204,22 @@ class welcomeCard extends React.Component{
                     <Col className="signInContainer" xs={{span: 12, offset:0}}>
                         <div>
                             <div className="signInHeader">Sign Up</div>
-                            <form autoComplete="off" onSubmit={this.handleSubmit}>
+                            <form autoComplete="off" name="signup" onSubmit={this.handleSubmit}>
                                 <label className="signInSubHeader">
                                     <div className="tab">Email</div>
-                                    <input className="input-form" type="text" name="email" onChange={this.emailChangeHandler}/>
+                                    <input className="input-form" type="text" name="email" onChange={this.changeHandler}/>
                                 </label>
                                 <label className="signInSubHeader">
                                     <div className="tab">Name</div>
-                                    <input className="input-form" type="text" name="name" onChange={this.emailChangeHandler}/>
+                                    <input className="input-form" type="text" name="name" onChange={this.changeHandler}/>
                                 </label>
                                 <label className="signInSubHeader">
                                     <div className="tab">Password</div>
-                                    <input className="input-form" type="password" name="password" onChange={this.passwordChangeHandler}/>
+                                    <input className="input-form" type="password" name="password" onChange={this.changeHandler}/>
                                 </label>
                                 <label className="signInSubHeader">
                                     <div className="tab">Confirm Password</div>
-                                    <input className="input-form" type="password" name="password2" onChange={this.passwordChangeHandler}/>
+                                    <input className="input-form" type="password" name="password2" onChange={this.changeHandler}/>
                                 </label>
                                 <button type="submit" className="submit-form">Submit</button>
                             </form>

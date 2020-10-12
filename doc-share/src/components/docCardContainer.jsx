@@ -2,16 +2,19 @@ import React from 'react';
 import DocumentCard from './documentCard';
 import NewDocCard from './newDocCard';
 import Cookies from "js-cookie";
-
+import { API } from './api';
 export default class DocCardContainer extends React.Component {
 
     constructor(props){
         super(props);
         this.getDocInfo = this.getDocInfo.bind(this);
+        this.rerenderContainer = this.rerenderContainer.bind(this);
+        this.setActiveId = this.setActiveId.bind(this);
         this.state = {
             isFetching: true, //later for loading animation
-            user_id: this.props.user_id,
-            doc_info: []
+            user_id: Cookies.get("user_id"),
+            doc_info: [],
+            activeId: -1
         }
     }
 
@@ -29,15 +32,15 @@ export default class DocCardContainer extends React.Component {
     }
         
     getDocInfo(){
-        // console.log(this.state.user_id)
-        var url = "http://localhost:5000/documents?user="+this.state.user_id;
+        console.log("fetching documents for:" + this.state.user_id)
+        var url = API + "/documents?user="+this.state.user_id;
         fetch(url, {
             method: 'GET',
             mode: 'cors'
         })
         .then(res => res.json())
         .then((result) => {
-            console.log(result)
+            // console.log(result)
             this.setState({ doc_info: result})
             this.setState({isFetching: false})
         }).catch((error) => {
@@ -45,10 +48,23 @@ export default class DocCardContainer extends React.Component {
         });
     }
 
+    rerenderContainer(){
+        console.log("rerendering container")
+        this.setState({isFetching: true})
+        this.getDocInfo();
+    }
+
+    setActiveId(id){
+        if (id !== undefined){
+            this.setState({activeId: id})
+        }
+    }
+
 
     render() {
         var cards;
         // console.log(this.state.doc_info);
+        // console.log(this.state.activeId)
         if(this.state.user_id !== -1 && this.state.isFetching !== true && this.state.doc_info !== null){
             cards = this.state.doc_info.map((doc) => 
                 <DocumentCard
@@ -58,6 +74,9 @@ export default class DocCardContainer extends React.Component {
                     name={doc["file_name"]}
                     status={doc["status"]}
                     path={doc["location"]}
+                    active= {this.state.activeId}
+                    setActiveId = {this.setActiveId}
+                    
                 />   
         );
         }else{
@@ -69,7 +88,7 @@ export default class DocCardContainer extends React.Component {
         return(
             <div>
                 {cards}
-                <NewDocCard/>
+                <NewDocCard rerenderContainer = {this.rerenderContainer}/>
             </div>
         );
     }

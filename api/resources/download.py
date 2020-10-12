@@ -42,4 +42,7 @@ class download(Resource):
 
         except Exception as e:
             print(e)
+
+    def delete(self):
+        return {"request": "delete"}
     
