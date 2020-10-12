@@ -63,12 +63,19 @@ class users(Resource):
             print(args['email'])
             if(args['email'] is not None and args['pass'] is not None and args['name'] is not None):
                 #validate email and pass here
-                query = "INSERT INTO users (email, password, name) VALUES (%s, SHA2(%s, 256), %s)"
+                query = "INSERT INTO users (email, password, name) VALUES (%s, SHA2(%s, 256), %s);"
                 tup = (args['email'], args['pass'], args['name'])
                 print(tup)
                 print(query.format(tup))
                 d = cursor.execute(query, tup)
                 conn.commit()
+                user_id = cursor.execute("SELECT user_id, name FROM users WHERE user_id = LAST_INSERT_ID()")
+                
+                if(user_id > 0):
+                    resp = cursor.fetchall()
+                    print(resp[0])
+                    return({"user_id": resp[0][0], "name": resp[0][1]})
+
                 # cursor.close()
                 return {"request": "success"}
             else:

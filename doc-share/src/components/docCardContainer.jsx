@@ -12,7 +12,7 @@ export default class DocCardContainer extends React.Component {
         this.setActiveId = this.setActiveId.bind(this);
         this.state = {
             isFetching: true, //later for loading animation
-            user_id: this.props.user_id,
+            user_id: Cookies.get("user_id"),
             doc_info: [],
             activeId: -1
         }
@@ -32,7 +32,7 @@ export default class DocCardContainer extends React.Component {
     }
         
     getDocInfo(){
-        // console.log(this.state.user_id)
+        console.log("fetching documents for:" + this.state.user_id)
         var url = API + "/documents?user="+this.state.user_id;
         fetch(url, {
             method: 'GET',
