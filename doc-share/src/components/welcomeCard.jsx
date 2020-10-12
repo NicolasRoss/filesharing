@@ -70,41 +70,46 @@ class welcomeCard extends React.Component{
         const submitRequest = event.target.getAttribute('name');
         var url;
         if(submitRequest === "login"){
-            url = API + "/users?email=" + this.state.email + "&pass=" + this.state.password;
-            fetch(url, {
-                method: 'GET',
-                mode:'cors',
-                
-            })
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    console.log(result)
-                    if(result !== undefined){
-                        if(result["user_id"] !== undefined){
-                            console.log("check success");
-                            //go to welcome page here
-                            console.log("result is:"+result["user_id"] )
-                            if(result["user_id"] !== "-1"){
-                                console.log("somehow passed the check")
-                                Cookies.remove("user_id");
-                                Cookies.set("user_id", result["user_id"], {expires: 7})
-                                if(result["name"] !== undefined){
-                                    Cookies.set("name", result["name"], {expires: 7})
+            if(this.state.email !== '' && this.state.password !== ''){
+                url = API + "/users?email=" + this.state.email + "&pass=" + this.state.password;
+                fetch(url, {
+                    method: 'GET',
+                    mode:'cors',
+                    
+                })
+                .then(res => res.json())
+                .then(
+                    (result) => {
+                        console.log(result)
+                        if(result !== undefined){
+                            if(result["user_id"] !== undefined){
+                                console.log("check success");
+                                //go to welcome page here
+                                console.log("result is:"+result["user_id"] )
+                                if(result["user_id"] !== "-1"){
+                                    console.log("somehow passed the check")
+                                    Cookies.remove("user_id");
+                                    Cookies.set("user_id", result["user_id"], {expires: 7})
+                                    if(result["name"] !== undefined){
+                                        Cookies.set("name", result["name"], {expires: 7})
+                                    }
+                                    this.props.history.push({
+                                        pathname: '/'
+                                        // state: {user_id: result["user_id"]}
+                                    });
                                 }
-                                this.props.history.push({
-                                    pathname: '/'
-                                    // state: {user_id: result["user_id"]}
-                                });
                             }
+                            
                         }
                         
                     }
-                    
-                }
-            ).catch(error => {
-                alert(error.message)
-            })
+            
+                ).catch(error => {
+                    alert(error.message)
+                })
+            }else{
+                alert("Please check your email and password")
+            }
         }else if(submitRequest === "signup"){
 
             if(this.checkEmail() === true && this.checkPasswords() === true && this.state.name !== ''){

@@ -75,9 +75,8 @@ class users(Resource):
                     resp = cursor.fetchall()
                     print(resp[0])
                     return({"user_id": resp[0][0], "name": resp[0][1]})
-
-                # cursor.close()
-                return {"request": "success"}
+                else:
+                    return {"user_id": "-1"}
             else:
                 return "user pass, name not submitted", 400
         except Exception as e:
