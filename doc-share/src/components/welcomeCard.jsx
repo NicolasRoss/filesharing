@@ -64,6 +64,8 @@ class welcomeCard extends React.Component{
         return passCheck;
     }
 
+    //testing automated build
+
     handleSubmit = (event) => {
         event.preventDefault();
         console.log("submit button pressed")
