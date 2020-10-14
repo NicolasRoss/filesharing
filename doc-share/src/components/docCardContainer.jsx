@@ -113,7 +113,15 @@ export default class DocCardContainer extends React.Component {
                 );
             }else{
                 console.log("no documents")
-                cards = (<div className="uuidContent">no documents matching search..</div>);
+                cards = (
+                <Container>
+                    <Row>
+                        <Col>
+                            <div className="uuidContent">no documents matching search..</div>
+                        </Col>
+                    </Row>
+                </Container>
+                );
             }
   
         
@@ -124,7 +132,7 @@ export default class DocCardContainer extends React.Component {
         }
 
         var newCard;
-        if(this.state.serachField !== ''){
+        if(this.state.searchField === ''){
             newCard = (<NewDocCard rerenderContainer = {this.rerenderContainer}/>);
         }else{
             newCard = (
@@ -142,6 +150,7 @@ export default class DocCardContainer extends React.Component {
                     </Row>
                 </Container>
                 {cards}
+                {newCard}
                 
             </div>
         );
