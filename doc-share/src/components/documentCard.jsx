@@ -159,9 +159,10 @@ class documentCard extends React.Component{
                                     <div style={{"pointerEvents": "none", "cursor": "initial"}} className="uuidContent">{this.state.uuid}</div>
                                 </div>
                             </Col>
-                            <Col  sm={12} lg={2}>
+                            <Col  sm={12} lg={1}>
                                 <div className="popContainer noselect">
-                                    <div  className="publicOrPrivate">Public</div>
+                                    <i className="lock fas fa-lock-open"></i>
+                                    {/* <div  className="publicOrPrivate">Public</div> */}
                                 </div>
                                 
                             </Col>
