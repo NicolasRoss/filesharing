@@ -1,7 +1,8 @@
 from flask_restful import Resource, reqparse
 from flask import jsonify, request
-from werkzeug.utils import secure_filename 
+from datetime import datetime, date
 from common import db
+import werkzeug
 import os
 
 parser = reqparse.RequestParser()
@@ -44,7 +45,7 @@ class documents(Resource):
                         resp = cursor.fetchall()
 
                         for result in resp:
-                            print(result)
+                            # print(result)
                             content = {
                                 "doc_id": result[0],
                                 "location": result[1],
@@ -77,33 +78,39 @@ class documents(Resource):
             try:
                 cursor = conn.cursor()
                 parser.add_argument('user', type=str)
+                parser.add_argument('action', type=str)
                 args = parser.parse_args()
-                user_id = args['user']
-                
-                if user_id is not None:
-                    file_to_upload = request.files["file"]
-                    file_name = file_to_upload.filename
 
+                user_id = args['user']
+                action = args['action']
+
+                if user_id is not None and action == "insert":
+                    parser.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
+                    args = parser.parse_args()
+                    file_to_upload = args["file"]
+                    file_name = file_to_upload.filename
+                    
                     # check if the file is a supported type and save to folder
                     if supported_file(file_name):
                         ext = file_ext(file_name)
                         folder = supported_file_types[ext]
                         location = upload_path + '/' + folder
+                        date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
                         # INSERT file data into DB to generate uuid
-                        insert = 'INSERT INTO documents (user_id, directory_loc, document_name, date, public) VALUES (%s, %s, %s, NOW(), %s)'
-                        values = (user_id, location, file_name, 1)
+                        insert = 'INSERT INTO documents (user_id, directory_loc, document_name, date, public) VALUES (%s, %s, %s, %s, %s)'
+                        values = (user_id, location, file_name, date, 1)
                         cursor.execute(insert, values)
                         conn.commit()
 
                         # SELECT for the uuid
-                        query = 'SELECT uuid_id FROM documents WHERE (directory_loc = %s AND document_name = %s)'
-                        values = (location, file_name)
+                        query = 'SELECT uuid_id FROM documents WHERE (user_id=%s AND directory_loc=%s AND document_name=%s AND date=%s)'
+                        values = (user_id, location, file_name, date)
                         cursor.execute(query, values)
                         response = cursor.fetchall()[0]
                         uuid = response[0]
 
-                        # save file to server
+                        # # save file to server
                         file_to_upload.save(os.path.join(upload_path, folder + uuid + '.' + ext))
                         
                         return {
@@ -113,14 +120,41 @@ class documents(Resource):
                             }
 
                     else:
-
                         return 'unsupported file type', 400
                 
+                elif user_id is not None and action == "delete":
+                    parser.add_argument('uuid', location='json')
+                    parser.add_argument('name', location='json')
+                    parser.add_argument('date', location='json')
+                    parser.add_argument('path', location='json')
+                    args = parser.parse_args()
+
+                    uuid = args['uuid']
+                    path = args['path']
+                    file_name = args['name']
+                    date = datetime.strptime(args['date'], '%a, %d %b %Y %H:%M:%S %Z')
+
+                    # DELETE from DB
+                    delete = 'DELETE FROM documents WHERE (user_id=%s AND uuid_id=%s AND directory_loc=%s AND document_name=%s AND date=%s)'
+                    values = (user_id, uuid, path, file_name, date)
+                    cursor.execute(delete, values)
+                    conn.commit()
+
+                    # DELETE from server
+                    file_loc = args['path'] + args['uuid'] + '.' + file_ext(args['name'])
+                    os.remove(file_loc)
+                    
+                    return {
+                                'name': args['name'],
+                                'message': 'file removed'
+                            }
+
                 else:
                     return 'no user submitted', 400
-                    
-            except:
-                print('QUERY FAILED')
+            except Exception as e:
+                print(e)
+            # except:
+            #     print('QUERY FAILED')
             
             finally:
                 conn.close()
