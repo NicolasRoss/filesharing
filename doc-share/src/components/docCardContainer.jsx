@@ -43,6 +43,7 @@ export default class DocCardContainer extends React.Component {
             // console.log(result)
             this.setState({ doc_info: result})
             this.setState({isFetching: false})
+
         }).catch((error) => {
             console.log(error);
         });
@@ -76,7 +77,7 @@ export default class DocCardContainer extends React.Component {
                     path={doc["location"]}
                     active= {this.state.activeId}
                     setActiveId = {this.setActiveId}
-                    
+                    rerenderContainer={this.rerenderContainer}
                 />   
         );
         }else{
@@ -88,7 +89,9 @@ export default class DocCardContainer extends React.Component {
         return(
             <div>
                 {cards}
-                <NewDocCard rerenderContainer = {this.rerenderContainer}/>
+                <NewDocCard 
+                    rerenderContainer={this.rerenderContainer}
+                />
             </div>
         );
     }

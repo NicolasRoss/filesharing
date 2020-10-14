@@ -34,16 +34,15 @@ export default class documentCard extends React.Component{
         if (this.state.user_id !== null && this.state.selectedFile != null) {
             const data = new FormData();
             data.append('file', this.state.selectedFile);
-            
             if (this.state.selectedFile["size"] < 16 * 1024 * 1024) {
-                var url = API + "/documents?user=" + this.state.user_id;
+                var url = API + "/documents?user=" + this.state.user_id + "&action=insert";
                 fetch(url, {
                     method: 'POST',
                     mode:'cors',
                     body: data
                     
                 })
-                .then(res => res.json())
+                // .then(res => res.json())
                 .then(result => {
                     console.log(result)
                     this.props.rerenderContainer();
@@ -61,7 +60,7 @@ export default class documentCard extends React.Component{
     render(){
         return(
             <Container onClick={this.handleClick} className="newDocContainer box-shadow noselect">
-                <form>
+                <form encType="multipart/form-data">
 
                     <div className="form-group">   
                         <Row>
