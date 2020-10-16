@@ -52,7 +52,7 @@ class documentCard extends React.Component{
 
         if(this.state.uuid !== undefined){
             console.log("clicked the download button for doc_id: " + this.state.uuid);
-            var url = API + "/download?doc_id=" + this.state.uuid + "&name=" + this.state.name + "&path=" + this.state.path;
+            var url = API + "/download?uuid=" + this.state.uuid + "&name=" + this.state.name + "&path=" + this.state.path;
             fetch(url, {
                 method: 'GET',
                 mode: 'cors'
@@ -81,7 +81,7 @@ class documentCard extends React.Component{
         console.log("clicked the delete button for doc_id: " + this.state.uuid);
         console.log("delete, path: " + this.state.path);
 
-        if(this.state.uuid !== undefined) {
+        if(this.state.uuid !== null && this.state.user_id !== null) {
             var url = API + "/documents?user=" + this.state.user_id + "&action=delete";
             fetch(url, {
                 method: 'POST',
@@ -109,7 +109,47 @@ class documentCard extends React.Component{
 
     shareClick = function(e) {
         e.stopPropagation();
+        console.log("clicked shar for doc_id: " + this.state.uuid)
         console.log("share, path: " + this.state.path)
+
+        if(this.state.uuid !== null && this.state.user_id !== null) {
+            var url = API + "/link?user=" + this.state.user_id;
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                },
+                mode: 'cors',
+                body: JSON.stringify({ 
+                                        'uuid': this.state.uuid,
+                                        'name': this.state.name,
+                                        'path': this.state.path
+                                    })
+            }).then(res => {
+                return res.json();
+
+            }).then((link) => {
+                if (link !== null) {
+                    const url = API + '/' + link;
+                    const textArea = document.createElement('textarea');
+                    textArea.innerText = url;
+                    
+                    document.body.appendChild(textArea)
+                    textArea.select();
+                    document.execCommand('copy')
+
+                    textArea.parentNode.removeChild(textArea);
+                    alert('Link copied to clipboard')
+                
+                } else {
+                    alert('Failed to Generate Link')
+                }
+
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
     }
 
     // componentDidMount(){
