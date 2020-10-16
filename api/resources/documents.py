@@ -151,10 +151,9 @@ class documents(Resource):
 
                 else:
                     return 'no user submitted', 400
-            except Exception as e:
-                print(e)
-            # except:
-            #     print('QUERY FAILED')
+            
+            except:
+                print('QUERY FAILED')
             
             finally:
                 conn.close()

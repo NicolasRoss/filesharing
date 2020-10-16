@@ -46,6 +46,7 @@ class welcomeCard extends React.Component{
         }
         return emailCheck;
     }
+    
     checkPasswords(){
         if(this.state.password !== this.state.password2){
             alert("passwords aren't the same")
