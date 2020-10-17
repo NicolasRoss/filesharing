@@ -13,6 +13,7 @@ class documentCard extends React.Component{
         this.deleteClick = this.deleteClick.bind(this);
         this.shareClick = this.shareClick.bind(this);
         this.noContainerClick = this.noContainerClick.bind(this);
+        this.formatDate = this.formatDate.bind(this);
 
         this.state = {
             uuid: this.props.doc_id,
@@ -152,16 +153,25 @@ class documentCard extends React.Component{
         }
     }
 
-    // componentDidMount(){
-    //     if(this.state.uuid === this.props.active){
-    //         this.setState({clickToggle: true})
-    //     }else{
-    //         this.setState({clickToggle: false})
-    //     }
-    // }
+    formatDate(){
+        if(this.state.date !== undefined && this.state.date !== ''){
+            var t = this.state.date.split(/[- :]/);
+            var timeOfDay = 'AM';
+            var hour = parseInt(t[4]);
+            if((parseInt(t[4])) > 12){
+                timeOfDay = 'PM';
+                hour = (parseInt(t[4])) - 12;
+            }
+            var d = "" + t[0] + " " + t[2] + " " + t[1] + " " + t[3] + " " + hour + ":" + t[5] + " " + timeOfDay + " " + "EST";
+            return d;
+        }
+        return '';
+        
+    }
 
     render(){
         var dropDown;
+        
         if(this.state.uuid === this.props.active){
             dropDown = (
                 <Row className="backgroundContainer">
@@ -211,7 +221,7 @@ class documentCard extends React.Component{
                             <Row>
                                 <Col xs={6} >
                                     <div>
-                                        <div className="docSubtitle marginLeft noselect">{this.state.date}</div>
+                                        <div className="docSubtitle marginLeft noselect">{this.formatDate()}</div>
                                     </div>
                                 </Col>
                                 {/* <Col className="buffer" xs={5}>

@@ -48,12 +48,14 @@ export default class documentCard extends React.Component{
     }
 
     fileSelectedHandler = (event) => {
+        console.log(event.target.files[0])
         this.setState({
             selectedFile: event.target.files[0]
         }, () => this.fileUploadHandler())
     }
 
     fileUploadHandler = () => {
+        console.log(this.state.selectedFile)
         if (this.state.user_id !== null && this.state.selectedFile != null) {
             const data = new FormData();
             data.append('file', this.state.selectedFile);
@@ -73,6 +75,8 @@ export default class documentCard extends React.Component{
                 }).catch((error) => {
                     console.log(error);
                 });
+            }else{
+                alert("File size is too large")
             }
             // add else for file to big
             
@@ -83,14 +87,12 @@ export default class documentCard extends React.Component{
     handleDrag = (e) =>{
         e.preventDefault()
         e.stopPropagation()
-        console.log(this.state.dragCounter)
 
     }
 
     handleDragIn = (e) => {
         e.preventDefault()
         e.stopPropagation()
-        console.log("draginIn")
         this.setState({dragCounter: this.state.dragCounter + 1})
         if (e.dataTransfer.items && e.dataTransfer.items.length > 0){
             this.setState({dragging: true})
@@ -101,7 +103,6 @@ export default class documentCard extends React.Component{
     handleDragOut = (e) =>{
         e.preventDefault()
         e.stopPropagation()
-        console.log("dragout")
         
         this.setState({dragCounter: this.state.dragCounter - 1})
         // console.log("")
@@ -129,12 +130,11 @@ export default class documentCard extends React.Component{
 
 
     render(){
-        console.log("drag is:" + this.state.dragging)
         return(
-            <Container onClick={this.handleClick}>
+            <Container onClick={this.handleClick} ref={this.dropRef} className={this.state.dragging ? "newDocContainer isDragging noselect" : "newDocContainer box-shadow noselect"}>
                 <Row>
                     <Col>
-                        <div ref={this.dropRef} className={this.state.dragging ? "newDocContainer isDragging noselect" : "newDocContainer box-shadow noselect"}>
+                        <div >
                             <div className={this.state.dragging ? "newDocPlus isDragging": "newDocPlus "}>+
                                 <input
                                         name="file" 

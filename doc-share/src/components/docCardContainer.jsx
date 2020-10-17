@@ -13,6 +13,7 @@ export default class DocCardContainer extends React.Component {
         this.setActiveId = this.setActiveId.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.getCards = this.getCards.bind(this);
+        this.onkeypressed = this.onkeypressed.bind(this);
         this.state = {
             isFetching: true, //later for loading animation
             user_id: Cookies.get("user_id"),
@@ -43,6 +44,16 @@ export default class DocCardContainer extends React.Component {
             // console.log(this.state.searchField)
         }
     }
+
+    onkeypressed(evt) {
+        var code = evt.charCode || evt.keyCode;
+        if (code == 27) {
+            this.setState({searchField: ""});
+            evt.target.value = '';
+        }
+    }
+
+
         
     getDocInfo(){
         console.log("fetching documents for:" + this.state.user_id)
@@ -144,7 +155,7 @@ export default class DocCardContainer extends React.Component {
                 <Container>
                     <Row>
                         <Col xs={8}>
-                            <input type="text" className="searchBar" placeholder="search..." name="searchField" onChange={this.handleChange}></input>
+                            <input type="text" className="searchBar" placeholder="search..." name="searchField" onKeyDown={this.onkeypressed} onChange={this.handleChange}></input>
                         </Col>
                     </Row>
                 </Container>
