@@ -4,7 +4,8 @@
     margin-top: 50px;
     border-radius: 20px;
     border-color: black;
-    background: linear-gradient(45deg, #ff5f6d, #ffc371);
+    /* background: linear-gradient(45deg, #ff5f6d, #ffc371); */
+    background-color: #004643;
     box-shadow: 0 1px 1px rgba(0,0,0,0.08), 
     0 2px 2px rgba(0,0,0,0.12), 
     0 4px 4px rgba(0,0,0,0.16), 
@@ -18,7 +19,7 @@
 
 .introTitle{
     text-align: center;
-    color: white;
+    color: #E8E8E8;
     font-size: 64px;
     letter-spacing: 2px;
     margin-top: 50px;
@@ -29,14 +30,14 @@
     margin-top: 60px;
     margin-left: 4vw;
     margin-right: 4vw;
-    color:white;
+    color:#E8E8E8;
     font-size: 32px;
     margin-bottom: 40px;
 }
 
 .introButton{
     font-family: 'Raleway', sans-serif;
-    color: white;
+    color: #E8E8E8;
     background-color: black;
     font-weight: 800;
     height: 60px;
