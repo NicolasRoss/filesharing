@@ -164,11 +164,11 @@ class documentCard extends React.Component{
         var dropDown;
         if(this.state.uuid === this.props.active){
             dropDown = (
-                <Row>
+                <Row className="backgroundContainer">
                     <Col xs={8}>
-                        <i className="icon black fas fa-arrow-alt-circle-down fa-3x" onClick={this.downloadClick}></i>
-                        <i className="icon black fas fa-share-alt-square fa-3x" onClick={this.shareClick}></i>
-                        <i className="icon black fas fa-trash-alt fa-3x" onClick={this.deleteClick}></i>
+                        <i className="icon black fas fa-save" onClick={this.downloadClick}></i>
+                        <i className="icon black fas fa-share-alt" onClick={this.shareClick}></i>
+                        <i className="icon black fas fa-trash-alt" onClick={this.deleteClick}></i>
                         {/* <button className="downloadButton noselect" onClick={this.downloadClick} download> Download File</button> */}
                     </Col>
                     {/* <Col xs={{span: 4}}> */}
@@ -192,34 +192,36 @@ class documentCard extends React.Component{
                 <Container className="docContainer box-shadow">
                     
                     <div onClick={this.goDocPage} style={{"pointerEvents": "all", "cursor": "pointer"}}>
-                        <Row>
-                            <Col sm={12} lg={10}>
-                                
-                                <div onClick={this.noContainerClick}  className="uuidContainer">
-                                    <div style={{"pointerEvents": "none", "cursor": "initial"}} className="uuidContent">{this.state.uuid}</div>
-                                </div>
-                            </Col>
-                            <Col  sm={12} lg={1}>
-                                <div className="popContainer noselect">
-                                    <i className="lock fas fa-lock-open"></i>
-                                    {/* <div  className="publicOrPrivate">Public</div> */}
-                                </div>
-                                
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col xs={6} >
-                                <div>
-                                    <div className="docSubtitle marginLeft noselect">{this.state.name}</div>
-                                </div>
-                            </Col>
-                            <Col className="buffer" xs={5}>
-                                <div>
-                                    <div className="docSubtitle floatRight noselect">{this.state.date}</div>
-                                </div>
-                                
-                            </Col>
-                        </Row>
+                        <div className="foregroundContainer box-shadow">
+                            <Row>
+                                <Col sm={12} lg={10}>
+                                    
+                                    <div className="uuidContainer">
+                                        <div className="uuidContent">{this.state.name}</div>
+                                    </div>
+                                </Col>
+                                <Col  sm={12} lg={1}>
+                                    <div className="popContainer noselect">
+                                        <i className="lock fas fa-lock-open"></i>
+                                        {/* <div  className="publicOrPrivate">Public</div> */}
+                                    </div>
+                                    
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xs={6} >
+                                    <div>
+                                        <div className="docSubtitle marginLeft noselect">{this.state.date}</div>
+                                    </div>
+                                </Col>
+                                {/* <Col className="buffer" xs={5}>
+                                    <div>
+                                        <div className="docSubtitle floatRight noselect">{this.state.date}</div>
+                                    </div>
+                                    
+                                </Col> */}
+                            </Row>
+                        </div>
                             
                         
                         {this.state.clickToggle && dropDown}
