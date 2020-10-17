@@ -132,7 +132,7 @@ class documentCard extends React.Component{
 
             }).then((link) => {
                 if (link !== null) {
-                    const url = API + '/' + link;
+                    const url = 'http://localhost:3000/Share?' + link; //change this to some const WEBSITE that is either localhost or cloud domain
                     const textArea = document.createElement('textarea');
                     textArea.innerText = url;
                     
