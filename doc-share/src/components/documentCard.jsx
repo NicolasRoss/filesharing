@@ -132,7 +132,7 @@ class documentCard extends React.Component{
 
             }).then((link) => {
                 if (link !== null) {
-                    const url = API + '/' + link;
+                    const url = 'http://localhost:3000/Share?' + link; //change this to some const WEBSITE that is either localhost or cloud domain
                     const textArea = document.createElement('textarea');
                     textArea.innerText = url;
                     
@@ -179,15 +179,7 @@ class documentCard extends React.Component{
                         <i className="icon black fas fa-save" onClick={this.downloadClick}></i>
                         <i className="icon black fas fa-share-alt" onClick={this.shareClick}></i>
                         <i className="icon black fas fa-trash-alt" onClick={this.deleteClick}></i>
-                        {/* <button className="downloadButton noselect" onClick={this.downloadClick} download> Download File</button> */}
                     </Col>
-                    {/* <Col xs={{span: 4}}> */}
-                        
-                    {/* </Col> */}
-                    {/* <Col> */}
-                        
-                        {/* <button className="downloadButton noselect" onClick={this.deleteClick}>Delete file</button> */}
-                    {/* </Col> */}
                 </Row>
                 
             )
@@ -224,12 +216,6 @@ class documentCard extends React.Component{
                                         <div className="docSubtitle marginLeft noselect">{this.formatDate()}</div>
                                     </div>
                                 </Col>
-                                {/* <Col className="buffer" xs={5}>
-                                    <div>
-                                        <div className="docSubtitle floatRight noselect">{this.state.date}</div>
-                                    </div>
-                                    
-                                </Col> */}
                             </Row>
                         </div>
                             

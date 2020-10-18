@@ -41,7 +41,7 @@ class link(Resource):
                     cursor.execute(insert, values)
                     conn.commit()
 
-                    return "link?link_id=%(link_id)s" % {
+                    return "link_id=%(link_id)s" % {
                                 "link_id": link_id,
                     }
             
@@ -83,7 +83,7 @@ class link(Resource):
                     if current_date < expire_date:
                         location = directory + doc_id + '.' + file_ext(file_name)
                         if os.path.exists(location):
-                            return  send_from_directory(directory, doc_id + '.' + file_ext(file_name), name=file_name, as_attachment=True, attachment_filename=file_name)
+                            return  send_from_directory(directory, doc_id + '.' + file_ext(file_name), as_attachment=True, attachment_filename=file_name)
                     
                     else:
                         return 'link expired', 404
