@@ -13,7 +13,7 @@ class Navbar extends React.Component{
         this.toLogin = this.toLogin.bind(this);
         this.toSignUp = this.toSignUp.bind(this);
         this.toUser = this.toUser.bind(this);
-        
+        this.getName = this.getName.bind(this);
         this.state= {
             user_id: -1,
             name: ""
@@ -27,6 +27,12 @@ class Navbar extends React.Component{
         }
         if(Cookies.get("name") !== undefined){
             this.setState({name: Cookies.get("name")})
+        }
+    }
+
+    getName(){
+        if(this.state.name !== ''){
+            return this.state.name.charAt(0).toUpperCase() + this.state.name.slice(1);
         }
     }
 
@@ -96,7 +102,7 @@ class Navbar extends React.Component{
                     <ul>
                         <a href="/" onClick={this.toHome}><li className="nav-item logo noselect">Doc</li></a>
                         <a href="/Account"><li className="nav-item right"><i className="fas fa-user"></i></li></a>
-                        <li className="nav-item right noselect">Hello, {this.state.name}</li>
+                        <li className="nav-item right noselect">Hello, {this.getName()}</li>
                         
                     </ul>
                 </Col>
