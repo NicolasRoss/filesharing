@@ -154,13 +154,14 @@ export default class DocCardContainer extends React.Component {
             <div>
                 <Container>
                     <Row>
-                        <Col xs={8}>
-                            <input type="text" className="searchBar" placeholder="search..." name="searchField" onKeyDown={this.onkeypressed} onChange={this.handleChange}></input>
+                        <Col xs={12}>
+                            <input type="text" className="searchBar"  placeholder="search..." name="searchField" onKeyDown={this.onkeypressed} onChange={this.handleChange}></input>
                         </Col>
                     </Row>
+                
+                    {newCard}
+                    {cards}
                 </Container>
-                {newCard}
-                {cards}
                 
             </div>
         );

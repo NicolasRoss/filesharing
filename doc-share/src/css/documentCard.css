@@ -59,7 +59,7 @@
     display: inline-block !important;
     border-radius: 15px;
     box-sizing: border-box;
-    transform: scale(0.99)
+    /* transform: scale(0.99) */
 }
 input{
     border:1px solid #1a252a;

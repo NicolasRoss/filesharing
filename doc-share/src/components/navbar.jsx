@@ -12,7 +12,7 @@ class Navbar extends React.Component{
         this.toHome = this.toHome.bind(this);
         this.toLogin = this.toLogin.bind(this);
         this.toSignUp = this.toSignUp.bind(this);
-
+        this.toUser = this.toUser.bind(this);
         
         this.state= {
             user_id: -1,
@@ -22,7 +22,7 @@ class Navbar extends React.Component{
 
 
     componentDidMount(){
-        if(Cookies.get("user_id") !== undefined){
+        if(Cookies.get("user_id") !== undefined && this.state.user_id === -1){
             this.setState({user_id: Cookies.get("user_id")})
         }
         if(Cookies.get("name") !== undefined){
@@ -30,13 +30,18 @@ class Navbar extends React.Component{
         }
     }
 
+    toUser(){
+        this.props.history.push("/Account");
+    }
+
     toHome(){
-        Cookies.remove("user_id");
+        // Cookies.remove("user_id");
         if(this.props.rerenderHome !== undefined){
-            this.setState({user_id: -1})
-            this.props.rerenderHome();
+            // this.setState({user_id: -1})
+            // this.props.rerenderHome();
+            this.props.history.push("/");
         }else{
-            Cookies.remove("user_id");
+            // Cookies.remove("user_id");
             this.props.history.push("/");
         }
         
@@ -89,9 +94,9 @@ class Navbar extends React.Component{
             <Row>
                 <Col xs = {12}>
                     <ul>
-                        <a href="/" onClick={this.toHome}><li className="nav-item logo">Doc</li></a>
-                        <a href="/"><li className="nav-item right"><i className="fas fa-user"></i></li></a>
-                        <a href="/"><li className="nav-item right">Hello, {this.state.name}</li></a>
+                        <a href="/" onClick={this.toHome}><li className="nav-item logo noselect">Doc</li></a>
+                        <a href="/Account"><li className="nav-item right"><i className="fas fa-user"></i></li></a>
+                        <li className="nav-item right noselect">Hello, {this.state.name}</li>
                         
                     </ul>
                 </Col>

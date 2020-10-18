@@ -41,7 +41,7 @@ class link(Resource):
                     cursor.execute(insert, values)
                     conn.commit()
 
-                    return "Share?link_id=%(link_id)s" % {
+                    return "link_id=%(link_id)s" % {
                                 "link_id": link_id,
                     }
             
