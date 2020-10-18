@@ -48,14 +48,12 @@ export default class documentCard extends React.Component{
     }
 
     fileSelectedHandler = (event) => {
-        console.log(event.target.files[0])
         this.setState({
             selectedFile: event.target.files[0]
         }, () => this.fileUploadHandler())
     }
 
     fileUploadHandler = () => {
-        console.log(this.state.selectedFile)
         if (this.state.user_id !== null && this.state.selectedFile != null) {
             const data = new FormData();
             data.append('file', this.state.selectedFile);
@@ -67,10 +65,9 @@ export default class documentCard extends React.Component{
                     body: data
                     
                 })
-                // .then(res => res.json())
+                .then(res => res.json())
                 .then(result => {
-                    console.log(result)
-                    this.props.rerenderContainer();
+                    this.props.insertCard(result);
                     
                 }).catch((error) => {
                     console.log(error);

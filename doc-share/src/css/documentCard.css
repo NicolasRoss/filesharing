@@ -69,6 +69,38 @@ input:focus{
     outline:none;
 }
 
+.sortButton {
+    background-color: #1a252a;
+    color: #E8E8E8;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    text-align: center;
+    width: 100%;
+    padding: 14px;
+    margin: 0px 0;
+    display: inline-block !important;
+    border-radius: 15px;
+    box-sizing: border-box;
+    cursor: pointer;
+    position: absolute;
+    z-index: 1;
+}
+
+.ddListContainer {
+    background-color: #1a252a;
+    color: #E8E8E8;
+}
+
+.ddList {
+    padding: 0;
+    margin: 0;
+}
+
+.ddItem {
+    list-style: none;
+}
+
 .uuidContent{
     color:#E8E8E8;
     font-family: 'Montserrat', sans-serif;

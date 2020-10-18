@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DocumentCard from './documentCard';
 import NewDocCard from './newDocCard';
 import Cookies from "js-cookie";
+import Filter from "./filter"
 import {Container, Row, Col } from 'react-bootstrap';
 import { API } from './api';
 export default class DocCardContainer extends React.Component {
@@ -10,10 +11,13 @@ export default class DocCardContainer extends React.Component {
         super(props);
         this.getDocInfo = this.getDocInfo.bind(this);
         this.rerenderContainer = this.rerenderContainer.bind(this);
+        this.deleteCard = this.deleteCard.bind(this);
+        this.insertCard = this.insertCard.bind(this);
         this.setActiveId = this.setActiveId.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.getCards = this.getCards.bind(this);
         this.onkeypressed = this.onkeypressed.bind(this);
+
         this.state = {
             isFetching: true, //later for loading animation
             user_id: Cookies.get("user_id"),
@@ -85,6 +89,27 @@ export default class DocCardContainer extends React.Component {
         }
     }
 
+    insertCard = (result) => {
+        console.log(result)
+        if (this.state.doc_info !== null) {
+            const newDocInfo = [...this.state.doc_info, result]
+            this.setState({ doc_info: newDocInfo })
+        
+        } else {
+            this.setState({ doc_info: [result]})
+        }
+    }
+
+    deleteCard = (result) => {
+        console.log(result)
+        const items = [...this.state.doc_info];
+        const j = items.findIndex(item => item.doc_id === result);
+        
+        items.splice([j], 1);
+
+        this.setState({ doc_info: items });
+    }
+
     getCards(){
         if(this.state.searchField === ''){
             // console.log("searchfield empty")
@@ -102,6 +127,24 @@ export default class DocCardContainer extends React.Component {
         }
     }
 
+    handleFilter = value => {
+        const sortedDocs = this.state.doc_info;
+        sortedDocs.sort(this.dynamicSort(value))
+        this.setState({ doc_info: sortedDocs })
+    }
+
+    dynamicSort(property) {
+        var sortOrder = 1;
+        if(property[0] === '-') {
+            sortOrder = -1;
+            property = property.substr(1);
+        }
+
+        return function (a, b) {
+            var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+            return result * sortOrder
+        }
+    }
 
     render() {
         var cards;
@@ -120,7 +163,7 @@ export default class DocCardContainer extends React.Component {
                     path={doc["location"]}
                     active= {this.state.activeId}
                     setActiveId = {this.setActiveId}
-                    rerenderContainer={this.rerenderContainer}
+                    deleteCard={this.deleteCard}
                 /> 
                 );
             }else{
@@ -142,20 +185,31 @@ export default class DocCardContainer extends React.Component {
         }
 
         var newCard;
-        if(this.state.searchField === ''){
-            newCard = (<NewDocCard rerenderContainer = {this.rerenderContainer}/>);
+        if(this.state.searchField === '') {
+            newCard = (<NewDocCard insertCard = {this.insertCard}/>);
         }else{
             newCard = (
             <div></div>
             );
         }
 
+        const options = [
+            {value:"file_name", name: "Filename"},
+            {value: "date", name: "Date"}
+        ]
+
         return(
             <div>
                 <Container>
                     <Row>
-                        <Col xs={12}>
+                        <Col xs={9}>
                             <input type="text" className="searchBar"  placeholder="search..." name="searchField" onKeyDown={this.onkeypressed} onChange={this.handleChange}></input>
+                        </Col>
+                        <Col xs={2}>
+                            <Filter 
+                                handleFilter={this.handleFilter} 
+                                defaultText="Filter" 
+                                options={options}/>
                         </Col>
                     </Row>
                 
