@@ -64,16 +64,13 @@ class link(Resource):
                 args = parser.parse_args()
 
                 link_id = args['link_id'] 
-                print(link_id)
+
                 # check DB to see if link has expired
                 query = "SELECT expire_date, directory_loc, document_name, doc_id FROM links WHERE (link_id=%s)"
                 cursor.execute(query, (link_id))
                 response = cursor.fetchall()
-                print(response)
                 
-                
-                if response is not ():
-                    print("here")
+                if response != ():
                     current_date = datetime.now()
                     expire_date = response[0][0]
                     directory = response[0][1]
@@ -83,7 +80,7 @@ class link(Resource):
                     if current_date < expire_date:
                         location = directory + doc_id + '.' + file_ext(file_name)
                         if os.path.exists(location):
-                            return  send_from_directory(directory, doc_id + '.' + file_ext(file_name), as_attachment=True, attachment_filename=file_name)
+                            return send_from_directory(directory, doc_id + '.' + file_ext(file_name), as_attachment=True, attachment_filename=file_name)
                     
                     else:
                         return 'link expired', 404

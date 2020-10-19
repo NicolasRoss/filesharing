@@ -1,30 +1,32 @@
-import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import "../css/documentCard.css";
-import { withRouter } from "react-router-dom";
-import Cookies from "js-cookie";
-import { API } from "./api";
 
-class documentCard extends React.Component {
-  constructor(props) {
-    super(props);
-    this.goDocPage = this.goDocPage.bind(this);
-    this.downloadClick = this.downloadClick.bind(this);
-    this.deleteClick = this.deleteClick.bind(this);
-    this.shareClick = this.shareClick.bind(this);
-    this.noContainerClick = this.noContainerClick.bind(this);
-    this.formatDate = this.formatDate.bind(this);
+import React from 'react';
+import {Container, Row, Col, ResponsiveEmbed} from 'react-bootstrap';
+import '../css/documentCard.css';
+import { withRouter } from 'react-router-dom';
+import Cookies from 'js-cookie'
+import { API } from './api';
 
-    this.state = {
-      uuid: this.props.doc_id,
-      name: this.props.name,
-      date: this.props.date,
-      path: this.props.path,
-      user_id: null,
-      status: this.props.status, // for public or private
-      clickToggle: false,
-    };
-  }
+class documentCard extends React.Component{
+    constructor(props){
+        super(props);
+        this.goDocPage = this.goDocPage.bind(this);
+        this.downloadClick = this.downloadClick.bind(this);
+        this.deleteClick = this.deleteClick.bind(this);
+        this.shareClick = this.shareClick.bind(this);
+        this.noContainerClick = this.noContainerClick.bind(this);
+        this.formatDate = this.formatDate.bind(this);
+
+        this.state = {
+            uuid: this.props.doc_id,
+            name: this.props.name,
+            date: this.props.date,
+            path: this.props.path,
+            user_id: null,
+            status: this.props.status, // for public or private
+            clickToggle: false,
+        };
+    }
+
 
   componentDidMount() {
     if (Cookies.get("user_id") !== undefined) {
@@ -87,31 +89,37 @@ class documentCard extends React.Component {
     e.stopPropagation();
     console.log("clicked the delete button for doc_id: " + this.state.uuid);
     console.log("delete, path: " + this.state.path);
+    deleteClick = function(e){
+        e.stopPropagation();
+        console.log("clicked the delete button for doc_id: " + this.state.uuid);
+        console.log("delete, path: " + this.state.path);
+        this.props.deleteCard(this.state.uuid);
 
-    if (this.state.uuid !== null && this.state.user_id !== null) {
-      var url =
-        API + "/documents?user=" + this.state.user_id + "&action=delete";
-      fetch(url, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        mode: "cors",
-        body: JSON.stringify({
-          uuid: this.state.uuid,
-          name: this.state.name,
-          date: this.state.date,
-          path: this.state.path,
-        }),
-      })
-        .then((res) => {
-          console.log(res);
-          this.props.rerenderContainer();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        if(this.state.uuid !== null && this.state.user_id !== null) {
+            var url = API + "/documents?user=" + this.state.user_id + "&action=delete";
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                },
+                mode: 'cors',
+                body: JSON.stringify({ 
+                                        'uuid': this.state.uuid,
+                                        'name': this.state.name,
+                                        'date': this.state.date,
+                                        'path': this.state.path
+                                    })
+
+            }).then(res => res.json())
+            .then(result => {
+                console.log("deleted")
+
+            }).catch((error) => {
+                console.log(error);
+            });
+        }
+
     }
   };
 

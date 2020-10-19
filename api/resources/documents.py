@@ -95,17 +95,17 @@ class documents(Resource):
                         ext = file_ext(file_name)
                         folder = supported_file_types[ext]
                         location = upload_path + '/' + folder
-                        date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                        date = datetime.now()
 
                         # INSERT file data into DB to generate uuid
                         insert = 'INSERT INTO documents (user_id, directory_loc, document_name, date, public) VALUES (%s, %s, %s, %s, %s)'
-                        values = (user_id, location, file_name, date, 1)
+                        values = (user_id, location, file_name, date.strftime('%Y-%m-%d %H:%M:%S'), 1)
                         cursor.execute(insert, values)
                         conn.commit()
 
                         # SELECT for the uuid
                         query = 'SELECT uuid_id FROM documents WHERE (user_id=%s AND directory_loc=%s AND document_name=%s AND date=%s)'
-                        values = (user_id, location, file_name, date)
+                        values = (user_id, location, file_name, date.strftime('%Y-%m-%d %H:%M:%S'))
                         cursor.execute(query, values)
                         response = cursor.fetchall()[0]
                         uuid = response[0]
@@ -113,11 +113,13 @@ class documents(Resource):
                         # # save file to server
                         file_to_upload.save(os.path.join(upload_path, folder + uuid + '.' + ext))
                         
-                        return {
-                                'data': uuid + '.' + ext,
-                                'location': upload_path + '/' + folder,
-                                'message': 'file uploaded'
-                            }
+                        return jsonify({
+                                    "doc_id": uuid,
+                                    "location": location,
+                                    "file_name": file_name,
+                                    "date": date,
+                                    "status": 1  # will need to change this when we actually do something with status
+                                })
 
                     else:
                         return 'unsupported file type', 400
@@ -144,16 +146,19 @@ class documents(Resource):
                     file_loc = args['path'] + args['uuid'] + '.' + file_ext(args['name'])
                     os.remove(file_loc)
                     
-                    return {
-                                'name': args['name'],
-                                'message': 'file removed'
-                            }
+                    return jsonify({
+                                    "doc_id": uuid,
+                                    "location": path,
+                                    "file_name": file_name,
+                                    "date": date,
+                                    "status": 1  # will need to change this when we actually do something with status
+                                })
 
                 else:
                     return 'no user submitted', 400
             
-            except:
-                print('QUERY FAILED')
+            except Exception as e:
+                print(e)
             
             finally:
                 conn.close()
