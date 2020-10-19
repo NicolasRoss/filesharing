@@ -5,8 +5,9 @@ import Cookies from "js-cookie";
 import Filter from "./filter"
 import {Container, Row, Col } from 'react-bootstrap';
 import { API } from './api';
-export default class DocCardContainer extends React.Component {
 
+
+export default class DocCardContainer extends React.Component {
     constructor(props){
         super(props);
         this.getDocInfo = this.getDocInfo.bind(this);
@@ -25,69 +26,82 @@ export default class DocCardContainer extends React.Component {
             activeId: -1,
             searchField: ''
         }
-    }
 
-    async componentDidMount() { 
-        if(Cookies.get("user_id") !== undefined){
-            this.setState({user_id: Cookies.get("user_id")})
-            try {
-                await this.getDocInfo();
-            
-            } catch(error) {
-                console.log(error);
-            }
+  async componentDidMount() {
+    if (Cookies.get("user_id") !== undefined) {
+      this.setState({ user_id: Cookies.get("user_id") });
+      try {
+        await this.getDocInfo();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  handleChange = (event) => {
+    const req = event.target.getAttribute("name");
+    console.log("req is:" + req);
+    if (req === "searchField") {
+      this.setState({ searchField: event.target.value });
+      // console.log(this.state.searchField)
+    }
+  };
+
+  onkeypressed(evt) {
+    var code = evt.charCode || evt.keyCode;
+    if (code == 27) {
+      this.setState({ searchField: "" });
+      evt.target.value = "";
+    }
+  }
+
+  getDocInfo() {
+    console.log("fetching documents for:" + this.state.user_id);
+    var url = API + "/documents?user=" + this.state.user_id;
+    fetch(url, {
+      method: "GET",
+      mode: "cors",
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        // console.log(result)
+        this.setState({ doc_info: result });
+        this.setState({ isFetching: false });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  rerenderContainer() {
+    console.log("rerendering container");
+    this.setState({ isFetching: true });
+    this.getDocInfo();
+  }
+
+  setActiveId(id) {
+    if (id !== undefined) {
+      this.setState({ activeId: id });
+    }
+  }
+
+  getCards() {
+    if (this.state.searchField === "") {
+      // console.log("searchfield empty")
+      return this.state.doc_info;
+    } else {
+      var searchedCards = [];
+      this.state.doc_info.map((doc) => {
+        if (doc["file_name"].includes(this.state.searchField)) {
+          searchedCards.push(doc);
         }
-
+      });
+      // console.log("serachfield not empty")
+      // console.log(searchedCards)
+      return searchedCards;
     }
+  }
 
-    handleChange = (event) =>{
-        const req = event.target.getAttribute('name')
-        console.log("req is:" + req)
-        if(req === 'searchField'){
-            this.setState({searchField: event.target.value})
-            // console.log(this.state.searchField)
-        }
-    }
-
-    onkeypressed(evt) {
-        var code = evt.charCode || evt.keyCode;
-        if (code == 27) {
-            this.setState({searchField: ""});
-            evt.target.value = '';
-        }
-    }
-
-
-        
-    getDocInfo(){
-        console.log("fetching documents for:" + this.state.user_id)
-        var url = API + "/documents?user="+this.state.user_id;
-        fetch(url, {
-            method: 'GET',
-            mode: 'cors'
-        })
-        .then(res => res.json())
-        .then((result) => {
-            // console.log(result)
-            this.setState({ doc_info: result})
-            this.setState({isFetching: false})
-
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
-
-    rerenderContainer(){
-        console.log("rerendering container")
-        this.setState({isFetching: true})
-        this.getDocInfo();
-    }
-
-    setActiveId(id){
-        if (id !== undefined){
-            this.setState({activeId: id})
-        }
-    }
 
     insertCard = (result) => {
         console.log(result)
@@ -221,3 +235,4 @@ export default class DocCardContainer extends React.Component {
         );
     }
 }
+
