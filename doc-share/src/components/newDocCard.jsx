@@ -88,40 +88,6 @@ export default class documentCard extends React.Component {
     e.stopPropagation();
   };
 
-
-    fileSelectedHandler = (event) => {
-        this.setState({
-            selectedFile: event.target.files[0]
-        }, () => this.fileUploadHandler())
-    }
-
-    fileUploadHandler = () => {
-        if (this.state.user_id !== null && this.state.selectedFile != null) {
-            const data = new FormData();
-            data.append('file', this.state.selectedFile);
-            if (this.state.selectedFile["size"] < 16 * 1024 * 1024) {
-                var url = API + "/documents?user=" + this.state.user_id + "&action=insert";
-                fetch(url, {
-                    method: 'POST',
-                    mode:'cors',
-                    body: data
-                    
-                })
-                .then(res => res.json())
-                .then(result => {
-                    this.props.insertCard(result);
-                    
-                }).catch((error) => {
-                    console.log(error);
-                });
-            }else{
-                alert("File size is too large")
-            }
-            // add else for file to big
-            
-        }
-        // add else for no user_id
-
   handleDragIn = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -129,7 +95,6 @@ export default class documentCard extends React.Component {
     this.setState({ dragCounter: this.state.dragCounter + 1 });
     if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
       this.setState({ dragging: true });
-
     }
   };
 
@@ -163,7 +128,7 @@ export default class documentCard extends React.Component {
 
   render() {
     return (
-      <Container
+      <div
         onClick={this.handleClick}
         ref={this.dropRef}
         className={
@@ -193,7 +158,7 @@ export default class documentCard extends React.Component {
             </div>
           </Col>
         </Row>
-      </Container>
+      </div>
     );
   }
 }
