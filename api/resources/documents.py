@@ -167,3 +167,19 @@ class documents(Resource):
             print(e)
 
         
+
+    def put(self):
+        parser.add_argument('public', type=str)
+        parser.add_argument('user_id', type=str)
+        args = parser.parse_args()
+        try:
+            conn = db.mysql.connect()
+            cursor = conn.cursor()
+            if(args['public'] is not None and args['user_id'] is not None):                    
+                print()
+        except Exception as e:
+            print(e)
+        finally:
+            cursor.close()
+            conn.close()
+            

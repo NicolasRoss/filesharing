@@ -15,16 +15,12 @@ export default class Intro extends React.Component {
           <Col className="introContainer" xs={12}>
             <div>
               <div>
-                <div className="introTitle">Dropdocs</div>
+                <div className="introTitle">Doc</div>
                 <div className="introStatement">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam a sapien facilisis, sagittis ligula dictum, mollis
-                  elit. Sed massa odio, sodales non erat eget, consectetur
-                  luctus turpis. Fusce sit amet accumsan augue. Duis semper
-                  tortor velit, tincidunt imperdiet ligula vestibulum ut. Proin
-                  ullamcorper faucibus magna sit amet sollicitudin. In ac quam
-                  enim. Suspendisse sed tortor pellentesque, ultricies ligula
-                  eget,
+                  Doc is a user-friendly file hosting web application with
+                  focuses on making work easier for people with innovative ways
+                  to reduce busywork so users can focus on the work that matters
+                  to them.
                 </div>
                 <button className="introButton" onClick={this.props.toLogin}>
                   Login

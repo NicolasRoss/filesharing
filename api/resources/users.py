@@ -84,3 +84,27 @@ class users(Resource):
         finally:
             cursor.close()
             conn.close()
+
+
+    def put(self):
+        # parser.add_argument('pass', type=str)
+        parser.add_argument('newPass', type=str)
+        parser.add_argument('user_id', type=str)
+        args = parser.parse_args()
+
+        try:
+            conn = db.mysql.connect()
+            cursor = conn.cursor()
+            if(args['newPass'] is not None and args['user_id'] is not None):
+                query = "UPDATE users SET password = SHA2(%s, 256) WHERE user_id = %s"
+                tup = (args['newPass'], args['user_id'])
+                d = cursor.execute(query, tup)
+                conn.commit()
+                print(d)
+                return {"request": "success"}
+        except Exception as e:
+            print(e)
+        finally:
+            cursor.close()
+            conn.close()
+                
