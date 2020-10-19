@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, ResponsiveEmbed } from "react-bootstrap";
 import "../css/documentCard.css";
 import { withRouter } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -42,11 +42,11 @@ class documentCard extends React.Component {
     }
   }
 
-  noContainerClick = function (e) {
+  noContainerClick = (e) => {
     e.stopPropagation();
   };
 
-  downloadClick = function (e) {
+  downloadClick = (e) => {
     e.stopPropagation();
     console.log("download, path: " + this.state.path);
 
@@ -83,10 +83,11 @@ class documentCard extends React.Component {
     }
   };
 
-  deleteClick = function (e) {
+  deleteClick = (e) => {
     e.stopPropagation();
     console.log("clicked the delete button for doc_id: " + this.state.uuid);
     console.log("delete, path: " + this.state.path);
+    this.props.deleteCard(this.state.uuid);
 
     if (this.state.uuid !== null && this.state.user_id !== null) {
       var url =
@@ -105,9 +106,9 @@ class documentCard extends React.Component {
           path: this.state.path,
         }),
       })
-        .then((res) => {
-          console.log(res);
-          this.props.rerenderContainer();
+        .then((res) => res.json())
+        .then((result) => {
+          console.log("deleted");
         })
         .catch((error) => {
           console.log(error);
