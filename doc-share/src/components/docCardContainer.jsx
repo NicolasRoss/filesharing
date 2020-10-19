@@ -4,6 +4,7 @@ import NewDocCard from "./newDocCard";
 import Cookies from "js-cookie";
 import { Container, Row, Col } from "react-bootstrap";
 import { API } from "./api";
+
 export default class DocCardContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -44,7 +45,7 @@ export default class DocCardContainer extends React.Component {
 
   onkeypressed(evt) {
     var code = evt.charCode || evt.keyCode;
-    if (code == 27) {
+    if (code === 27) {
       this.setState({ searchField: "" });
       evt.target.value = "";
     }
@@ -150,7 +151,7 @@ export default class DocCardContainer extends React.Component {
       <div>
         <Container>
           <Row>
-            <Col xs={12}>
+            <Col xs={11}>
               <input
                 type="text"
                 className="searchBar"

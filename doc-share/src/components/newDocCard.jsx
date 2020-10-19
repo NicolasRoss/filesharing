@@ -128,7 +128,7 @@ export default class documentCard extends React.Component {
 
   render() {
     return (
-      <Container
+      <div
         onClick={this.handleClick}
         ref={this.dropRef}
         className={
@@ -158,7 +158,7 @@ export default class documentCard extends React.Component {
             </div>
           </Col>
         </Row>
-      </Container>
+      </div>
     );
   }
 }
