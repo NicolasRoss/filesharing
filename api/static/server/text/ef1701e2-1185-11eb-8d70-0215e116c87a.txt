@@ -1,0 +1,16 @@
+
+
+def snapCrackle:
+
+    for i in range(1,101):
+        print(i)
+        
+        if(i % 3 == 0):
+            print(" snap")        
+
+        if(i % 7 == 0):
+            print(" crackle")
+	
+	println("")
+
+    return

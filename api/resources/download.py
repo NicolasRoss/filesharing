@@ -3,7 +3,6 @@ from flask import send_from_directory
 from common import db
 import os
 
-
 parser = reqparse.RequestParser()
 
 # GET helpers
@@ -12,34 +11,21 @@ def file_ext(file_name):
 
 class download(Resource):
     def get(self):
-        try:
-            conn = db.mysql.connect()
+        parser.add_argument('uuid', type=str)
+        parser.add_argument('name', type=str)
+        parser.add_argument('path', type=str)
+        args = parser.parse_args()
 
-            try:
-                cursor = conn.cursor()
-                parser.add_argument('doc_id', type=str)
-                parser.add_argument('name', type=str)
-                parser.add_argument('path', type=str)
-                args = parser.parse_args()
+        doc_id = args['uuid']
+        file_name = args['name']
+        directory = args['path']
+        ext = file_ext(file_name)
+        location = directory + doc_id + '.' + ext
 
-                doc_id = args['doc_id']
-                file_name = args['name']
-                directory = args['path']
-                ext = file_ext(file_name)
-                location = directory + doc_id + '.' + ext
+        if os.path.exists(location):
+            return send_from_directory(directory, doc_id + '.' + ext, as_attachment=True)
 
-                if os.path.exists(location):
-                    return send_from_directory(directory, doc_id + '.' + ext, as_attachment=True)
+        else:
+            return 'file not found', 404    
 
-                else:
-                    return 'file not found', 404    
-
-            except Exception as e:
-                print(e)
-
-            finally:
-                conn.close()
-
-        except Exception as e:
-            print(e)
     

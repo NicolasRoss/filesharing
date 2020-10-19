@@ -1,63 +1,59 @@
-
-
-.introContainer{
-    margin-top: 50px;
-    border-radius: 20px;
-    border-color: black;
-    background: linear-gradient(45deg, #ff5f6d, #ffc371);
-    box-shadow: 0 1px 1px rgba(0,0,0,0.08), 
-    0 2px 2px rgba(0,0,0,0.12), 
-    0 4px 4px rgba(0,0,0,0.16), 
-    0 8px 8px rgba(0,0,0,0.20);
-    /* height: 800px; */
-    margin-bottom: 20px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 800
-    
+.introContainer {
+  margin-top: 50px;
+  border-radius: 20px;
+  border-color: black;
+  /* background: linear-gradient(45deg, #ff5f6d, #ffc371); */
+  background-color: #004643;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 0 2px 2px rgba(0, 0, 0, 0.12),
+    0 4px 4px rgba(0, 0, 0, 0.16), 0 8px 8px rgba(0, 0, 0, 0.2);
+  /* height: 800px; */
+  margin-bottom: 20px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 800;
 }
 
-.introTitle{
-    text-align: center;
-    color: white;
-    font-size: 64px;
-    letter-spacing: 2px;
-    margin-top: 50px;
+.introTitle {
+  text-align: center;
+  color: #e8e8e8;
+  font-size: 64px;
+  letter-spacing: 2px;
+  margin-top: 50px;
 }
 
-
-.introStatement{
-    margin-top: 60px;
-    margin-left: 4vw;
-    margin-right: 4vw;
-    color:white;
-    font-size: 32px;
-    margin-bottom: 40px;
+.introStatement {
+  margin-top: 60px;
+  margin-left: 4vw;
+  margin-right: 4vw;
+  color: #e8e8e8;
+  font-size: 32px;
+  margin-bottom: 40px;
+  text-align: center;
 }
 
-.introButton{
-    font-family: 'Raleway', sans-serif;
-    color: white;
-    background-color: black;
-    font-weight: 800;
-    height: 60px;
-    font-size: 26px;
-    border-radius: 20px;
-    border: 1px solid black;
-    width: 80%;
-    margin-left: 10%;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    /* position: absolute;
+.introButton {
+  font-family: "Raleway", sans-serif;
+  color: #e8e8e8;
+  background-color: black;
+  font-weight: 800;
+  height: 60px;
+  font-size: 26px;
+  border-radius: 20px;
+  border: 1px solid black;
+  width: 80%;
+  margin-left: 10%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  /* position: absolute;
     right: 11%;
     bottom: 3%; */
 }
 
-.introButton:hover{
-    color: #f5f5f5 !important;
+.introButton:hover {
+  color: #f5f5f5 !important;
 }
-.introButton:focus{
-    outline: none;
+.introButton:focus {
+  outline: none;
 }
-.introButton:active{
-    transform: scale(0.96);
+.introButton:active {
+  transform: scale(0.96);
 }

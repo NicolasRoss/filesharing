@@ -11,7 +11,7 @@ RUN pip install -r requirements.txt
 
 # Run the application:
 # COPY . .
-EXPOSE 8000
+EXPOSE 5000
 CMD ["python", "main.py"]
 
 
