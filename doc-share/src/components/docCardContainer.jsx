@@ -40,10 +40,8 @@ export default class DocCardContainer extends React.Component {
 
   handleChange = (event) => {
     const req = event.target.getAttribute("name");
-    console.log("req is:" + req);
     if (req === "searchField") {
       this.setState({ searchField: event.target.value });
-      // console.log(this.state.searchField)
     }
   };
 
@@ -184,7 +182,6 @@ export default class DocCardContainer extends React.Component {
           />
         ));
       } else {
-        console.log("no documents");
         cards = (
           <Container>
             <Row>

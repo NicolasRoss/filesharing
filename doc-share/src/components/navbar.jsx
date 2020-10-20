@@ -21,6 +21,7 @@ class Navbar extends React.Component {
 
   componentDidMount() {
     if (Cookies.get("user_id") !== undefined && this.state.user_id === -1) {
+      console.log(Cookies.get("user_id"));
       this.setState({ user_id: Cookies.get("user_id") });
     }
     if (Cookies.get("name") !== undefined) {
