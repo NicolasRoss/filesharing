@@ -93,37 +93,7 @@ class Share extends React.Component {
   }
 
   render() {
-    if (Cookies.get("user_id") === undefined) {
-      this.props.history.push({
-        pathname: "/",
-        // state: {user_id: result["user_id"]}
-      });
-    } else {
-      let params = queryString.parse(this.props.location.search);
-      if (params.link_id !== undefined) {
-        this.setState({ link_id: params.link_id });
-        let url =
-          API + "/link?link_id=" + params.link_id + "&getAttributes=true";
-        fetch(url, {
-          method: "GET",
-          mode: "cors",
-        })
-          .then((res) => res.json())
-          .then((result) => {
-            console.log(result);
-            this.setState({ fileName: result["file_name"] });
-            this.setState({ expireDate: result["expire_date"] });
-            this.setState({ currentDate: result["current_date"] });
-            this.setState({ doc_id: result["doc_id"] });
-            this.setState({ fetching: false });
-          });
-      }
-    }
-  }
-  render() {
-    if (Cookies.get("user_id") === undefined) {
-      return <div></div>;
-    } else if (this.state.fetching === false) {
+    if (this.state.fetching === false) {
       if (this.state.link_id !== "") {
         return (
           <div>
@@ -160,6 +130,7 @@ class Share extends React.Component {
     } else {
       return <div></div>;
     }
+    return <div></div>;
   }
 }
 
