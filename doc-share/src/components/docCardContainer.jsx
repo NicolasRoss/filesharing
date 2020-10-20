@@ -203,7 +203,12 @@ export default class DocCardContainer extends React.Component {
 
     var newCard;
     if (this.state.searchField === "") {
-      newCard = <NewDocCard insertCard={this.insertCard} />;
+      newCard = (
+        <NewDocCard
+          insertCard={this.insertCard}
+          rerenderContainer={this.rerenderContainer}
+        />
+      );
     } else {
       newCard = <div></div>;
     }
