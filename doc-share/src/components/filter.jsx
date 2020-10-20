@@ -44,7 +44,6 @@ export default class Filter extends React.Component {
   };
 
   handleOptionClick = (e) => {
-    e.persist();
     this.setState(
       {
         defaultText: e.target.getAttribute("data-name"),
@@ -64,7 +63,6 @@ export default class Filter extends React.Component {
   };
 
   handleSortDirection = (e) => {
-    e.persist();
     this.setState(
       {
         directionToggle: !this.state.directionToggle,
