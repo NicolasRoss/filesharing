@@ -45,7 +45,6 @@ export default class documentCard extends React.Component {
   };
 
   fileSelectedHandler = (event) => {
-    console.log(event.target.files[0]);
     this.setState(
       {
         selectedFile: event.target.files[0],
@@ -97,7 +96,7 @@ export default class documentCard extends React.Component {
     e.stopPropagation();
 
     this.setState({ dragCounter: this.state.dragCounter - 1 });
-    // console.log("")
+
     if (this.state.dragCounter === 0) {
       this.setState({ dragging: false });
     }
@@ -106,10 +105,10 @@ export default class documentCard extends React.Component {
   handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
     this.setState({ dragging: false });
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       this.setState({ dragCounter: 0 });
-      console.log(e.dataTransfer.files[0]);
       this.setState(
         {
           selectedFile: e.dataTransfer.files[0],

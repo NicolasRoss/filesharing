@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 import "../css/navbar.css";
 import { withRouter } from "react-router-dom";
 
-//this should be a func
 class Navbar extends React.Component {
   constructor(props) {
     super();
@@ -21,7 +20,6 @@ class Navbar extends React.Component {
 
   componentDidMount() {
     if (Cookies.get("user_id") !== undefined && this.state.user_id === -1) {
-      console.log(Cookies.get("user_id"));
       this.setState({ user_id: Cookies.get("user_id") });
     }
     if (Cookies.get("name") !== undefined) {
@@ -40,15 +38,7 @@ class Navbar extends React.Component {
   }
 
   toHome() {
-    // Cookies.remove("user_id");
-    if (this.props.rerenderHome !== undefined) {
-      // this.setState({user_id: -1})
-      // this.props.rerenderHome();
-      this.props.history.push("/");
-    } else {
-      // Cookies.remove("user_id");
-      this.props.history.push("/");
-    }
+    this.props.history.push("/");
   }
 
   toLogin() {
@@ -77,7 +67,6 @@ class Navbar extends React.Component {
   }
 
   render() {
-    // console.log("name:" + this.state.name)
     const notLoggedIn = (
       <Container fluid>
         <Row>
