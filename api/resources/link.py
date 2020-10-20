@@ -31,41 +31,29 @@ class link(Resource):
                 query = "SELECT expire_date, directory_loc, document_name, doc_id FROM links WHERE (link_id=%s)"
                 cursor.execute(query, (link_id))
                 response = cursor.fetchall()
-                if(args['getAttributes'] is not None and args['getAttributes'] == 'true'):
-                    if(response != ()):
-                        current_date = datetime.now()
-                        expire_date = response[0][0]
-                        directory = response[0][1]
-                        file_name = response[0][2]
-                        doc_id = response[0][3]
+
+                if response != ():
+                    current_date = datetime.now()
+                    expire_date = response[0][0]
+                    directory = response[0][1]
+                    file_name = response[0][2]
+                    doc_id = response[0][3]
+
+                    if current_date < expire_date:
                         content = {
                             "current_date": current_date,
                             "expire_date": expire_date,
                             "file_name": file_name,
-                            "doc_id": doc_id
+                            "doc_id": doc_id,
+                            "directory": directory
                             }
                         return jsonify(content)
-                    else:
-                        return {"request": "failed"}, 401
-                else:
-                
-                    if response != ():
-                        current_date = datetime.now()
-                        expire_date = response[0][0]
-                        directory = response[0][1]
-                        file_name = response[0][2]
-                        doc_id = response[0][3]
-
-                        if current_date < expire_date:
-                            location = directory + doc_id + '.' + file_ext(file_name)
-                            if os.path.exists(location):
-                                return send_from_directory(directory, doc_id + '.' + file_ext(file_name), as_attachment=True, attachment_filename=file_name)
-                        
-                        else:
-                            return 'link expired', 404
                     
                     else:
-                        return "link not found", 404
+                        return 'link expired', 404
+                
+                else:
+                    return "link not found", 404
 
             except Exception as e:
                 print(e)
@@ -106,7 +94,7 @@ class link(Resource):
                     cursor.execute(insert, values)
                     conn.commit()
 
-                    return "link_id=%(link_id)s" % {
+                    return "/Share?link_id=%(link_id)s" % {
                                 "link_id": link_id,
                     }
             
