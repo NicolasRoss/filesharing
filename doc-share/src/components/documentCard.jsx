@@ -75,7 +75,6 @@ class documentCard extends React.Component {
           link.click();
 
           link.parentNode.removeChild(link);
-          this.setState({ action: "" });
         })
         .catch((error) => {
           console.log(error);

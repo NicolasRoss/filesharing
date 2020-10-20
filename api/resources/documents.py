@@ -144,7 +144,8 @@ class documents(Resource):
 
                     # DELETE from server
                     file_loc = args['path'] + args['uuid'] + '.' + file_ext(args['name'])
-                    os.remove(file_loc)
+                    if os.path.exists(file_loc):
+                        os.remove(file_loc)
                     
                     return jsonify({
                                     "doc_id": uuid,
