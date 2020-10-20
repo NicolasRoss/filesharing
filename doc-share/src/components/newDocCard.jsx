@@ -1,8 +1,7 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import "../css/newDocCard.css";
 import Cookies from "js-cookie";
-import { useDropzone } from "react-dropzone";
 import { API } from "./api";
 
 export default class documentCard extends React.Component {

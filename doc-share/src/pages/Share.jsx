@@ -1,5 +1,4 @@
 import React from "react";
-import WelcomeCard from "../components/welcomeCard";
 import Navbar from "../components/navbar";
 import { Container, Row, Col } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
@@ -27,13 +26,14 @@ class Share extends React.Component {
 
   buttonClick() {
     if (this.state.link_id !== undefined && this.state.link_id !== "") {
-      let url = API + 
+      let url =
+        API +
         "/download?uuid=" +
         this.state.doc_id +
         "&name=" +
         this.state.fileName +
         "&path=" +
-        this.state.directory
+        this.state.directory;
       fetch(url, {
         method: "GET",
         mode: "cors",
@@ -100,7 +100,7 @@ class Share extends React.Component {
       if (this.state.link_id !== "") {
         return (
           <div>
-            <Navbar />
+            {/* <Navbar /> */}
             <Container className="docContainer box-shadow">
               <Row>
                 <Col xs={6} className="uuidContainer">

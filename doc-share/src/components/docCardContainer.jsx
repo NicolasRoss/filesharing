@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import DocumentCard from "./documentCard";
 import NewDocCard from "./newDocCard";
 import Cookies from "js-cookie";
@@ -66,6 +66,7 @@ export default class DocCardContainer extends React.Component {
       .then((result) => {
         // console.log(result)
         this.setState({ doc_info: result });
+        this.handleFilter("date");
         this.setState({ isFetching: false });
       })
       .catch((error) => {
@@ -82,23 +83,6 @@ export default class DocCardContainer extends React.Component {
   setActiveId(id) {
     if (id !== undefined) {
       this.setState({ activeId: id });
-    }
-  }
-
-  getCards() {
-    if (this.state.searchField === "") {
-      // console.log("searchfield empty")
-      return this.state.doc_info;
-    } else {
-      var searchedCards = [];
-      this.state.doc_info.map((doc) => {
-        if (doc["file_name"].includes(this.state.searchField)) {
-          searchedCards.push(doc);
-        }
-      });
-      // console.log("serachfield not empty")
-      // console.log(searchedCards)
-      return searchedCards;
     }
   }
 
@@ -153,8 +137,15 @@ export default class DocCardContainer extends React.Component {
     }
 
     return function (a, b) {
-      var result =
-        a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+      var result = null;
+      if (property === "date") {
+        result =
+          a[property] < b[property] ? 1 : a[property] > b[property] ? -1 : 0;
+      } else {
+        result =
+          a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+      }
+
       return result * sortOrder;
     };
   }
@@ -227,7 +218,7 @@ export default class DocCardContainer extends React.Component {
                 onChange={this.handleChange}
               ></input>
             </Col>
-            <Col xs={2}>
+            <Col xs={3}>
               <Filter
                 handleFilter={this.handleFilter}
                 defaultText="Filter"

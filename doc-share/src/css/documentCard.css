@@ -52,7 +52,7 @@
   padding: 14px;
   margin: 0px 0;
   display: inline-block !important;
-  border-radius: 15px;
+  border-radius: 15px 0px 0px 15px;
   box-sizing: border-box;
   cursor: pointer;
   position: absolute;
@@ -71,6 +71,22 @@
 
 .ddItem {
   list-style: none;
+}
+
+.sortDirection {
+  background-color: #1a252a;
+  color: #e8e8e8;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+  font-size: 26px;
+  text-align: center;
+  padding: 14px;
+  margin: 0px 0;
+  display: inline-block !important;
+  border-radius: 0px 15px 15px 0px;
+  box-sizing: border-box;
+  cursor: pointer;
+  z-index: 1;
 }
 
 .searchBar {
