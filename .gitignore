@@ -2,6 +2,7 @@ devenv
 venv
 __pycache__
 .vscode
+api.jsx
 
 
 #copied from create-react-app
