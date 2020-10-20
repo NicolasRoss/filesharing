@@ -62,6 +62,7 @@ export default class DocCardContainer extends React.Component {
       .then((res) => res.json())
       .then((result) => {
         this.setState({ doc_info: result });
+        this.handleFilter("date");
         this.setState({ isFetching: false });
       })
       .catch((error) => {
@@ -80,19 +81,6 @@ export default class DocCardContainer extends React.Component {
     }
   }
 
-  getCards() {
-    if (this.state.searchField === "") {
-      return this.state.doc_info;
-    } else {
-      var searchedCards = [];
-      this.state.doc_info.map((doc) => {
-        if (doc["file_name"].includes(this.state.searchField)) {
-          searchedCards.push(doc);
-        }
-      });
-      return searchedCards;
-    }
-  }
 
   insertCard = (result) => {
     if (this.state.doc_info !== null) {
@@ -115,7 +103,6 @@ export default class DocCardContainer extends React.Component {
 
   getCards() {
     if (this.state.searchField === "") {
-      // console.log("searchfield empty")
       return this.state.doc_info;
     } else {
       var searchedCards = [];
@@ -142,8 +129,15 @@ export default class DocCardContainer extends React.Component {
     }
 
     return function (a, b) {
-      var result =
-        a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+      var result = null;
+      if (property === "date") {
+        result =
+          a[property] < b[property] ? 1 : a[property] > b[property] ? -1 : 0;
+      } else {
+        result =
+          a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+      }
+
       return result * sortOrder;
     };
   }
@@ -213,7 +207,7 @@ export default class DocCardContainer extends React.Component {
                 onChange={this.handleChange}
               ></input>
             </Col>
-            <Col xs={2}>
+            <Col xs={3}>
               <Filter
                 handleFilter={this.handleFilter}
                 defaultText="Filter"

@@ -1,5 +1,4 @@
 import React from "react";
-import WelcomeCard from "../components/welcomeCard";
 import Navbar from "../components/navbar";
 import { Container, Row, Col } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
@@ -109,7 +108,7 @@ class Share extends React.Component {
 
         return (
           <div>
-            <Navbar />
+            {/* <Navbar /> */}
             <Container className="docContainer box-shadow">
               <Row>
                 <Col xs={6} className="uuidContainer">

@@ -1,5 +1,4 @@
 import React from "react";
-import WelcomeCard from "../components/welcomeCard";
 import Navbar from "../components/navbar";
 import { withRouter } from "react-router-dom";
 import { API } from "../components/api";
