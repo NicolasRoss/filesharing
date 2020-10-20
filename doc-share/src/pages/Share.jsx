@@ -13,41 +13,43 @@ class Share extends React.Component {
     super(props);
     this.buttonClick = this.buttonClick.bind(this);
     this.calculateTimeToExpiry = this.calculateTimeToExpiry.bind(this);
+
     this.state = {
       link_id: "",
       fileName: "",
       expireDate: "",
       currentDate: "",
       doc_id: "",
+      directory: "",
       fetching: true,
     };
   }
+
   buttonClick() {
-    //do stuff here
-    console.log(this.state);
     if (this.state.link_id !== undefined && this.state.link_id !== "") {
-      let url = API + "/link?link_id=" + this.state.link_id;
+      let url = API + 
+        "/download?uuid=" +
+        this.state.doc_id +
+        "&name=" +
+        this.state.fileName +
+        "&path=" +
+        this.state.directory
       fetch(url, {
         method: "GET",
         mode: "cors",
       })
         .then((res) => {
-          console.log(res.status);
-          console.log(res.text);
-          console.log(this.state.name);
           if (res.status === 200) {
             res.blob().then((blob) => {
-              console.log(blob.name);
               const url = window.URL.createObjectURL(new Blob([blob]));
               const link = document.createElement("a");
               link.href = url;
-              link.setAttribute("download", this.state.name);
+              link.setAttribute("download", this.state.fileName);
 
               document.body.appendChild(link);
               link.click();
 
               link.parentNode.removeChild(link);
-              // this.setState({ action: '' })
             });
           }
         })
@@ -71,22 +73,23 @@ class Share extends React.Component {
     let params = queryString.parse(this.props.location.search);
     if (params.link_id !== undefined) {
       this.setState({ link_id: params.link_id });
-      let url = API + "/link?link_id=" + params.link_id + "&getAttributes=true";
+      let url = API + "/link?link_id=" + params.link_id;
       fetch(url, {
         method: "GET",
         mode: "cors",
       })
         .then((res) => res.json())
         .then((result) => {
-          console.log(result);
           this.setState({ fileName: result["file_name"] });
           this.setState({ expireDate: result["expire_date"] });
           this.setState({ currentDate: result["current_date"] });
           this.setState({ doc_id: result["doc_id"] });
+          this.setState({ directory: result["directory"] });
           this.setState({ fetching: false });
         });
     }
   }
+
   render() {
     if (Cookies.get("user_id") === undefined) {
       this.props.history.push({
