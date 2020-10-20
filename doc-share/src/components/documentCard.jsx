@@ -3,7 +3,7 @@ import { Container, Row, Col, ResponsiveEmbed } from "react-bootstrap";
 import "../css/documentCard.css";
 import { withRouter } from "react-router-dom";
 import Cookies from "js-cookie";
-import { API } from "./api";
+import { API, HOST } from "./api";
 
 class documentCard extends React.Component {
   constructor(props) {
@@ -141,7 +141,7 @@ class documentCard extends React.Component {
         })
         .then((link) => {
           if (link !== null) {
-            const url = "http://localhost:3000/Share?" + link; //change this to some const WEBSITE that is either localhost or cloud domain
+            const url = HOST + link; //change this to some const WEBSITE that is either localhost or cloud domain
             const textArea = document.createElement("textarea");
             textArea.innerText = url;
 
