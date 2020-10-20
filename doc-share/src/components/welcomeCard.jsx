@@ -23,8 +23,6 @@ class welcomeCard extends React.Component {
 
   changeHandler = (evt) => {
     const value = evt.target.value;
-    // console.log("name: " + evt.target.name)
-    // console.log("value:" + value)
     this.setState({ [evt.target.name]: value });
   };
   passwordChangeHandler = (event) => {
@@ -32,9 +30,7 @@ class welcomeCard extends React.Component {
   };
 
   toggleContainer() {
-    console.log("toggle pressed");
     this.setState({ containerToggle: !this.state.containerToggle });
-    console.log(this.state.containerToggle);
   }
 
   checkEmail() {
@@ -63,15 +59,11 @@ class welcomeCard extends React.Component {
         "password must contain uppercase, lowercase, numbers and be longer than 8 characters"
       );
     }
-    console.log("pass check:" + passCheck);
     return passCheck;
   }
 
-  //testing automated build
-
   handleSubmit = (event) => {
     event.preventDefault();
-    console.log("submit button pressed");
     const submitRequest = event.target.getAttribute("name");
     var url;
     if (submitRequest === "login") {
@@ -88,14 +80,9 @@ class welcomeCard extends React.Component {
         })
           .then((res) => res.json())
           .then((result) => {
-            console.log(result);
             if (result !== undefined) {
               if (result["user_id"] !== undefined) {
-                console.log("check success");
-                //go to welcome page here
-                console.log("result is:" + result["user_id"]);
                 if (result["user_id"] !== "-1") {
-                  console.log("somehow passed the check");
                   Cookies.remove("user_id");
                   Cookies.set("user_id", result["user_id"], { expires: 7 });
                   if (result["name"] !== undefined) {
@@ -103,7 +90,6 @@ class welcomeCard extends React.Component {
                   }
                   this.props.history.push({
                     pathname: "/",
-                    // state: {user_id: result["user_id"]}
                   });
                 }
               }
@@ -121,7 +107,6 @@ class welcomeCard extends React.Component {
         this.checkPasswords() === true &&
         this.state.name !== ""
       ) {
-        console.log("create user request");
         url =
           API +
           "/users?email=" +
@@ -136,14 +121,9 @@ class welcomeCard extends React.Component {
         })
           .then((res) => res.json())
           .then((result) => {
-            console.log(result);
             if (result !== undefined) {
               if (result["user_id"] !== undefined) {
-                console.log("check success");
-                //go to welcome page here
-                console.log("result is:" + result["user_id"]);
                 if (result["user_id"] !== "-1") {
-                  console.log("somehow passed the check");
                   Cookies.remove("user_id");
                   Cookies.set("user_id", result["user_id"], { expires: 7 });
                   if (result["name"] !== undefined) {
@@ -165,19 +145,15 @@ class welcomeCard extends React.Component {
   };
 
   componentDidMount() {
-    console.log("welcome did mount");
-
     if (
       this.props.location !== undefined &&
       this.props.location.state !== undefined &&
       this.props.location.state.containerToggle !== undefined
     ) {
-      // console.log("props:"+ this.props.location.state.containerToggle)
       this.setState({
         containerToggle: this.props.location.state.containerToggle,
       });
       this.props.location.state.containerToggle = undefined;
-      // console.log("props:" + this.props.location.state.containerToggle);
     }
   }
 
