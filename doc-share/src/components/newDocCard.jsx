@@ -55,7 +55,6 @@ export default class documentCard extends React.Component {
   };
 
   fileUploadHandler = () => {
-    console.log(this.state.selectedFile);
     if (this.state.user_id !== null && this.state.selectedFile != null) {
       const data = new FormData();
       data.append("file", this.state.selectedFile);
@@ -67,20 +66,15 @@ export default class documentCard extends React.Component {
           mode: "cors",
           body: data,
         })
-          // .then(res => res.json())
+          .then((res) => res.json())
           .then((result) => {
-            console.log(result);
-            this.props.rerenderContainer();
+            this.props.insertCard(result);
           })
-          .catch((error) => {
-            console.log(error);
-          });
+          .catch((error) => {});
       } else {
         alert("File size is too large");
       }
-      // add else for file to big
     }
-    // add else for no user_id
   };
 
   handleDrag = (e) => {
