@@ -40,10 +40,8 @@ export default class DocCardContainer extends React.Component {
 
   handleChange = (event) => {
     const req = event.target.getAttribute("name");
-    console.log("req is:" + req);
     if (req === "searchField") {
       this.setState({ searchField: event.target.value });
-      // console.log(this.state.searchField)
     }
   };
 
@@ -56,7 +54,6 @@ export default class DocCardContainer extends React.Component {
   }
 
   getDocInfo() {
-    console.log("fetching documents for:" + this.state.user_id);
     var url = API + "/documents?user=" + this.state.user_id;
     fetch(url, {
       method: "GET",
@@ -64,7 +61,6 @@ export default class DocCardContainer extends React.Component {
     })
       .then((res) => res.json())
       .then((result) => {
-        // console.log(result)
         this.setState({ doc_info: result });
         this.handleFilter("date");
         this.setState({ isFetching: false });
@@ -75,7 +71,6 @@ export default class DocCardContainer extends React.Component {
   }
 
   rerenderContainer() {
-    console.log("rerendering container");
     this.setState({ isFetching: true });
     this.getDocInfo();
   }
@@ -86,8 +81,8 @@ export default class DocCardContainer extends React.Component {
     }
   }
 
+
   insertCard = (result) => {
-    console.log(result);
     if (this.state.doc_info !== null) {
       const newDocInfo = [...this.state.doc_info, result];
       this.setState({ doc_info: newDocInfo });
@@ -108,7 +103,6 @@ export default class DocCardContainer extends React.Component {
 
   getCards() {
     if (this.state.searchField === "") {
-      // console.log("searchfield empty")
       return this.state.doc_info;
     } else {
       var searchedCards = [];
@@ -117,8 +111,6 @@ export default class DocCardContainer extends React.Component {
           searchedCards.push(doc);
         }
       });
-      // console.log("serachfield not empty")
-      // console.log(searchedCards)
       return searchedCards;
     }
   }
@@ -152,8 +144,6 @@ export default class DocCardContainer extends React.Component {
 
   render() {
     var cards;
-    // console.log(this.state.doc_info);
-    // console.log("render called")
     if (
       this.state.user_id !== -1 &&
       this.state.isFetching !== true &&
@@ -175,7 +165,6 @@ export default class DocCardContainer extends React.Component {
           />
         ));
       } else {
-        console.log("no documents");
         cards = (
           <Container>
             <Row>

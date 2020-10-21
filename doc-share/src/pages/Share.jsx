@@ -18,6 +18,7 @@ class Share extends React.Component {
       fileName: "",
       expireDate: "",
       currentDate: "",
+      name: "",
       doc_id: "",
       directory: "",
       fetching: true,
@@ -58,6 +59,7 @@ class Share extends React.Component {
         });
     }
   }
+  validateLink() {}
 
   calculateTimeToExpiry() {
     if (this.state.currentDate !== "" && this.state.expireDate !== "") {
@@ -65,7 +67,12 @@ class Share extends React.Component {
       let expiry = new Date(this.state.expireDate);
       var diff = (expiry.getTime() - current.getTime()) / 1000;
       diff /= 60 * 60;
-      return Math.abs(Math.round(diff));
+      let hoursRemaining = Math.abs(Math.round(diff));
+      if (hoursRemaining > 0) {
+        return hoursRemaining + "h";
+      } else {
+        return Math.abs(Math.round(diff * 60)) + "m";
+      }
     }
   }
 
@@ -86,18 +93,19 @@ class Share extends React.Component {
           this.setState({ doc_id: result["doc_id"] });
           this.setState({ directory: result["directory"] });
           this.setState({ fetching: false });
-        });
+        })
+        .then(this.validateLink());
     }
   }
 
   render() {
-    if (Cookies.get("user_id") === undefined) {
-      this.props.history.push({
-        pathname: "/",
-        // state: {user_id: result["user_id"]}
-      });
-    } else if (this.state.fetching === false) {
+    if (this.state.fetching === false) {
       if (this.state.link_id !== "") {
+        var cont;
+
+        if (this.state.validLink) {
+        }
+
         return (
           <div>
             {/* <Navbar /> */}
@@ -108,7 +116,7 @@ class Share extends React.Component {
                 </Col>
                 <Col xs={4}>
                   <div className="expiry">
-                    <div>Expires in: {this.calculateTimeToExpiry()}h</div>
+                    <div>Expires in: {this.calculateTimeToExpiry()}</div>
                   </div>
                 </Col>
               </Row>
@@ -133,6 +141,7 @@ class Share extends React.Component {
     } else {
       return <div></div>;
     }
+    return <div></div>;
   }
 }
 
