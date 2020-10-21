@@ -8,7 +8,7 @@ export default class Filter extends React.Component {
 
     this.state = {
       defaultText: "",
-      value: "",
+      value: "date",
       directionToggle: true,
       isOpen: false,
       options: [],
@@ -73,7 +73,7 @@ export default class Filter extends React.Component {
           .getAttribute("value");
         var sortBy = this.state.value;
         // console.log(direction + sortBy);
-
+        
         this.props.handleFilter(direction + sortBy);
       }
     );

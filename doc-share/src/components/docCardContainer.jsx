@@ -19,11 +19,11 @@ export default class DocCardContainer extends React.Component {
     this.onkeypressed = this.onkeypressed.bind(this);
 
     this.state = {
-      isFetching: true, //later for loading animation
-      user_id: Cookies.get("user_id"),
-      doc_info: [],
-      activeId: -1,
       searchField: "",
+      doc_info: [],
+      user_id: Cookies.get("user_id"),
+      isFetching: true, //later for loading animation
+      activeId: -1,
     };
   }
 

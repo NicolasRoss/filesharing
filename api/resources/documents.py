@@ -56,7 +56,10 @@ class documents(Resource):
                             payload.append(content)
 
                         return jsonify(payload)
-                        
+
+                    else:
+                        return "no documents found", 404
+
                 else:
                     return "no user or key submitted", 400
 
@@ -78,13 +81,11 @@ class documents(Resource):
             try:
                 cursor = conn.cursor()
                 parser.add_argument('user', type=str)
-                parser.add_argument('action', type=str)
                 args = parser.parse_args()
 
                 user_id = args['user']
-                action = args['action']
 
-                if user_id is not None and action == "insert":
+                if user_id is not None:
                     parser.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
                     args = parser.parse_args()
                     file_to_upload = args["file"]
@@ -123,8 +124,31 @@ class documents(Resource):
 
                     else:
                         return 'unsupported file type', 400
-                
-                elif user_id is not None and action == "delete":
+
+                else:
+                    return 'no user submitted', 400
+            
+            except Exception as e:
+                print(e)
+            
+            finally:
+                conn.close()
+
+        except Exception as e:
+            print(e)
+
+    def delete(self):
+        try:
+            conn = db.mysql.connect()
+
+            try:
+                cursor = conn.cursor()
+                parser.add_argument('user', type=str)
+                args = parser.parse_args()
+
+                user_id = args['user']
+
+                if user_id is not None:
                     parser.add_argument('uuid', location='json')
                     parser.add_argument('name', location='json')
                     parser.add_argument('date', location='json')
@@ -154,7 +178,6 @@ class documents(Resource):
                                     "date": date,
                                     "status": 1  # will need to change this when we actually do something with status
                                 })
-
                 else:
                     return 'no user submitted', 400
             
@@ -166,8 +189,6 @@ class documents(Resource):
 
         except Exception as e:
             print(e)
-
-        
 
     def put(self):
         parser.add_argument('public', type=str)

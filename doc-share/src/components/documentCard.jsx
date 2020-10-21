@@ -90,9 +90,9 @@ class documentCard extends React.Component {
 
     if (this.state.uuid !== null && this.state.user_id !== null) {
       var url =
-        API + "/documents?user=" + this.state.user_id + "&action=delete";
+        API + "/documents?user=" + this.state.user_id;
       fetch(url, {
-        method: "POST",
+        method: "DELETE",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -107,7 +107,7 @@ class documentCard extends React.Component {
       })
         .then((res) => res.json())
         .then((result) => {
-          console.log("deleted");
+          console.log(result);
         })
         .catch((error) => {
           console.log(error);
