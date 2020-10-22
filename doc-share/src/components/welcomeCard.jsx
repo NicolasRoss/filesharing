@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import Modal from "./modal";
 import "../css/welcomeCard.css";
 import Cookies from "js-cookie";
 import { withRouter } from "react-router-dom";
@@ -10,6 +11,8 @@ class welcomeCard extends React.Component {
     this.toggleContainer = this.toggleContainer.bind(this);
     this.checkPasswords = this.checkPasswords.bind(this);
     this.checkEmail = this.checkEmail.bind(this);
+    this.hideModal = this.hideModal.bind(this);
+    this.showModal = this.showModal.bind(this);
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.state = {
@@ -18,6 +21,11 @@ class welcomeCard extends React.Component {
       password: "",
       password2: "",
       containerToggle: true,
+      showErrorModal: false,
+      emailWrong: false,
+      passWrong: false,
+      pass2Wrong: false,
+      loginFailed: false,
     };
   }
 
@@ -36,38 +44,66 @@ class welcomeCard extends React.Component {
   checkEmail() {
     const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     const emailCheck = re.test(this.state.email);
-    console.log("emailCheck:" + emailCheck);
     if (emailCheck === false) {
-      alert("please check if your email is correct");
+      this.setState({ emailWrong: true });
+      // this.showModal();
+    } else {
+      this.setState({ emailWrong: false });
     }
+
     return emailCheck;
   }
 
-  checkPasswords() {
-    if (this.state.password !== this.state.password2) {
-      alert("passwords aren't the same");
-      return false;
+  checkPasswords(isLogin) {
+    if (isLogin === true) {
+      if (this.state.password === "") {
+        // this.showModal();
+        this.setState({ passWrong: true });
+        return false;
+      }
+    } else {
+      if (this.state.password !== this.state.password2) {
+        // this.showModal();
+        this.setState({ passWrong: true });
+        return false;
+      }
     }
+
     const posPass = this.state.password;
     var passCheck = false;
     var passw = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
     if (passw.test(posPass)) {
       passCheck = true;
+      this.setState({ passWrong: false });
     }
     if (passCheck === false) {
-      alert(
-        "password must contain uppercase, lowercase, numbers and be longer than 8 characters"
-      );
+      this.setState({ passWrong: true });
+      // this.showModal();
     }
     return passCheck;
   }
+
+  showModal = () => {
+    this.setState({ showErrorModal: true });
+  };
+
+  hideModal = () => {
+    this.setState({ showErrorModal: false });
+  };
 
   handleSubmit = (event) => {
     event.preventDefault();
     const submitRequest = event.target.getAttribute("name");
     var url;
     if (submitRequest === "login") {
-      if (this.state.email !== "" && this.state.password !== "") {
+      const emailCheck = this.checkEmail();
+      const passCheck = this.checkPasswords(true);
+      if (
+        this.state.email !== "" &&
+        this.state.password !== "" &&
+        emailCheck === true &&
+        passCheck === true
+      ) {
         url =
           API +
           "/users?email=" +
@@ -83,6 +119,7 @@ class welcomeCard extends React.Component {
             if (result !== undefined) {
               if (result["user_id"] !== undefined) {
                 if (result["user_id"] !== "-1") {
+                  this.setState({ loginFailed: false });
                   Cookies.remove("user_id");
                   Cookies.set("user_id", result["user_id"], { expires: 7 });
                   if (result["name"] !== undefined) {
@@ -91,6 +128,8 @@ class welcomeCard extends React.Component {
                   this.props.history.push({
                     pathname: "/",
                   });
+                } else {
+                  this.setState({ loginFailed: true });
                 }
               }
             }
@@ -99,14 +138,12 @@ class welcomeCard extends React.Component {
             alert(error.message);
           });
       } else {
-        alert("Please check your email and password");
+        // alert("Please check your email and password");
       }
     } else if (submitRequest === "signup") {
-      if (
-        this.checkEmail() === true &&
-        this.checkPasswords() === true &&
-        this.state.name !== ""
-      ) {
+      const emailCheck = this.checkEmail();
+      const passCheck = this.checkPasswords(false);
+      if (emailCheck === true && passCheck === true && this.state.name !== "") {
         url =
           API +
           "/users?email=" +
@@ -164,6 +201,9 @@ class welcomeCard extends React.Component {
           <Col className="signInContainer" xs={{ span: 12, offset: 0 }}>
             <div>
               <div className="signInHeader">Login</div>
+              {this.state.loginFailed && (
+                <div className="error">Failed to log in</div>
+              )}
 
               <form
                 autoComplete="off"
@@ -172,6 +212,9 @@ class welcomeCard extends React.Component {
               >
                 <label className="signInSubHeader">
                   <div className="tab">Email</div>
+                  {this.state.emailWrong && (
+                    <div className="error">Email Incorrect</div>
+                  )}
                   <input
                     className="input-form"
                     type="text"
@@ -181,6 +224,9 @@ class welcomeCard extends React.Component {
                 </label>
                 <label className="signInSubHeader">
                   <div className="tab">Password</div>
+                  {this.state.passWrong && (
+                    <div className="error">Password Incorrect</div>
+                  )}
                   <input
                     className="input-form"
                     type="password"
@@ -221,6 +267,9 @@ class welcomeCard extends React.Component {
               >
                 <label className="signInSubHeader">
                   <div className="tab">Email</div>
+                  {this.state.emailWrong && (
+                    <div className="error">Email Incorrect</div>
+                  )}
                   <input
                     className="input-form"
                     type="text"
@@ -230,6 +279,7 @@ class welcomeCard extends React.Component {
                 </label>
                 <label className="signInSubHeader">
                   <div className="tab">Name</div>
+
                   <input
                     className="input-form"
                     type="text"
@@ -239,6 +289,9 @@ class welcomeCard extends React.Component {
                 </label>
                 <label className="signInSubHeader">
                   <div className="tab">Password</div>
+                  {this.state.passWrong && (
+                    <div className="error">Password Incorrect</div>
+                  )}
                   <input
                     className="input-form"
                     type="password"
@@ -248,6 +301,9 @@ class welcomeCard extends React.Component {
                 </label>
                 <label className="signInSubHeader">
                   <div className="tab">Confirm Password</div>
+                  {this.state.passWrong && (
+                    <div className="error">Password Incorrect</div>
+                  )}
                   <input
                     className="input-form"
                     type="password"

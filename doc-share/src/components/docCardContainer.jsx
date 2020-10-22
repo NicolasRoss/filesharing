@@ -81,7 +81,6 @@ export default class DocCardContainer extends React.Component {
     }
   }
 
-
   insertCard = (result) => {
     if (this.state.doc_info !== null) {
       const newDocInfo = [...this.state.doc_info, result];
