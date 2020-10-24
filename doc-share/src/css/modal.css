@@ -4,12 +4,12 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .modal-main {
   position: fixed;
-  background-color: #004643;
+  background-color: #1f2d33;
   width: 90%;
   height: 80% !important;
   height: 500px;

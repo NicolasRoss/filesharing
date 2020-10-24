@@ -1,5 +1,6 @@
 import React from "react";
 import DocumentCard from "./documentCard";
+import SmallDocumentCard from "./smallDocumentCard";
 import Modal from "./modal";
 import Cookies from "js-cookie";
 import Filter from "./filter";
@@ -7,7 +8,6 @@ import { Container, Row, Col } from "react-bootstrap";
 import { API } from "./api";
 
 export default class DocCardContainer extends React.Component {
-  dropRef = React.createRef();
   constructor(props) {
     super(props);
     this.getDocInfo = this.getDocInfo.bind(this);
@@ -27,21 +27,13 @@ export default class DocCardContainer extends React.Component {
       activeId: -1,
       searchField: "",
       selectedFile: null,
-      dragging: false,
-      dragCounter: 0,
       editUUID: null,
       showDocModal: false,
+      cardType: "small",
     };
-    this.hiddenFileInput = React.createRef();
   }
 
   async componentDidMount() {
-    let div = this.dropRef.current;
-    div.addEventListener("dragenter", this.handleDragIn);
-    div.addEventListener("dragleave", this.handleDragOut);
-    div.addEventListener("dragover", this.handleDrag);
-    div.addEventListener("drop", this.handleDrop);
-
     if (Cookies.get("user_id") !== undefined) {
       this.setState({ user_id: Cookies.get("user_id") });
       try {
@@ -50,14 +42,6 @@ export default class DocCardContainer extends React.Component {
         console.log(error);
       }
     }
-  }
-
-  componentWillUnmount() {
-    let div = this.dropRef.current;
-    div.removeEventListener("dragenter", this.handleDragIn);
-    div.removeEventListener("dragleave", this.handleDragOut);
-    div.removeEventListener("dragover", this.handleDrag);
-    div.removeEventListener("drop", this.handleDrop);
   }
 
   editClicked = (uuid) => {
@@ -109,49 +93,6 @@ export default class DocCardContainer extends React.Component {
     }
   };
 
-  handleDrag = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  handleDragIn = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    this.setState({ dragCounter: this.state.dragCounter + 1 });
-    if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
-      this.setState({ dragging: true });
-    }
-  };
-
-  handleDragOut = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    this.setState({ dragCounter: this.state.dragCounter - 1 });
-
-    if (this.state.dragCounter === 0) {
-      this.setState({ dragging: false });
-    }
-  };
-
-  handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    this.setState({ dragging: false });
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      this.setState({ dragCounter: 0 });
-      this.setState(
-        {
-          selectedFile: e.dataTransfer.files[0],
-        },
-        () => this.fileUploadHandler()
-      );
-      e.dataTransfer.clearData();
-    }
-  };
-
   handleChange = (event) => {
     const req = event.target.getAttribute("name");
     if (req === "searchField") {
@@ -191,20 +132,6 @@ export default class DocCardContainer extends React.Component {
   setActiveId(id) {
     if (id !== undefined) {
       this.setState({ activeId: id });
-    }
-  }
-
-  getCards() {
-    if (this.state.searchField === "") {
-      return this.state.doc_info;
-    } else {
-      var searchedCards = [];
-      this.state.doc_info.map((doc) => {
-        if (doc["file_name"].includes(this.state.searchField)) {
-          searchedCards.push(doc);
-        }
-      });
-      return searchedCards;
     }
   }
 
@@ -282,20 +209,40 @@ export default class DocCardContainer extends React.Component {
     ) {
       var filteredCards = this.getCards();
       if (filteredCards.length > 0) {
-        cards = filteredCards.map((doc) => (
-          <DocumentCard
-            key={doc["doc_id"]}
-            date={doc["date"]}
-            doc_id={doc["doc_id"]}
-            name={doc["file_name"]}
-            status={doc["status"]}
-            path={doc["location"]}
-            active={this.state.activeId}
-            setActiveId={this.setActiveId}
-            deleteCard={this.deleteCard}
-            editClicked={this.editClicked}
-          />
-        ));
+        if (this.state.cardType === "small") {
+          cards = filteredCards.map((doc) => (
+            <Col sm={6} md={4} lg={4} xl={3}>
+              <SmallDocumentCard
+                key={doc["doc_id"]}
+                date={doc["date"]}
+                doc_id={doc["doc_id"]}
+                name={doc["file_name"]}
+                status={doc["status"]}
+                path={doc["location"]}
+                active={this.state.activeId}
+                setActiveId={this.setActiveId}
+                deleteCard={this.deleteCard}
+                editClicked={this.editClicked}
+              />
+            </Col>
+          ));
+        } else {
+          //full sized cards
+          cards = filteredCards.map((doc) => (
+            <DocumentCard
+              key={doc["doc_id"]}
+              date={doc["date"]}
+              doc_id={doc["doc_id"]}
+              name={doc["file_name"]}
+              status={doc["status"]}
+              path={doc["location"]}
+              active={this.state.activeId}
+              setActiveId={this.setActiveId}
+              deleteCard={this.deleteCard}
+              editClicked={this.editClicked}
+            />
+          ));
+        }
       } else {
         cards = (
           <Container>
@@ -319,34 +266,30 @@ export default class DocCardContainer extends React.Component {
     ];
 
     return (
-      <div
-        ref={this.dropRef}
-        className={this.state.dragging ? "isDragging" : ""}
-      >
-        <Container>
-          <Row>
-            <Col xs={9}>
-              <input
-                type="text"
-                className="searchBar"
-                placeholder="search..."
-                name="searchField"
-                onKeyDown={this.onkeypressed}
-                onChange={this.handleChange}
-              ></input>
-            </Col>
-            <Col xs={2}>
-              <Filter
-                handleFilter={this.handleFilter}
-                defaultText="Filter"
-                options={options}
-              />
-            </Col>
-          </Row>
-          {modal}
-          {cards}
-        </Container>
-      </div>
+      <Container>
+        <Row>
+          <Col xs={9}>
+            <input
+              type="text"
+              className="searchBar"
+              placeholder="search..."
+              name="searchField"
+              onKeyDown={this.onkeypressed}
+              onChange={this.handleChange}
+            ></input>
+          </Col>
+          <Col xs={2}>
+            <Filter
+              handleFilter={this.handleFilter}
+              defaultText="Filter"
+              options={options}
+            />
+          </Col>
+        </Row>
+        {modal}
+        {this.state.cardType === "small" && <Row>{cards}</Row>}
+        {this.state.cardType === "large" && cards}
+      </Container>
     );
   }
 }

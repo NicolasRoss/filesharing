@@ -57,6 +57,14 @@
     0 4px 4px rgba(0, 0, 0, 0.16), 0 8px 8px rgba(0, 0, 0, 0.2);
 }
 
+.dropZoneContainer {
+  display: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
 .uuidContainer {
   margin-left: 3vw;
   /* background-color: white; */

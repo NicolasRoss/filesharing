@@ -1,0 +1,47 @@
+.smallDocContainer {
+  /* color: #2f3e46; */
+  /* background: linear-gradient(45deg, #ff5f6d, #ffc371); */
+  /* background-color:#3b3257 ; */
+  /* background-color: #002f2d; */
+  background: linear-gradient(45deg, #02aab0, #00cdac) !important;
+  margin-top: 15px;
+  min-height: 100px;
+  border-radius: 20px;
+  font-family: "Raleway", sans-serif;
+  font-weight: 800;
+  /* z-index: 200 !important; */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.smallDocIcons {
+  display: flex;
+  justify-content: space-around;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+.smallIcons {
+  color: white;
+  font-size: 18px;
+}
+
+.fileIcon {
+  display: flex;
+  justify-content: center;
+  font-size: 96px;
+  padding-top: 20px;
+  color: white;
+}
+
+.smallDocTitle {
+  display: flex;
+  justify-content: center;
+  color: white;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 24px;
+}
