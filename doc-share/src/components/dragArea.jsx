@@ -19,7 +19,7 @@ export default class documentCard extends React.Component {
   }
 
   componentDidMount() {
-    this.dragCounter = 0;
+    // this.dragCounter = 0;
     if (Cookies.get("user_id") !== undefined) {
       this.setState({ user_id: Cookies.get("user_id") });
     }
@@ -128,29 +128,7 @@ export default class documentCard extends React.Component {
             ? "newDocContainer isDragging noselect"
             : "newDocContainer box-shadow noselect"
         }
-      >
-        <Row>
-          <Col>
-            <div>
-              <div
-                className={
-                  this.state.dragging ? "newDocPlus isDragging" : "newDocPlus "
-                }
-              >
-                +
-                <input
-                  name="file"
-                  id="file"
-                  type="file"
-                  ref={this.hiddenFileInput}
-                  onChange={this.fileSelectedHandler}
-                  style={{ display: "none" }}
-                />
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </div>
+      ></div>
     );
   }
 }

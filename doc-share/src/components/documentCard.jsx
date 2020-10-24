@@ -214,6 +214,11 @@ class documentCard extends React.Component {
               onClick={this.deleteClick}
             ></i>
           </Col>
+          <Col xs={4}>
+            <div>
+              <button className="editButton">Edit</button>
+            </div>
+          </Col>
         </Row>
       );
     } else {
