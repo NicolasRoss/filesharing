@@ -22,13 +22,20 @@
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 200;
 }
 
 .editButton {
   float: right;
   margin-left: 0px;
   margin-right: 4vw;
+  background-color: grey;
 }
+
+.editButton:focus {
+  outline: none;
+}
+
 .isDragging {
   background: #172125;
   border-radius: 15px;
@@ -58,6 +65,10 @@
   margin-top: 20px;
 }
 
+.sortContainer {
+  background-color: #1a252a;
+}
+
 .sortButton {
   background-color: #1a252a;
   color: #e8e8e8;
@@ -69,11 +80,11 @@
   padding: 14px;
   margin: 0px 0;
   display: inline-block !important;
-  border-radius: 15px 0px 0px 15px;
+  border-radius: 15px;
   box-sizing: border-box;
   cursor: pointer;
   position: absolute;
-  z-index: 1;
+  z-index: 200 !important;
 }
 
 .ddListContainer {

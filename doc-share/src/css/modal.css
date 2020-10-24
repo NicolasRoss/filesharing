@@ -10,8 +10,8 @@
 .modal-main {
   position: fixed;
   background-color: #004643;
-  width: 80%;
-  height: auto;
+  width: 90%;
+  height: 80% !important;
   height: 500px;
   padding-right: 15px;
   padding-left: 15px;

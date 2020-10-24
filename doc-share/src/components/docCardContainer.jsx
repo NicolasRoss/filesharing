@@ -1,6 +1,6 @@
 import React from "react";
 import DocumentCard from "./documentCard";
-// import NewDocCard from "./newDocCard";
+import Modal from "./modal";
 import Cookies from "js-cookie";
 import Filter from "./filter";
 import { Container, Row, Col } from "react-bootstrap";
@@ -18,6 +18,7 @@ export default class DocCardContainer extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.getCards = this.getCards.bind(this);
     this.onkeypressed = this.onkeypressed.bind(this);
+    this.editClicked = this.editClicked.bind(this);
 
     this.state = {
       isFetching: true, //later for loading animation
@@ -28,6 +29,8 @@ export default class DocCardContainer extends React.Component {
       selectedFile: null,
       dragging: false,
       dragCounter: 0,
+      editUUID: null,
+      showDocModal: false,
     };
     this.hiddenFileInput = React.createRef();
   }
@@ -56,6 +59,20 @@ export default class DocCardContainer extends React.Component {
     div.removeEventListener("dragover", this.handleDrag);
     div.removeEventListener("drop", this.handleDrop);
   }
+
+  editClicked = (uuid) => {
+    console.log("editClicked");
+    console.log(uuid);
+    if (uuid !== undefined) {
+      this.setState({ modalUUID: uuid });
+      this.setState({ showDocModal: true });
+    }
+  };
+
+  hideModal = () => {
+    this.setState({ showDocModal: false });
+  };
+
   handleClick = () => {
     this.hiddenFileInput.current.click();
   };
@@ -246,6 +263,17 @@ export default class DocCardContainer extends React.Component {
   }
 
   render() {
+    var modal;
+    if (this.state.modalUUID !== null) {
+      modal = (
+        <Modal show={this.state.showDocModal} handleClose={this.hideModal}>
+          <div className="tab">{this.state.modalUUID}</div>
+        </Modal>
+      );
+    } else {
+      modal = <div></div>;
+    }
+
     var cards;
     if (
       this.state.user_id !== -1 &&
@@ -265,6 +293,7 @@ export default class DocCardContainer extends React.Component {
             active={this.state.activeId}
             setActiveId={this.setActiveId}
             deleteCard={this.deleteCard}
+            editClicked={this.editClicked}
           />
         ));
       } else {
@@ -282,13 +311,6 @@ export default class DocCardContainer extends React.Component {
       }
     } else {
       cards = <div></div>;
-    }
-
-    var newCard;
-    if (this.state.searchField === "") {
-      // newCard = <NewDocCard insertCard={this.insertCard} />;
-    } else {
-      newCard = <div></div>;
     }
 
     const options = [
@@ -321,8 +343,7 @@ export default class DocCardContainer extends React.Component {
               />
             </Col>
           </Row>
-
-          {/* {newCard} */}
+          {modal}
           {cards}
         </Container>
       </div>

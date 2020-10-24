@@ -160,6 +160,10 @@ class documentCard extends React.Component {
     }
   };
 
+  editClicked = () => {
+    this.props.editClicked(this.state.uuid);
+  };
+
   formatDate() {
     if (this.state.date !== undefined && this.state.date !== "") {
       var t = this.state.date.split(/[- :]/);
@@ -216,7 +220,9 @@ class documentCard extends React.Component {
           </Col>
           <Col xs={4}>
             <div>
-              <button className="editButton">Edit</button>
+              <button className="editButton" onClick={this.editClicked}>
+                Edit
+              </button>
             </div>
           </Col>
         </Row>

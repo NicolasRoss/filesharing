@@ -10,7 +10,7 @@ const Modal = ({ handleClose, show, children }) => {
         <div className="closeContainer">
           <button onClick={handleClose} className="closeButton">
             <div className="closeBox">
-              <i class="fas fa-times-circle"></i>
+              <i className="fas fa-times-circle"></i>
               {/* <div className="closeText">x</div> */}
             </div>
           </button>
