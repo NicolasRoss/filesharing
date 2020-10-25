@@ -259,8 +259,6 @@ export default class DocCardContainer extends React.Component {
                   )
                 ]
               }
-              deleteCard={this.deleteCard}
-              handleClose={this.hideModal}
               user_id={this.state.user_id}
               uuid={this.state.modalUUID}
             />
@@ -347,7 +345,7 @@ export default class DocCardContainer extends React.Component {
               onChange={this.handleChange}
             ></input>
           </Col>
-          <Col xs={3}>
+          <Col xs={2}>
             <Filter
               handleFilter={this.handleFilter}
               defaultText="Filter"
