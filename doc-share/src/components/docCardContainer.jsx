@@ -211,7 +211,7 @@ export default class DocCardContainer extends React.Component {
       if (filteredCards.length > 0) {
         if (this.state.cardType === "small") {
           cards = filteredCards.map((doc) => (
-            <Col sm={6} md={4} lg={4} xl={3}>
+            <Col xs={12} sm={6} md={4} lg={4} xl={3} key={doc["doc_id"]}>
               <SmallDocumentCard
                 key={doc["doc_id"]}
                 date={doc["date"]}

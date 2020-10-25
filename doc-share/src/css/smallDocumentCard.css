@@ -16,6 +16,10 @@
   position: relative;
 }
 
+.smallDocContainer:hover .fileIcon:hover {
+  animation: shake 0.8s;
+}
+
 .smallDocIcons {
   display: flex;
   justify-content: space-around;
@@ -37,11 +41,27 @@
   color: white;
 }
 
+@keyframes shake {
+  33% {
+    transform: translate(2px, -2px);
+  }
+
+  66% {
+    transform: translate(-2px, 2px);
+  }
+
+  100% {
+    transform: translate(0px, 0px);
+  }
+}
+
 .smallDocTitle {
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.4px;
   display: flex;
   justify-content: center;
   color: white;
   padding-top: 20px;
   padding-bottom: 20px;
-  font-size: 24px;
 }

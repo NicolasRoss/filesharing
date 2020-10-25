@@ -195,12 +195,12 @@ class smallDocumentCard extends React.Component {
         onClick={this.editClicked}
       >
         <div className="fileIcon">
-          <i class="fas fa-file-alt"></i>
+          <i className="fas fa-file-alt"></i>
         </div>
         <div className="smallDocTitle noselect">{this.state.name} </div>
         <div className="smallDocIcons">
           <i
-            className="smallIcons fas fa-save"
+            className="smallIcons fas fa-file-download"
             onClick={this.downloadClick}
           ></i>
           <i
