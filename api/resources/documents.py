@@ -36,41 +36,51 @@ class documents(Resource):
                 user_id = args['user']
 
                 if(user_id is not None):
-                    # get all documents owned by user id
-                    query = "SELECT uuid_id, directory_loc, document_name, date, public FROM documents WHERE user_id = %s"
-                    doc_ids = cursor.execute(query, user_id)
+                    query = "SELECT * FROM documents WHERE user_id = %s"
+                    
+                    numDocs = cursor.execute(query, user_id)
+                    if(numDocs > 0):
+                        columns = cursor.description
+                        result = [{columns[index][0]:column for index, column in enumerate(value)} for value in cursor.fetchall()]
 
-                    if(doc_ids > 0):
-                        payload = []
-                        resp = cursor.fetchall()
+                        return jsonify(result)
 
-                        for result in resp:
-                            # print(result)
-                            content = {
-                                "doc_id": result[0],
-                                "location": result[1],
-                                "file_name": result[2],
-                                "date": result[3],
-                                "status": result[4]
-                                }
-                            payload.append(content)
+                        
+                    # else:
+                    #     # get all documents owned by user id
+                    #     query = "SELECT uuid_id, directory_loc, document_name, date, public FROM documents WHERE user_id = %s"
+                    #     doc_ids = cursor.execute(query, user_id)
 
-                        return jsonify(payload)
+                    #     if(doc_ids > 0):
+                    #         payload = []
+                    #         resp = cursor.fetchall()
 
-                    else:
-                        return "no documents found", 404
+                    #         for result in resp:
+                    #             # print(result)
+                    #             content = {
+                    #                 "doc_id": result[0],
+                    #                 "location": result[1],
+                    #                 "file_name": result[2],
+                    #                 "date": result[3],
+                    #                 "status": result[4]
+                    #                 }
+                    #             payload.append(content)
 
+                    #         return jsonify(payload)
+                        
                 else:
                     return "no user or key submitted", 400
 
             except:
                 print('QUERY FAILED')
+                return {}, 400
 
             finally:
                 conn.close()
             
         except Exception as e:
             print(e)
+            return {}, 400
 
 
 

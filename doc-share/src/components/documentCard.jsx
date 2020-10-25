@@ -160,6 +160,10 @@ class documentCard extends React.Component {
     }
   };
 
+  editClicked = () => {
+    this.props.editClicked(this.state.uuid);
+  };
+
   formatDate() {
     if (this.state.date !== undefined && this.state.date !== "") {
       var t = this.state.date.split(/[- :]/);
@@ -213,6 +217,13 @@ class documentCard extends React.Component {
               className="icon black fas fa-trash-alt"
               onClick={this.deleteClick}
             ></i>
+          </Col>
+          <Col xs={4}>
+            <div>
+              <button className="editButton" onClick={this.editClicked}>
+                Edit
+              </button>
+            </div>
           </Col>
         </Row>
       );

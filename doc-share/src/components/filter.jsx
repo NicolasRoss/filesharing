@@ -87,31 +87,37 @@ export default class Filter extends React.Component {
         <Row>
           <Col xs={9}>
             <div className="sortButton">
-              <div id="sortby" value={this.state.value} onClick={this.toggleDD}>
-                {defaultText}
-              </div>
-              {isOpen && (
-                <div className="ddListContainer">
-                  <ul className="ddList">
-                    {options.map((option) => {
-                      return (
-                        <li
-                          className="ddItem"
-                          data-name={option.name}
-                          key={option.value}
-                          value={option.value}
-                          onClick={this.handleOptionClick}
-                        >
-                          {option.name}
-                        </li>
-                      );
-                    })}
-                  </ul>
+              <div className="sortContainer">
+                <div
+                  id="sortby"
+                  value={this.state.value}
+                  onClick={this.toggleDD}
+                >
+                  {defaultText}
                 </div>
-              )}
+                {isOpen && (
+                  <div className="ddListContainer">
+                    <ul className="ddList">
+                      {options.map((option) => {
+                        return (
+                          <li
+                            className="ddItem"
+                            data-name={option.name}
+                            key={option.value}
+                            value={option.value}
+                            onClick={this.handleOptionClick}
+                          >
+                            {option.name}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
           </Col>
-          <Col xs={3}>
+          <Col xs={3} className="sortContainer">
             <div className="sortDirection">
               <i
                 id="direction"

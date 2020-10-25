@@ -11,10 +11,34 @@
   border-radius: 20px;
   font-family: "Raleway", sans-serif;
   font-weight: 800;
-  z-index: 200 !important;
+  /* z-index: 200 !important; */
   padding-left: 0 !important;
   padding-right: 0 !important;
   position: relative;
+}
+.dropArea {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 200;
+}
+
+.editButton {
+  float: right;
+  margin-left: 0px;
+  margin-right: 4vw;
+  background-color: grey;
+}
+
+.editButton:focus {
+  outline: none;
+}
+
+.isDragging {
+  background: #172125;
+  border-radius: 15px;
 }
 
 .foregroundContainer {
@@ -33,12 +57,24 @@
     0 4px 4px rgba(0, 0, 0, 0.16), 0 8px 8px rgba(0, 0, 0, 0.2);
 }
 
+.dropZoneContainer {
+  display: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
 .uuidContainer {
   margin-left: 3vw;
   /* background-color: white; */
   /* cursor: initial !important; */
   border-radius: 10px;
   margin-top: 20px;
+}
+
+.sortContainer {
+  background-color: #1a252a;
 }
 
 .sortButton {
@@ -52,25 +88,28 @@
   padding: 14px;
   margin: 0px 0;
   display: inline-block !important;
-  border-radius: 15px 0px 0px 15px;
+  border-radius: 15px;
   box-sizing: border-box;
   cursor: pointer;
   position: absolute;
-  z-index: 1;
+  z-index: 200 !important;
 }
 
 .ddListContainer {
   background-color: #1a252a;
   color: #e8e8e8;
+  z-index: 200;
 }
 
 .ddList {
   padding: 0;
   margin: 0;
+  z-index: 200;
 }
 
 .ddItem {
   list-style: none;
+  z-index: 200;
 }
 
 .sortDirection {
@@ -86,7 +125,7 @@
   border-radius: 0px 15px 15px 0px;
   box-sizing: border-box;
   cursor: pointer;
-  z-index: 1;
+  z-index: 2;
 }
 
 .searchBar {
