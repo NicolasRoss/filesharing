@@ -2,6 +2,7 @@ import React from "react";
 import DocumentCard from "./documentCard";
 import SmallDocumentCard from "./smallDocumentCard";
 import Modal from "./modal";
+import ModalContent from "./modalDocContent";
 import Cookies from "js-cookie";
 import Filter from "./filter";
 import { Container, Row, Col } from "react-bootstrap";
@@ -116,6 +117,7 @@ export default class DocCardContainer extends React.Component {
     })
       .then((res) => res.json())
       .then((result) => {
+        console.log(result);
         this.setState({ doc_info: result });
         this.setState({ isFetching: false });
       })
@@ -161,7 +163,7 @@ export default class DocCardContainer extends React.Component {
     } else {
       var searchedCards = [];
       this.state.doc_info.map((doc) => {
-        if (doc["file_name"].includes(this.state.searchField)) {
+        if (doc["document_name"].includes(this.state.searchField)) {
           searchedCards.push(doc);
         }
       });
@@ -194,7 +196,12 @@ export default class DocCardContainer extends React.Component {
     if (this.state.modalUUID !== null) {
       modal = (
         <Modal show={this.state.showDocModal} handleClose={this.hideModal}>
-          <div className="tab">{this.state.modalUUID}</div>
+          {this.state.showDocModal && (
+            <ModalContent
+              user_id={this.state.user_id}
+              uuid={this.state.modalUUID}
+            />
+          )}
         </Modal>
       );
     } else {
@@ -211,14 +218,13 @@ export default class DocCardContainer extends React.Component {
       if (filteredCards.length > 0) {
         if (this.state.cardType === "small") {
           cards = filteredCards.map((doc) => (
-            <Col xs={12} sm={6} md={4} lg={4} xl={3} key={doc["doc_id"]}>
+            <Col xs={12} sm={6} md={4} lg={4} xl={3} key={doc["uuid_id"]}>
               <SmallDocumentCard
-                key={doc["doc_id"]}
                 date={doc["date"]}
-                doc_id={doc["doc_id"]}
-                name={doc["file_name"]}
-                status={doc["status"]}
-                path={doc["location"]}
+                doc_id={doc["uuid_id"]}
+                name={doc["document_name"]}
+                status={doc["public"]}
+                path={doc["directory_loc"]}
                 active={this.state.activeId}
                 setActiveId={this.setActiveId}
                 deleteCard={this.deleteCard}
@@ -230,12 +236,12 @@ export default class DocCardContainer extends React.Component {
           //full sized cards
           cards = filteredCards.map((doc) => (
             <DocumentCard
-              key={doc["doc_id"]}
+              key={doc["uuid_id"]}
               date={doc["date"]}
-              doc_id={doc["doc_id"]}
-              name={doc["file_name"]}
-              status={doc["status"]}
-              path={doc["location"]}
+              doc_id={doc["uuid_id"]}
+              name={doc["document_name"]}
+              status={doc["public"]}
+              path={doc["directory_loc"]}
               active={this.state.activeId}
               setActiveId={this.setActiveId}
               deleteCard={this.deleteCard}

@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import Modal from "./modal";
 import "../css/welcomeCard.css";
 import Cookies from "js-cookie";
 import { withRouter } from "react-router-dom";

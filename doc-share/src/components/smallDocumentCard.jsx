@@ -26,15 +26,6 @@ class smallDocumentCard extends React.Component {
     }
   }
 
-  editClicked = (uuid) => {
-    console.log("editClicked");
-    console.log(uuid);
-    if (uuid !== undefined) {
-      this.setState({ modalUUID: uuid });
-      this.setState({ showDocModal: true });
-    }
-  };
-
   downloadClick = (e) => {
     e.stopPropagation();
     console.log("download, path: " + this.state.path);
@@ -192,7 +183,6 @@ class smallDocumentCard extends React.Component {
       <div
         className="smallDocContainer"
         style={{ pointerEvents: "all", cursor: "pointer" }}
-        onClick={this.editClicked}
       >
         <div className="fileIcon">
           <i className="fas fa-file-alt"></i>
@@ -211,6 +201,7 @@ class smallDocumentCard extends React.Component {
             className="smallIcons fas fa-trash-alt"
             onClick={this.deleteClick}
           ></i>
+          <i className="smallIcons fas fa-cog" onClick={this.editClicked}></i>
         </div>
       </div>
     );
