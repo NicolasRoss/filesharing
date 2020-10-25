@@ -1,5 +1,4 @@
 import React from "react";
-import { Container, Row, Col } from "react-bootstrap";
 import "../css/smallDocumentCard.css";
 import { withRouter } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -70,9 +69,9 @@ class smallDocumentCard extends React.Component {
 
     if (this.state.uuid !== null && this.state.user_id !== null) {
       var url =
-        API + "/documents?user=" + this.state.user_id + "&action=delete";
+        API + "/documents?user=" + this.state.user_id;
       fetch(url, {
-        method: "POST",
+        method: "DELETE",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -87,7 +86,7 @@ class smallDocumentCard extends React.Component {
       })
         .then((res) => res.json())
         .then((result) => {
-          console.log("deleted");
+          console.log(result);
         })
         .catch((error) => {
           console.log(error);
@@ -136,6 +135,7 @@ class smallDocumentCard extends React.Component {
         })
         .catch((error) => {
           console.log(error);
+        
         });
     }
   };
@@ -188,6 +188,7 @@ class smallDocumentCard extends React.Component {
           <i className="fas fa-file-alt"></i>
         </div>
         <div className="smallDocTitle noselect">{this.state.name} </div>
+        {/* <div className="smallDocTitle noselect">{this.state.date}</div> */}
         <div className="smallDocIcons">
           <i
             className="smallIcons fas fa-file-download"

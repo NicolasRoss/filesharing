@@ -9,12 +9,10 @@ import { Container, Row, Col } from "react-bootstrap";
 import { API } from "./api";
 
 export default class DocCardContainer extends React.Component {
+  dropRef = React.createRef();
   constructor(props) {
     super(props);
     this.getDocInfo = this.getDocInfo.bind(this);
-    this.rerenderContainer = this.rerenderContainer.bind(this);
-    this.deleteCard = this.deleteCard.bind(this);
-    this.insertCard = this.insertCard.bind(this);
     this.setActiveId = this.setActiveId.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.getCards = this.getCards.bind(this);
@@ -27,7 +25,6 @@ export default class DocCardContainer extends React.Component {
       user_id: Cookies.get("user_id"),
       isFetching: true, //later for loading animation
       activeId: -1,
-      searchField: "",
       selectedFile: null,
       editUUID: null,
       showDocModal: false,
@@ -35,7 +32,56 @@ export default class DocCardContainer extends React.Component {
     };
   }
 
+  handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  handleDragIn = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.setState({ dragCounter: this.state.dragCounter + 1 });
+    if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+      this.setState({ dragging: true });
+    }
+  };
+
+  handleDragOut = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.setState({ dragCounter: this.state.dragCounter - 1 });
+
+    if (this.state.dragCounter === 0) {
+      this.setState({ dragging: false });
+    }
+  };
+
+  handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.setState({ dragging: false });
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      this.setState({ dragCounter: 0 });
+      this.setState(
+        {
+          selectedFile: e.dataTransfer.files[0],
+        },
+        () => this.fileUploadHandler()
+      );
+      e.dataTransfer.clearData();
+    }
+  };
+
   async componentDidMount() {
+    let div = this.dropRef.current;
+    div.addEventListener("dragenter", this.handleDragIn);
+    div.addEventListener("dragleave", this.handleDragOut);
+    div.addEventListener("dragover", this.handleDrag);
+    div.addEventListener("drop", this.handleDrop);
+
     if (Cookies.get("user_id") !== undefined) {
       this.setState({ user_id: Cookies.get("user_id") });
       try {
@@ -44,6 +90,14 @@ export default class DocCardContainer extends React.Component {
         console.log(error);
       }
     }
+  }
+
+  componentWillUnmount() {
+    let div = this.dropRef.current;
+    div.removeEventListener("dragenter", this.handleDragIn);
+    div.removeEventListener("dragleave", this.handleDragOut);
+    div.removeEventListener("dragover", this.handleDrag);
+    div.removeEventListener("drop", this.handleDrop);
   }
 
   editClicked = (uuid) => {
@@ -72,29 +126,6 @@ export default class DocCardContainer extends React.Component {
     );
   };
 
-  fileUploadHandler = () => {
-    if (this.state.user_id !== null && this.state.selectedFile != null) {
-      const data = new FormData();
-      data.append("file", this.state.selectedFile);
-      if (this.state.selectedFile["size"] < 16 * 1024 * 1024) {
-        var url =
-          API + "/documents?user=" + this.state.user_id + "&action=insert";
-        fetch(url, {
-          method: "POST",
-          mode: "cors",
-          body: data,
-        })
-          .then((res) => res.json())
-          .then((result) => {
-            this.insertCard(result);
-          })
-          .catch((error) => {});
-      } else {
-        alert("File size is too large");
-      }
-    }
-  };
-
   handleChange = (event) => {
     const req = event.target.getAttribute("name");
     if (req === "searchField") {
@@ -120,6 +151,7 @@ export default class DocCardContainer extends React.Component {
       .then((result) => {
         console.log(result);
         this.setState({ doc_info: result });
+        this.handleFilter("date");
         this.setState({ isFetching: false });
       })
       .catch((error) => {
@@ -127,16 +159,35 @@ export default class DocCardContainer extends React.Component {
       });
   }
 
-  rerenderContainer() {
-    this.setState({ isFetching: true });
-    this.getDocInfo();
-  }
-
   setActiveId(id) {
     if (id !== undefined) {
       this.setState({ activeId: id });
     }
   }
+
+  fileUploadHandler = () => {
+    if (this.state.user_id !== null && this.state.selectedFile != null) {
+      const data = new FormData();
+      data.append("file", this.state.selectedFile);
+      if (this.state.selectedFile["size"] < 16 * 1024 * 1024) {
+        var url =
+          API + "/documents?user=" + this.state.user_id + "&action=insert";
+        fetch(url, {
+          method: "POST",
+          mode: "cors",
+          body: data,
+        })
+          .then((res) => res.json())
+          .then((result) => {
+            console.log(result);
+            this.insertCard(result);
+          })
+          .catch((error) => {});
+      } else {
+        alert("File size is too large");
+      }
+    }
+  };
 
   insertCard = (result) => {
     if (this.state.doc_info !== null) {
@@ -150,7 +201,7 @@ export default class DocCardContainer extends React.Component {
   deleteCard = (result) => {
     console.log(result);
     const items = [...this.state.doc_info];
-    const j = items.findIndex((item) => item.doc_id === result);
+    const j = items.findIndex((item) => item.uuid_id === result);
 
     items.splice([j], 1);
 
@@ -174,8 +225,10 @@ export default class DocCardContainer extends React.Component {
 
   handleFilter = (value) => {
     const sortedDocs = this.state.doc_info;
-    sortedDocs.sort(this.dynamicSort(value));
-    this.setState({ doc_info: sortedDocs });
+    if (sortedDocs !== null) {
+      sortedDocs.sort(this.dynamicSort(value));
+      this.setState({ doc_info: sortedDocs });
+    }
   };
 
   dynamicSort(property) {
@@ -199,6 +252,13 @@ export default class DocCardContainer extends React.Component {
         <Modal show={this.state.showDocModal} handleClose={this.hideModal}>
           {this.state.showDocModal && (
             <ModalContent
+              doc_info={
+                this.state.doc_info[
+                  this.state.doc_info.findIndex(
+                    (p) => p.uuid_id === this.state.modalUUID
+                  )
+                ]
+              }
               user_id={this.state.user_id}
               uuid={this.state.modalUUID}
             />
@@ -268,7 +328,7 @@ export default class DocCardContainer extends React.Component {
     }
 
     const options = [
-      { value: "file_name", name: "Filename" },
+      { value: "document_name", name: "Filename" },
       { value: "date", name: "Date" },
     ];
 
@@ -293,9 +353,18 @@ export default class DocCardContainer extends React.Component {
             />
           </Col>
         </Row>
-        {modal}
-        {this.state.cardType === "small" && <Row>{cards}</Row>}
-        {this.state.cardType === "large" && cards}
+        <Container
+          ref={this.dropRef}
+          className={
+            this.state.dragging
+              ? "dropZoneContainer isDragging"
+              : "dropZoneContainer"
+          }
+        >
+          {modal}
+          {this.state.cardType === "small" && <Row>{cards}</Row>}
+          {this.state.cardType === "large" && cards}
+        </Container>
       </Container>
     );
   }

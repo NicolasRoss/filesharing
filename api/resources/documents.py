@@ -125,11 +125,11 @@ class documents(Resource):
                         file_to_upload.save(os.path.join(upload_path, folder + uuid + '.' + ext))
                         
                         return jsonify({
-                                    "doc_id": uuid,
-                                    "location": location,
-                                    "file_name": file_name,
+                                    "uuid_id": uuid,
+                                    "directory_loc": location,
+                                    "document_name": file_name,
                                     "date": date,
-                                    "status": 1  # will need to change this when we actually do something with status
+                                    "public": 1  # will need to change this when we actually do something with status
                                 })
 
                     else:
@@ -182,11 +182,11 @@ class documents(Resource):
                         os.remove(file_loc)
                     
                     return jsonify({
-                                    "doc_id": uuid,
-                                    "location": path,
-                                    "file_name": file_name,
+                                    "uuid_id": uuid,
+                                    "directory_loc": location,
+                                    "document_name": file_name,
                                     "date": date,
-                                    "status": 1  # will need to change this when we actually do something with status
+                                    "public": 1  # will need to change this when we actually do something with status
                                 })
                 else:
                     return 'no user submitted', 400

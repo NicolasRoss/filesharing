@@ -4,8 +4,9 @@ import DocCardContainer from "../components/docCardContainer";
 import Intro from "../components/Intro";
 import { withRouter } from "react-router-dom";
 import Cookies from "js-cookie";
+import { API } from "../components/api";
+
 class Home extends React.Component {
-  dropRef = React.createRef();
   constructor(props) {
     super(props);
     this.toLogin = this.toLogin.bind(this);
@@ -15,51 +16,7 @@ class Home extends React.Component {
       dragging: false,
       dragCounter: 0,
     };
-    this.hiddenFileInput = React.createRef();
   }
-
-  handleDrag = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  handleDragIn = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    this.setState({ dragCounter: this.state.dragCounter + 1 });
-    if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
-      this.setState({ dragging: true });
-    }
-  };
-
-  handleDragOut = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    this.setState({ dragCounter: this.state.dragCounter - 1 });
-
-    if (this.state.dragCounter === 0) {
-      this.setState({ dragging: false });
-    }
-  };
-
-  handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    this.setState({ dragging: false });
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      this.setState({ dragCounter: 0 });
-      this.setState(
-        {
-          selectedFile: e.dataTransfer.files[0],
-        },
-        () => this.fileUploadHandler()
-      );
-      e.dataTransfer.clearData();
-    }
-  };
 
   toLogin() {
     this.props.history.push({
@@ -68,23 +25,9 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    let div = this.dropRef.current;
-    div.addEventListener("dragenter", this.handleDragIn);
-    div.addEventListener("dragleave", this.handleDragOut);
-    div.addEventListener("dragover", this.handleDrag);
-    div.addEventListener("drop", this.handleDrop);
-
     if (Cookies.get("user_id") !== undefined) {
       this.setState({ user_id: Cookies.get("user_id") });
     }
-  }
-
-  componentWillUnmount() {
-    let div = this.dropRef.current;
-    div.removeEventListener("dragenter", this.handleDragIn);
-    div.removeEventListener("dragleave", this.handleDragOut);
-    div.removeEventListener("dragover", this.handleDrag);
-    div.removeEventListener("drop", this.handleDrop);
   }
 
   rerenderHome() {
@@ -92,24 +35,49 @@ class Home extends React.Component {
     this.setState({ user_id: -1 });
   }
 
+  fileUploadHandler = () => {
+    if (this.state.user_id !== null && this.state.selectedFile != null) {
+      const data = new FormData();
+      data.append("file", this.state.selectedFile);
+      if (this.state.selectedFile["size"] < 16 * 1024 * 1024) {
+        var url =
+          API + "/documents?user=" + this.state.user_id + "&action=insert";
+        fetch(url, {
+          method: "POST",
+          mode: "cors",
+          body: data,
+        })
+          .then((res) => res.json())
+          .then((result) => {
+            this.insertCard(result);
+          })
+          .catch((error) => {});
+      } else {
+        alert("File size is too large");
+      }
+    }
+  };
+
+  insertCard = (result) => {
+    if (this.state.doc_info !== null) {
+      const newDocInfo = [...this.state.doc_info, result];
+      this.setState({ doc_info: newDocInfo });
+    } else {
+      this.setState({ doc_info: [result] });
+    }
+  };
+
   render() {
     if (this.state.user_id !== -1) {
       return (
-        <div
-          ref={this.dropRef}
-          className={
-            this.state.dragging
-              ? "dropZoneContainer isDragging"
-              : "dropZoneContainer"
-          }
-        >
+        <div>
           <Navbar rerenderHome={this.rerenderHome} />
-          <DocCardContainer rerenderHome={this.rerenderHome} />
+          <DocCardContainer rerenderHome={this.rerenderHome} fileUploadHandler={this.fileUploadHandler}/>
         </div>
       );
     } else {
       return (
-        <div ref={this.dropRef}>
+        <div>
           <Navbar />
           <Intro rerenderHome={this.rerenderHome} toLogin={this.toLogin} />
         </div>

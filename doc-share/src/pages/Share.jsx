@@ -4,7 +4,6 @@ import { Container, Row, Col } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
 import { API } from "../components/api";
 import queryString from "query-string";
-import Cookies from "js-cookie";
 import "../css/share.css";
 
 class Share extends React.Component {
@@ -141,7 +140,6 @@ class Share extends React.Component {
     } else {
       return <div></div>;
     }
-    return <div></div>;
   }
 }
 
