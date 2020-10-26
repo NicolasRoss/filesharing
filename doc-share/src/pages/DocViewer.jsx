@@ -32,7 +32,9 @@ class DocViewer extends React.Component {
         <Container>
           <Row>
             <Col xs={2}>
-              <button onClick={this.toHomePage}>go back</button>
+              <button className="submit-form" onClick={this.toHomePage}>
+                <i className="fas fa-arrow-left"></i>
+              </button>
             </Col>
           </Row>
           <Row>

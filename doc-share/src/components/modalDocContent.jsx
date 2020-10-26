@@ -115,27 +115,28 @@ class modalContent extends React.Component {
                 {this.state.nameWrong && (
                   <div className="modalDate">name does not match.</div>
                 )}
-
-                <input
-                  type="text"
-                  name="deleteField"
-                  className="modalTextField"
-                  onChange={this.changeHandler}
-                ></input>
-                <button
-                  className={
-                    this.state.buttonIsDisabled
-                      ? "disabledButton"
-                      : "activeButton"
-                  }
-                  disabled={
-                    this.state.deleteField !==
-                    this.state.doc_info["document_name"]
-                  }
-                  onClick={this.handleDelete}
-                >
-                  Delete
-                </button>
+                <div className="modalDeleteForm">
+                  <input
+                    type="text"
+                    name="deleteField"
+                    className="modalTextField"
+                    onChange={this.changeHandler}
+                  ></input>
+                  <button
+                    className={
+                      this.state.buttonIsDisabled
+                        ? "disabledButton"
+                        : "activeButton"
+                    }
+                    disabled={
+                      this.state.deleteField !==
+                      this.state.doc_info["document_name"]
+                    }
+                    onClick={this.handleDelete}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             </div>
           </Col>
