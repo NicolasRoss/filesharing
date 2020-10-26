@@ -32,3 +32,40 @@
   color: white;
   border-radius: 20px;
 }
+
+.modalTextField {
+  width: 100%;
+  margin-left: 10px;
+  background-color: white;
+  min-width: 100px;
+  width: 20vw;
+  display: inline-block !important;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.disabledButton {
+  background-color: grey;
+  border: none;
+}
+
+.disabledButton:disabled,
+disabledButton[disabled] {
+  background-color: grey;
+  color: black;
+  border-radius: 10px;
+  border: none;
+}
+
+.activeButton {
+  background-color: red;
+  border-radius: 10px;
+  border: none;
+}
+
+disabledButton:focus {
+  outline: none;
+}
+activeButton:focus {
+  outline: none;
+}

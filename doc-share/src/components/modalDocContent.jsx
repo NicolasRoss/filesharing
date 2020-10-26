@@ -8,17 +8,28 @@ class modalContent extends React.Component {
     this.formatDate = this.formatDate.bind(this);
     this.changeHandler = this.changeHandler.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.checkCorrectName = this.checkCorrectName.bind(this);
 
     this.state = {
       doc_info: this.props.doc_info,
       deleteField: "",
       nameWrong: false,
+      buttonIsDisabled: true,
     };
   }
 
-  changeHandler = (evt) => {
+  changeHandler = async (evt) => {
     const value = evt.target.value;
-    this.setState({ [evt.target.name]: value });
+    await this.setState({ [evt.target.name]: value });
+    await this.checkCorrectName();
+  };
+
+  checkCorrectName = async () => {
+    if (this.state.deleteField === this.state.doc_info["document_name"]) {
+      this.setState({ buttonIsDisabled: false });
+    } else {
+      this.setState({ buttonIsDisabled: true });
+    }
   };
 
   formatDate() {
@@ -87,28 +98,45 @@ class modalContent extends React.Component {
         <Row>
           <Col xs={6}>
             <div className="modalContainer">
-              <div className="modalDisplayField">Collaborators</div>
+              <div className="modalDate">Collaborators</div>
+              <div className="modalDisplayField">lorem ipsum dolor</div>
             </div>
           </Col>
           <Col xs={6}>
-            {this.state.date !== "" && (
-              <div className="modalDate">{this.formatDate()}</div>
-            )}
-            <div>
-              <div className="modalDate">
-                To confirm, type in file name:{" "}
-                {this.state.doc_info["document_name"]}
-              </div>
-              {this.state.nameWrong && (
-                <div className="modalDate">name does not match.</div>
+            <div className="modalContainer">
+              {this.state.date !== "" && (
+                <div className="modalDate">{this.formatDate()}</div>
               )}
+              <div>
+                <div className="modalDate">
+                  To confirm, type in file name:{" "}
+                  {this.state.doc_info["document_name"]}
+                </div>
+                {this.state.nameWrong && (
+                  <div className="modalDate">name does not match.</div>
+                )}
 
-              <input
-                type="text"
-                name="deleteField"
-                onChange={this.changeHandler}
-              ></input>
-              <button onClick={this.handleDelete}>Delete</button>
+                <input
+                  type="text"
+                  name="deleteField"
+                  className="modalTextField"
+                  onChange={this.changeHandler}
+                ></input>
+                <button
+                  className={
+                    this.state.buttonIsDisabled
+                      ? "disabledButton"
+                      : "activeButton"
+                  }
+                  disabled={
+                    this.state.deleteField !==
+                    this.state.doc_info["document_name"]
+                  }
+                  onClick={this.handleDelete}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </Col>
           <Col xs={{ span: 6, offset: 6 }}></Col>
