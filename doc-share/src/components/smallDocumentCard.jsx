@@ -87,7 +87,7 @@ class smallDocumentCard extends React.Component {
       })
         .then((res) => res.json())
         .then((result) => {
-          console.log(result);
+          console.log("deleted");
         })
         .catch((error) => {
           console.log(error);

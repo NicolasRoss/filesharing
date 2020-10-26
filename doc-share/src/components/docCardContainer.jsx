@@ -29,6 +29,7 @@ export default class DocCardContainer extends React.Component {
       editUUID: null,
       showDocModal: false,
       cardType: "small",
+      filter: "",
     };
   }
 
@@ -149,10 +150,9 @@ export default class DocCardContainer extends React.Component {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result);
-        this.setState({ doc_info: result });
-        this.handleFilter("date");
-        this.setState({ isFetching: false });
+        // console.log(result);
+        this.setState({ doc_info: result, isFetching: false, filter: "date" });
+        this.handleFilter(this.state.filter);
       })
       .catch((error) => {
         console.log(error);
@@ -170,19 +170,25 @@ export default class DocCardContainer extends React.Component {
       const data = new FormData();
       data.append("file", this.state.selectedFile);
       if (this.state.selectedFile["size"] < 16 * 1024 * 1024) {
-        var url =
-          API + "/documents?user=" + this.state.user_id + "&action=insert";
+        //for files < 16MB
+        var url = API + "/documents?user=" + this.state.user_id;
         fetch(url, {
           method: "POST",
           mode: "cors",
           body: data,
         })
-          .then((res) => res.json())
+          .then((res) => {
+            if (res.status === 200) {
+              return res.json();
+            }
+            throw new Error("Unsupported file type.");
+          })
           .then((result) => {
-            console.log(result);
             this.insertCard(result);
           })
-          .catch((error) => {});
+          .catch((error) => {
+            alert(error.message);
+          });
       } else {
         alert("File size is too large");
       }
@@ -193,6 +199,7 @@ export default class DocCardContainer extends React.Component {
     if (this.state.doc_info !== null) {
       const newDocInfo = [...this.state.doc_info, result];
       this.setState({ doc_info: newDocInfo });
+      this.handleFilter(this.state.filter);
     } else {
       this.setState({ doc_info: [result] });
     }
@@ -224,6 +231,7 @@ export default class DocCardContainer extends React.Component {
   }
 
   handleFilter = (value) => {
+    this.setState({ filter: value });
     const sortedDocs = this.state.doc_info;
     if (sortedDocs !== null) {
       sortedDocs.sort(this.dynamicSort(value));
@@ -237,10 +245,16 @@ export default class DocCardContainer extends React.Component {
       sortOrder = -1;
       property = property.substr(1);
     }
-
     return function (a, b) {
-      var result =
-        a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+      var result = null;
+      if (property === "date") {
+        var date1 = new Date(a[property]);
+        var date2 = new Date(b[property]);
+        result = date1 < date2 ? 1 : date1 > date2 ? -1 : 0;
+      } else {
+        result =
+          a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+      }
       return result * sortOrder;
     };
   }
