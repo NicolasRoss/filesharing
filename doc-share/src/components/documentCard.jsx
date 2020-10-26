@@ -89,8 +89,7 @@ class documentCard extends React.Component {
     this.props.deleteCard(this.state.uuid);
 
     if (this.state.uuid !== null && this.state.user_id !== null) {
-      var url =
-        API + "/documents?user=" + this.state.user_id;
+      var url = API + "/documents?user=" + this.state.user_id;
       fetch(url, {
         method: "DELETE",
         headers: {

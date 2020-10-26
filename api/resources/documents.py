@@ -12,6 +12,7 @@ upload_path = "static/server"
 supported_file_types = {
                         'txt': 'text/', 'pdf': 'pdf/',
                         'py': 'code/', 'java': 'code/', 'html': 'code/',
+                        'js': 'code/', 'jsx': 'code/', 'css': 'code/',
                         'png': 'image/', 'jpg': 'image/', 'jpeg': 'image/',
                         'csv': 'data/',
                         'zip': 'other/' 

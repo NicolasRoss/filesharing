@@ -29,7 +29,6 @@ export default class DocCardContainer extends React.Component {
       editUUID: null,
       showDocModal: false,
       cardType: "small",
-      filter: "",
     };
   }
 
@@ -150,9 +149,10 @@ export default class DocCardContainer extends React.Component {
     })
       .then((res) => res.json())
       .then((result) => {
-        // console.log(result);
-        this.setState({ doc_info: result, isFetching: false, filter: "date" });
-        this.handleFilter(this.state.filter);
+        console.log(result);
+        this.setState({ doc_info: result });
+        this.handleFilter("date");
+        this.setState({ isFetching: false });
       })
       .catch((error) => {
         console.log(error);
@@ -170,25 +170,19 @@ export default class DocCardContainer extends React.Component {
       const data = new FormData();
       data.append("file", this.state.selectedFile);
       if (this.state.selectedFile["size"] < 16 * 1024 * 1024) {
-        //for files < 16MB
-        var url = API + "/documents?user=" + this.state.user_id;
+        var url =
+          API + "/documents?user=" + this.state.user_id + "&action=insert";
         fetch(url, {
           method: "POST",
           mode: "cors",
           body: data,
         })
-          .then((res) => {
-            if (res.status === 200) {
-              return res.json();
-            }
-            throw new Error("Unsupported file type.");
-          })
+          .then((res) => res.json())
           .then((result) => {
+            console.log(result);
             this.insertCard(result);
           })
-          .catch((error) => {
-            alert(error.message);
-          });
+          .catch((error) => {});
       } else {
         alert("File size is too large");
       }
@@ -199,7 +193,6 @@ export default class DocCardContainer extends React.Component {
     if (this.state.doc_info !== null) {
       const newDocInfo = [...this.state.doc_info, result];
       this.setState({ doc_info: newDocInfo });
-      this.handleFilter(this.state.filter);
     } else {
       this.setState({ doc_info: [result] });
     }
@@ -231,7 +224,6 @@ export default class DocCardContainer extends React.Component {
   }
 
   handleFilter = (value) => {
-    this.setState({ filter: value });
     const sortedDocs = this.state.doc_info;
     if (sortedDocs !== null) {
       sortedDocs.sort(this.dynamicSort(value));
@@ -245,16 +237,10 @@ export default class DocCardContainer extends React.Component {
       sortOrder = -1;
       property = property.substr(1);
     }
+
     return function (a, b) {
-      var result = null;
-      if (property === "date") {
-        var date1 = new Date(a[property]);
-        var date2 = new Date(b[property]);
-        result = date1 < date2 ? 1 : date1 > date2 ? -1 : 0;
-      } else {
-        result =
-          a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
-      }
+      var result =
+        a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
       return result * sortOrder;
     };
   }
@@ -273,8 +259,6 @@ export default class DocCardContainer extends React.Component {
                   )
                 ]
               }
-              deleteCard={this.deleteCard}
-              handleClose={this.hideModal}
               user_id={this.state.user_id}
               uuid={this.state.modalUUID}
             />
@@ -298,7 +282,6 @@ export default class DocCardContainer extends React.Component {
             <Col xs={12} sm={6} md={4} lg={4} xl={3} key={doc["uuid_id"]}>
               <SmallDocumentCard
                 date={doc["date"]}
-                doc_info={doc}
                 doc_id={doc["uuid_id"]}
                 name={doc["document_name"]}
                 status={doc["public"]}
@@ -362,7 +345,7 @@ export default class DocCardContainer extends React.Component {
               onChange={this.handleChange}
             ></input>
           </Col>
-          <Col xs={3}>
+          <Col xs={2}>
             <Filter
               handleFilter={this.handleFilter}
               defaultText="Filter"

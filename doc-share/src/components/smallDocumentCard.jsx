@@ -10,6 +10,8 @@ class smallDocumentCard extends React.Component {
     this.downloadClick = this.downloadClick.bind(this);
     this.deleteClick = this.deleteClick.bind(this);
     this.shareClick = this.shareClick.bind(this);
+    this.checkFileExt = this.checkFileExt.bind(this);
+    this.toDocViewer = this.toDocViewer.bind(this);
     this.state = {
       uuid: this.props.doc_id,
       name: this.props.name,
@@ -68,8 +70,7 @@ class smallDocumentCard extends React.Component {
     this.props.deleteCard(this.state.uuid);
 
     if (this.state.uuid !== null && this.state.user_id !== null) {
-      var url =
-        API + "/documents?user=" + this.state.user_id;
+      var url = API + "/documents?user=" + this.state.user_id;
       fetch(url, {
         method: "DELETE",
         headers: {
@@ -135,7 +136,6 @@ class smallDocumentCard extends React.Component {
         })
         .catch((error) => {
           console.log(error);
-        
         });
     }
   };
@@ -178,14 +178,45 @@ class smallDocumentCard extends React.Component {
     return "";
   }
 
+  checkFileExt() {
+    if (this.state.name !== "") {
+      var patt = /\.([0-9a-z]+)(?:[\?#]|$)/i;
+      var ext = this.state.name.match(patt);
+      if (
+        ext[0].includes("jpg") ||
+        ext[0].includes("jpeg") ||
+        ext[0].includes("png")
+      ) {
+        return <i className="fas fa-file-image"></i>;
+      } else if (
+        ext[0].includes("py") ||
+        ext[0].includes("js") ||
+        ext[0].includes("css")
+      ) {
+        return <i className="fas fa-file-code"></i>;
+      } else if (ext[0].includes("zip")) {
+        return <i className="fas fa-file-archive"></i>;
+      }
+    }
+    return <i className="fas fa-file-alt"></i>;
+  }
+
+  toDocViewer() {
+    this.props.history.push({
+      pathname: "/DocViewer",
+      state: { doc_info: this.props.doc_info },
+    });
+  }
+
   render() {
+    var icon = this.checkFileExt();
     return (
       <div
         className="smallDocContainer"
         style={{ pointerEvents: "all", cursor: "pointer" }}
       >
-        <div className="fileIcon">
-          <i className="fas fa-file-alt"></i>
+        <div className="fileIcon" onClick={this.toDocViewer}>
+          {icon}
         </div>
         <div className="smallDocTitle noselect">{this.state.name} </div>
         {/* <div className="smallDocTitle noselect">{this.state.date}</div> */}
@@ -198,10 +229,10 @@ class smallDocumentCard extends React.Component {
             className="smallIcons fas fa-share-alt"
             onClick={this.shareClick}
           ></i>
-          <i
+          {/* <i
             className="smallIcons fas fa-trash-alt"
             onClick={this.deleteClick}
-          ></i>
+          ></i> */}
           <i className="smallIcons fas fa-cog" onClick={this.editClicked}></i>
         </div>
       </div>
