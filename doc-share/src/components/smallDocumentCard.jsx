@@ -11,6 +11,7 @@ class smallDocumentCard extends React.Component {
     this.deleteClick = this.deleteClick.bind(this);
     this.shareClick = this.shareClick.bind(this);
     this.checkFileExt = this.checkFileExt.bind(this);
+    this.toDocViewer = this.toDocViewer.bind(this);
     this.state = {
       uuid: this.props.doc_id,
       name: this.props.name,
@@ -200,6 +201,13 @@ class smallDocumentCard extends React.Component {
     return <i className="fas fa-file-alt"></i>;
   }
 
+  toDocViewer() {
+    this.props.history.push({
+      pathname: "/DocViewer",
+      state: { doc_info: this.props.doc_info },
+    });
+  }
+
   render() {
     var icon = this.checkFileExt();
     return (
@@ -207,7 +215,9 @@ class smallDocumentCard extends React.Component {
         className="smallDocContainer"
         style={{ pointerEvents: "all", cursor: "pointer" }}
       >
-        <div className="fileIcon">{icon}</div>
+        <div className="fileIcon" onClick={this.toDocViewer}>
+          {icon}
+        </div>
         <div className="smallDocTitle noselect">{this.state.name} </div>
         {/* <div className="smallDocTitle noselect">{this.state.date}</div> */}
         <div className="smallDocIcons">

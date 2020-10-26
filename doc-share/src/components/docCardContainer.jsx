@@ -284,6 +284,7 @@ export default class DocCardContainer extends React.Component {
             <Col xs={12} sm={6} md={4} lg={4} xl={3} key={doc["uuid_id"]}>
               <SmallDocumentCard
                 date={doc["date"]}
+                doc_info={doc}
                 doc_id={doc["uuid_id"]}
                 name={doc["document_name"]}
                 status={doc["public"]}
