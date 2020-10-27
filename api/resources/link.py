@@ -55,14 +55,16 @@ class link(Resource):
                 else:
                     return "link not found", 404
 
-            except Exception as e:
-                print(e)
+            except:
+                print('QUERY FAILED')
+                return {}, 400
 
             finally:
                 conn.close()
-
+            
         except Exception as e:
             print(e)
+            return {}, 400
             
 
     def post(self):
@@ -98,12 +100,14 @@ class link(Resource):
                                 "link_id": link_id,
                     }
             
-            except Exception as e:
-                print(e)
+            except:
+                print('QUERY FAILED')
+                return {}, 400
 
             finally:
                 conn.close()
-        
+            
         except Exception as e:
             print(e)
+            return {}, 400
 
