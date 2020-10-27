@@ -1,6 +1,7 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
 import "../css/modalContent.css";
+import { API, HOST } from "./api";
 
 class modalContent extends React.Component {
   constructor(props) {
@@ -68,18 +69,39 @@ class modalContent extends React.Component {
     return "";
   }
 
-  handleDelete() {
-    console.log("handle delete");
-    if (this.state.deleteField === this.state.doc_info["document_name"]) {
-      this.setState({ nameWrong: false });
-      console.log("deleting card..");
-      this.props.deleteCard(this.state.doc_info["uuid_id"]);
+  deleteClick = (e) => {
+    console.log("clicked the delete button for doc_id: " + this.state.uuid);
+    console.log("delete, path: " + this.state.path);
+    this.props.deleteCard(this.state.doc_info["uuid_id"]);
 
-      this.props.handleClose();
+    if (this.state.deleteField === this.state.doc_info["document_name"]) {
+      var url = API + "/documents?user=" + this.props.user_id;
+      fetch(url, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: JSON.stringify({
+          uuid: this.state.doc_info["uuid_id"],
+          name: this.state.doc_info["document_name"],
+          date: this.state.doc_info["date"],
+          path: this.state.doc_info["directory_loc"],
+        }),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          console.log("deleted");
+          this.props.handleClose();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
       this.setState({ nameWrong: true });
     }
-  }
+  };
 
   render() {
     return (
@@ -128,7 +150,7 @@ class modalContent extends React.Component {
                       this.state.deleteField !==
                       this.state.doc_info["document_name"]
                     }
-                    onClick={this.handleDelete}
+                    onClick={this.deleteClick}
                   >
                     Delete
                   </button>

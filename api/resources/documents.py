@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from flask import jsonify, request
+from flask import jsonify
 from datetime import datetime, date
 from common import db
 import werkzeug
@@ -139,14 +139,16 @@ class documents(Resource):
                 else:
                     return 'no user submitted', 400
             
-            except Exception as e:
-                print(e)
-            
+            except:
+                print('QUERY FAILED')
+                return {}, 400
+
             finally:
                 conn.close()
-
+            
         except Exception as e:
             print(e)
+            return {}, 400
 
     def delete(self):
         try:
@@ -192,14 +194,16 @@ class documents(Resource):
                 else:
                     return 'no user submitted', 400
             
-            except Exception as e:
-                print(e)
-            
+            except:
+                print('QUERY FAILED')
+                return {}, 400
+
             finally:
                 conn.close()
-
+            
         except Exception as e:
             print(e)
+            return {}, 400
 
     def put(self):
         parser.add_argument('public', type=str)
