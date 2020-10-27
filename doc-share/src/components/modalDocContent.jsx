@@ -13,7 +13,6 @@ class modalContent extends React.Component {
     this.state = {
       doc_info: this.props.doc_info,
       deleteField: "",
-      nameWrong: false,
       buttonIsDisabled: true,
     };
   }
@@ -112,9 +111,6 @@ class modalContent extends React.Component {
                   To confirm, type in file name:{" "}
                   {this.state.doc_info["document_name"]}
                 </div>
-                {this.state.nameWrong && (
-                  <div className="modalDate">name does not match.</div>
-                )}
                 <div className="modalDeleteForm">
                   <input
                     type="text"
