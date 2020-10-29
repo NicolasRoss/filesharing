@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import Filter from "./filter";
 import { Container, Row, Col } from "react-bootstrap";
 import { API } from "./api";
+import { Provider } from "react-redux";
 
 export default class DocCardContainer extends React.Component {
   dropRef = React.createRef();

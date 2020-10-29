@@ -72,7 +72,10 @@ class Home extends React.Component {
       return (
         <div>
           <Navbar rerenderHome={this.rerenderHome} />
-          <DocCardContainer rerenderHome={this.rerenderHome} fileUploadHandler={this.fileUploadHandler}/>
+          <DocCardContainer
+            rerenderHome={this.rerenderHome}
+            fileUploadHandler={this.fileUploadHandler}
+          />
         </div>
       );
     } else {
