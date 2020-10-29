@@ -171,7 +171,7 @@ class smallDocumentCard extends React.Component {
   toDocViewer() {
     this.props.history.push({
       pathname: "/DocViewer",
-      state: { doc_info: this.props.doc_info },
+      state: { doc_info: this.props.doc_info, user_id: this.state.user_id },
     });
   }
 

@@ -99,7 +99,6 @@ class documents(Resource):
                 user_id = args['user']
 
                 if user_id is not None:
-                    print("here")
                     parser.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
                     args = parser.parse_args()
                     file_to_upload = args["file"]
@@ -112,8 +111,6 @@ class documents(Resource):
                         location = upload_path + '/' + folder
                         date = datetime.now()
                         doc_id = uuid4()
-                        
-
 
                         # INSERT file data into DB to generate uuid
                         insert = 'INSERT INTO documents (uuid_id, user_id, directory_loc, document_name, date, public) VALUES (%s, %s, %s, %s, %s, %s)'
@@ -121,7 +118,6 @@ class documents(Resource):
                         
                         cursor.execute(insert, values)
                         conn.commit()
-                        print("inserted")
 
                         # SELECT for the uuid
                         # query = 'SELECT uuid_id FROM documents WHERE (user_id=%s AND directory_loc=%s AND document_name=%s AND date=%s)'
@@ -132,7 +128,7 @@ class documents(Resource):
 
                         # # save file to server
                         file_to_upload.save(os.path.join(upload_path, folder + str(doc_id) + '.' + ext))
-                        print("HJER WE GO")
+
                         return jsonify({
                                     "uuid_id": str(doc_id),
                                     "directory_loc": location,
@@ -211,14 +207,29 @@ class documents(Resource):
             return {}, 400
 
     def put(self):
-        parser.add_argument('public', type=str)
-        parser.add_argument('user_id', type=str)
+        parser.add_argument('user', type=str)
+        parser.add_argument('uuid', type=str)
         args = parser.parse_args()
+        
+        user_id = args['user']
+        uuid = args['uuid']
+
         try:
             conn = db.mysql.connect()
             cursor = conn.cursor()
-            if(args['public'] is not None and args['user_id'] is not None):                    
-                print()
+            if user_id is not None and uuid is not None:
+                parser.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
+                args = parser.parse_args()
+                file_to_modify = args["file"]
+                file_name = file_to_modify.filename
+                
+                ext = file_ext(file_name)
+                folder = supported_file_types[ext]
+
+                file_to_modify.save(os.path.join(upload_path, folder + uuid + '.' + ext))
+
+                return {"request": "file saved"}
+                    
         except Exception as e:
             print(e)
         finally:
