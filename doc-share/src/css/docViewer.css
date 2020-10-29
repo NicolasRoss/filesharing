@@ -25,6 +25,8 @@
   height: 85vh;
   resize: none;
   overflow: auto;
+  padding: 25px 50px 25px 50px;
+  line-height: 20px;
 }
 
 .backButton {
@@ -49,4 +51,8 @@
 }
 .backButton:active {
   transform: scale(0.96);
+}
+
+.hidden {
+  visibility: hidden;
 }
