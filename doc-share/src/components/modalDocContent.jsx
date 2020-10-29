@@ -8,7 +8,6 @@ class modalContent extends React.Component {
     super(props);
     this.formatDate = this.formatDate.bind(this);
     this.changeHandler = this.changeHandler.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
     this.checkCorrectName = this.checkCorrectName.bind(this);
 
     this.state = {

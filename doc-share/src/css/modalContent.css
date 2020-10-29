@@ -67,7 +67,7 @@ disabledButton[disabled] {
 }
 
 .activeButton {
-  background-color: red;
+  background-color: #800000;
   border-radius: 10px;
   border: none;
   padding: 5px;
