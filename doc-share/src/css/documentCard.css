@@ -144,6 +144,11 @@
   /* transform: scale(0.99) */
 }
 
+.searchBar::placeholder {
+  color: #e8e8e8;
+  opacity: 0.9;
+}
+
 /* .sortIcon {
   background-color: #1a252a;
   color: grey;
