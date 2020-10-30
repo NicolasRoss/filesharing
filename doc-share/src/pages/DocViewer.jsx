@@ -9,11 +9,6 @@ import { render } from "react-dom";
 import AceEditor from "react-ace";
 import Prism from "prismjs";
 
-import Editor from "../components/editor";
-
-// import "../css/editor.css";
-import "../css/prism.css";
-// import "ace-builds";
 const languages = [
   "javascript",
   "java",
