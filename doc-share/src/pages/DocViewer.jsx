@@ -31,6 +31,7 @@ class DocViewer extends React.Component {
           user_id: this.props.location.state.user_id,
         },
         () => {
+          console.log("doing getFile");
           this.getFile();
         }
       );
@@ -83,6 +84,7 @@ class DocViewer extends React.Component {
         mode: "cors",
       })
         .then((res) => {
+          console.log(res);
           if (res.status === 200) {
             return res.blob();
           }
@@ -104,6 +106,7 @@ class DocViewer extends React.Component {
     if (extension === "text") {
       var reader = new FileReader();
       reader.addEventListener("loadend", () => {
+        console.log(reader.result);
         this.setState({ value: reader.result });
       });
       reader.readAsText(blob);
@@ -144,7 +147,7 @@ class DocViewer extends React.Component {
       .textContent;
     var newBlob = new Blob([newContent], { type: this.state.blob.type });
     var newFile = new File([newBlob], this.state.doc_info["document_name"]);
-    
+
     if (newFile !== undefined) {
       const data = new FormData();
       data.append("file", newFile);
@@ -160,18 +163,19 @@ class DocViewer extends React.Component {
           method: "PUT",
           mode: "cors",
           body: data,
-        }).then((res) => {
-          if (res.status === 200) {
-            return res.json();
-          }
-          throw new Error("File Failed to save");
         })
-        .then((result) => {
-          alert(result["request"]);
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
+          .then((res) => {
+            if (res.status === 200) {
+              return res.json();
+            }
+            throw new Error("File Failed to save");
+          })
+          .then((result) => {
+            alert(result["request"]);
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
       }
     }
   }
