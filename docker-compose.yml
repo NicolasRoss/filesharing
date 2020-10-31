@@ -2,7 +2,7 @@ version: "3.3"
 services:
   web:
     build:
-    context: ./doc-share
+      context: ./doc-share
     ports:
       - "80:3000"
 
@@ -20,15 +20,15 @@ services:
     container_name: reverse-proxy
     restart: on-failure
     ports:
-        - 80:80
-        - 443:443
+      - 80:80
+      - 443:443
     volumes:
-        - ./.ssl-data:/etc/rest-auto-ssl
+      - ./.ssl-data:/etc/rest-auto-ssl
     environment:
-        SITES: 'declr.dev:443;declr.dev:80'
-        FORCE_HTTPS: "true"
+      SITES: "declr.dev:443;declr.dev:80"
+      FORCE_HTTPS: "true"
     depends_on:
-        - web
-        - api
-    volumes:
-        .ssl-data:
+      - web
+      - api
+volumes:
+  .ssl-data:
