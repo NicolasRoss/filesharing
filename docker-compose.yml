@@ -2,7 +2,7 @@ version: "3.3"
 services:
   web:
     build:
-    context: "./doc-share"
+    context: ./doc-share
     ports:
       - "80:3000"
 
@@ -10,7 +10,7 @@ services:
 
   api:
     build:
-      context: "./api"
+      context: ./api
     ports:
       - "5000:5000"
     image: docshare:backend
