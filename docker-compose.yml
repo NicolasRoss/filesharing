@@ -1,34 +1,22 @@
-version: "3.3"
+version: "3.4"
+
 services:
   web:
-    build:
-      context: ./doc-share
-    ports:
-      - "80:3000"
-
-    image: docshare:frontend
-
-  api:
-    build:
-      context: ./api
-    ports:
-      - "5000:5000"
-    image: docshare:backend
-
-  reverse-proxy:
-    image: valian/docker-nginx-auto-ssl:1.0.0
-    container_name: reverse-proxy
-    restart: on-failure
+    image: nginx:1.14.2-alpine
+    restart: always
+    volumes:
+      - ./doc-share/build/:/public_html
+      - ./conf.d:/etc/nginx/conf.d
+      - ./dhparam:/etc/nginx/dhparam
+      - ./certbot/conf:/etc/nginx/ssl
+      - ./certbot/data:/usr/share/nginx/html/letsencrypt
     ports:
       - 80:80
       - 443:443
+  certbot:
+    image: certbot/certbot:latest
+    command: certonly --webroot --webroot-path=/usr/share/nginx/html/letsencrypt --email noahjacknichols@gmail.com --agree-tos --no-eff-email -d declr.dev
     volumes:
-      - ./.ssl-data:/etc/rest-auto-ssl
-    environment:
-      SITES: "declr.dev:443;declr.dev:80"
-      FORCE_HTTPS: "true"
-    depends_on:
-      - web
-      - api
-volumes:
-  .ssl-data:
+      - ./certbot/conf:/etc/letsencrypt
+      - ./certbot/logs:/var/log/letsencrypt
+      - ./cerbot/data:/usr/share/nginx/html/letsencrypt
