@@ -3,7 +3,7 @@ version: "3"
 services:
   nodejs:
     build:
-      context: .
+      context: ./doc-share
       dockerfile: Dockerfile
     image: nodejs
     container_name: nodejs
@@ -17,16 +17,33 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - web-root:/var/www/html
       - ./nginx-conf:/etc/nginx/conf.d
       - certbot-etc:/etc/letsencrypt
       - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
     depends_on:
       - nodejs
     networks:
       - app-network
 
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./nginx-conf:/etc/nginx/conf.d
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
+    image: api
+    container_name: api
+    networks:
+      - app-network
   certbot:
     image: certbot/certbot
     container_name: certbot
@@ -36,7 +53,7 @@ services:
       - web-root:/var/www/html
     depends_on:
       - webserver
-    command: certonly --webroot --webroot-path=/var/www/html --email noahjacknichols@gmail.com --agree-tos --no-eff-email --staging -d declr.dev  -d www.declr.dev
+    command: certonly --webroot --webroot-path=/var/www/html --email noahjacknichols@gmail.com --agree-tos --no-eff-email --force-renewal -d declr.dev  -d www.declr.dev
 
 volumes:
   certbot-etc:
@@ -47,7 +64,12 @@ volumes:
       type: none
       device: /home/ubuntu/proj/filesharing/doc-share/build/
       o: bind
-
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/ubuntu/proj/filesharing/dhparam/
+      o: bind
 networks:
   app-network:
     driver: bridge
