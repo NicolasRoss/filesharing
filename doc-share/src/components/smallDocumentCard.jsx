@@ -8,6 +8,7 @@ class smallDocumentCard extends React.Component {
   constructor(props) {
     super(props);
     this.downloadClick = this.downloadClick.bind(this);
+    this.deleteClick = this.deleteClick.bind(this);
     this.shareClick = this.shareClick.bind(this);
     this.checkFileExt = this.checkFileExt.bind(this);
     this.toDocViewer = this.toDocViewer.bind(this);
@@ -55,6 +56,38 @@ class smallDocumentCard extends React.Component {
           link.click();
 
           link.parentNode.removeChild(link);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
+  deleteClick = (e) => {
+    e.stopPropagation();
+    console.log("clicked the delete button for doc_id: " + this.state.uuid);
+    console.log("delete, path: " + this.state.path);
+    this.props.deleteCard(this.state.uuid);
+
+    if (this.state.uuid !== null && this.state.user_id !== null) {
+      var url = API + "/documents?user=" + this.state.user_id;
+      fetch(url, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        mode: "cors",
+        body: JSON.stringify({
+          uuid: this.state.uuid,
+          name: this.state.name,
+          date: this.state.date,
+          path: this.state.path,
+        }),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result);
         })
         .catch((error) => {
           console.log(error);
@@ -171,7 +204,7 @@ class smallDocumentCard extends React.Component {
   toDocViewer() {
     this.props.history.push({
       pathname: "/DocViewer",
-      state: { doc_info: this.props.doc_info, user_id: this.state.user_id },
+      state: { doc_info: this.props.doc_info },
     });
   }
 

@@ -4,6 +4,50 @@ import { Container, Row, Col } from "react-bootstrap";
 import Navbar from "../components/navbar";
 import "../css/docViewer.css";
 import { API } from "../components/api";
+import { render } from "react-dom";
+
+import AceEditor from "react-ace";
+import Prism from "prismjs";
+
+const languages = [
+  "javascript",
+  "java",
+  "python",
+  "xml",
+  "ruby",
+  "sass",
+  "markdown",
+  "mysql",
+  "json",
+  "html",
+  "handlebars",
+  "golang",
+  "csharp",
+  "elixir",
+  "typescript",
+  "css",
+];
+
+const themes = [
+  "monokai",
+  "github",
+  "tomorrow",
+  "kuroir",
+  "twilight",
+  "xcode",
+  "textmate",
+  "solarized_dark",
+  "solarized_light",
+  "terminal",
+];
+
+languages.forEach((lang) => {
+  require(`ace-builds/src-noconflict/mode-${lang}`);
+  require(`ace-builds/src-noconflict/snippets/${lang}`);
+});
+
+themes.forEach((theme) => require(`ace-builds/src-noconflict/theme-${theme}`));
+/*eslint-disable no-alert, no-console */
 
 class DocViewer extends React.Component {
   constructor(props) {
@@ -15,11 +59,13 @@ class DocViewer extends React.Component {
 
     this.state = {
       doc_info: [],
+      fetching: true,
       user_id: "",
       value: "",
       editable: false,
       spellCheck: true,
       blob: null,
+      codeType: "",
     };
   }
 
@@ -31,11 +77,26 @@ class DocViewer extends React.Component {
           user_id: this.props.location.state.user_id,
         },
         () => {
+          console.log("doing getFile");
           this.getFile();
         }
       );
     }
   }
+
+  getCodeExt = (name) => {
+    if (name.includes("js") || name.includes("jsx")) {
+      this.setState({ codeType: "javascript" });
+    } else if (name.includes("ts")) {
+      this.setState({ codeType: "typescript" });
+    } else if (name.includes("py")) {
+      this.setState({ codeType: "python" });
+    } else if (name.includes("xml")) {
+      this.setState({ codeType: "xml" });
+    } else if (name.includes("rb")) {
+      this.setState({ codeType: "ruby" });
+    }
+  };
 
   toHomePage() {
     this.props.history.push({
@@ -47,6 +108,7 @@ class DocViewer extends React.Component {
     if (this.state.doc_info["document_name"] !== "") {
       var patt = /\.([0-9a-z]+)(?:[\?#]|$)/i;
       var ext = this.state.doc_info["document_name"].match(patt);
+
       if (
         ext[0].includes("jpg") ||
         ext[0].includes("jpeg") ||
@@ -58,6 +120,7 @@ class DocViewer extends React.Component {
         ext[0].includes("js") ||
         ext[0].includes("css")
       ) {
+        this.getCodeExt(ext[0]);
         return "code";
       } else if (ext[0].includes("zip")) {
         return "zip";
@@ -83,6 +146,7 @@ class DocViewer extends React.Component {
         mode: "cors",
       })
         .then((res) => {
+          console.log(res);
           if (res.status === 200) {
             return res.blob();
           }
@@ -101,16 +165,20 @@ class DocViewer extends React.Component {
   displayFile = (blob) => {
     this.setState({ blob: blob });
     var extension = this.checkFileExt();
+    console.log(`extension is ${extension}`);
     if (extension === "text") {
       var reader = new FileReader();
       reader.addEventListener("loadend", () => {
+        console.log(reader);
         this.setState({ value: reader.result });
+        console.log(this.state.value);
       });
       reader.readAsText(blob);
+      console.log(this.state.value);
       //add update button
       this.setState({ editable: true, spellCheck: false });
     } else if (blob.type.startsWith("image/")) {
-      var textarea = document.getElementById("textarea");
+      var textarea = document.getElementById("ace-editor");
       textarea.parentNode.removeChild(textarea);
 
       const textContainer = document.getElementById("text");
@@ -124,6 +192,9 @@ class DocViewer extends React.Component {
       var reader = new FileReader();
       reader.addEventListener("loadend", () => {
         this.setState({ value: reader.result });
+        console.log("reading in code file");
+        console.log(this.state.value);
+        this.setState({ fetching: false });
       });
       reader.readAsText(blob);
       //add update button
@@ -133,18 +204,20 @@ class DocViewer extends React.Component {
     }
   };
 
-  handleFileChange() {
+  handleFileChange(newValue) {
     this.setState({
-      value: document.getElementsByClassName("textArea")[0].value,
+      value: newValue,
     });
+    // console.log(newValue);
   }
 
   handleFileSave() {
-    const newContent = document.getElementsByClassName("textArea")[0]
-      .textContent;
+    // const newContent = document.getElementsByClassName("textArea")[0]
+    //   .textContent;
+    const newContent = this.state.value;
     var newBlob = new Blob([newContent], { type: this.state.blob.type });
     var newFile = new File([newBlob], this.state.doc_info["document_name"]);
-    
+
     if (newFile !== undefined) {
       const data = new FormData();
       data.append("file", newFile);
@@ -160,18 +233,19 @@ class DocViewer extends React.Component {
           method: "PUT",
           mode: "cors",
           body: data,
-        }).then((res) => {
-          if (res.status === 200) {
-            return res.json();
-          }
-          throw new Error("File Failed to save");
         })
-        .then((result) => {
-          alert(result["request"]);
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
+          .then((res) => {
+            if (res.status === 200) {
+              return res.json();
+            }
+            throw new Error("File Failed to save");
+          })
+          .then((result) => {
+            alert(result["request"]);
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
       }
     }
   }
@@ -205,18 +279,24 @@ class DocViewer extends React.Component {
           <Row>
             <Col xs={12}>
               <div id="text" className="docViewerContainer">
-                <textarea
-                  id="textarea"
-                  className={this.state.editable ? "textArea" : "hidden"}
-                  spellCheck={this.state.code}
+                <AceEditor
+                  mode={this.state.codeType}
+                  theme="monokai"
                   value={this.state.value}
                   onChange={this.handleFileChange}
-                ></textarea>
+                  showPrintMargin={false}
+                  className={this.state.editable ? "textArea" : "hidden"}
+                  style={{
+                    width: "100%",
+                    height: "80vh",
+                  }}
+                ></AceEditor>
               </div>
             </Col>
           </Row>
-          {/* <Container fluid></Container> */}
         </Container>
+
+        {/* <CodeEditor language={"javascript"} content={this.state.value} /> */}
       </div>
     );
   }

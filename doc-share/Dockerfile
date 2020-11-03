@@ -1,6 +1,6 @@
 FROM node:12
 
-WORKDIR /docker/app
+WORKDIR /
 
 
 COPY package*.json ./
@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "startHTTPS"]
+CMD ["npm", "start"]

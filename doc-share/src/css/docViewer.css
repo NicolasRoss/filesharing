@@ -22,7 +22,7 @@
 
 .textArea {
   width: 100%;
-  height: 85vh;
+  /* height: 85vh; */
   resize: none;
   overflow: auto;
   padding: 25px 50px 25px 50px;
