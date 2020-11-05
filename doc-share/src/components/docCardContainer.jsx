@@ -152,7 +152,7 @@ export default class DocCardContainer extends React.Component {
       .then((res) => res.json())
       .then((result) => {
         // console.log(result);
-        this.setState({ doc_info: result, isFetching: false, filter: "date" });
+        this.setState({ doc_info: result, isFetching: false, filter: "last_modified" });
         this.handleFilter(this.state.filter);
       })
       .catch((error) => {
@@ -249,7 +249,7 @@ export default class DocCardContainer extends React.Component {
     }
     return function (a, b) {
       var result = null;
-      if (property === "date") {
+      if (property === "date" || property === "last_modified") {
         var date1 = new Date(a[property]);
         var date2 = new Date(b[property]);
         result = date1 < date2 ? 1 : date1 > date2 ? -1 : 0;
@@ -277,7 +277,6 @@ export default class DocCardContainer extends React.Component {
               }
               deleteCard={this.deleteCard}
               handleClose={this.hideModal}
-              user_id={this.state.user_id}
               uuid={this.state.modalUUID}
             />
           )}
@@ -349,6 +348,7 @@ export default class DocCardContainer extends React.Component {
     const options = [
       { value: "document_name", name: "Filename" },
       { value: "date", name: "Date" },
+      { value: "last_modified", name: "Modified" },
     ];
 
     return (
@@ -367,7 +367,7 @@ export default class DocCardContainer extends React.Component {
           <Col xs={3}>
             <Filter
               handleFilter={this.handleFilter}
-              defaultText="Filter"
+              defaultText="Modified"
               options={options}
             />
           </Col>

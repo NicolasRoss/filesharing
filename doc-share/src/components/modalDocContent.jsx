@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
 import "../css/modalContent.css";
-import { API, HOST } from "./api";
+import { API } from "./api";
 
 class modalContent extends React.Component {
   constructor(props) {
@@ -31,12 +31,9 @@ class modalContent extends React.Component {
     }
   };
 
-  formatDate() {
-    if (
-      this.state.doc_info["date"] !== undefined &&
-      this.state.doc_info["date"] !== ""
-    ) {
-      var t = this.state.doc_info["date"].split(/[- :]/);
+  formatDate = (date) => {
+    if (date !== undefined && date !== null && date !== "") {
+      var t = date.split(/[- :]/);
       var timeOfDay = "AM";
       var hour = parseInt(t[4]);
       if (parseInt(t[4]) >= 12) {
@@ -66,7 +63,7 @@ class modalContent extends React.Component {
       return d;
     }
     return "";
-  }
+  };
 
   deleteClick = (e) => {
     console.log("clicked the delete button for doc_id: " + this.state.uuid);
@@ -125,7 +122,16 @@ class modalContent extends React.Component {
           <Col xs={6}>
             <div className="modalContainer">
               {this.state.date !== "" && (
-                <div className="modalDate">{this.formatDate()}</div>
+                <div className="modalDate">
+                  Date Added:
+                  {" " + this.formatDate(this.state.doc_info["date"])}
+                </div>
+              )}
+              {this.state.date !== null && (
+                <div className="modalDate">
+                  Last Modified:
+                  {" " + this.formatDate(this.state.doc_info["last_modified"])}
+                </div>
               )}
               <div>
                 <div className="modalDate">
@@ -138,7 +144,7 @@ class modalContent extends React.Component {
                     name="deleteField"
                     className="modalTextField"
                     onChange={this.changeHandler}
-                  ></input>
+                  />
                   <button
                     className={
                       this.state.buttonIsDisabled

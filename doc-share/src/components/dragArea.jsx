@@ -1,5 +1,4 @@
 import React from "react";
-import { Row, Col } from "react-bootstrap";
 import "../css/newDocCard.css";
 import Cookies from "js-cookie";
 import { API } from "./api";

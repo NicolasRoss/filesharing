@@ -3,7 +3,7 @@
 // export const HOST = "https://declr.dev";
 
 //for local development
-export const API = "http://localhost:5000/api/";
+export const API = "http://localhost:5000/api";
 
 export const HOST = "http://localhost:3000";
 

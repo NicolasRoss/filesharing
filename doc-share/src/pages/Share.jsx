@@ -100,8 +100,6 @@ class Share extends React.Component {
   render() {
     if (this.state.fetching === false) {
       if (this.state.link_id !== "") {
-        var cont;
-
         if (this.state.validLink) {
         }
 

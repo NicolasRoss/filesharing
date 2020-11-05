@@ -8,7 +8,7 @@ export default class Filter extends React.Component {
 
     this.state = {
       defaultText: "",
-      value: "date",
+      value: "last_modified",
       directionToggle: true,
       isOpen: false,
       options: [],

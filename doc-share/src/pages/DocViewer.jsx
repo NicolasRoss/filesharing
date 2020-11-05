@@ -4,10 +4,8 @@ import { Container, Row, Col } from "react-bootstrap";
 import Navbar from "../components/navbar";
 import "../css/docViewer.css";
 import { API } from "../components/api";
-import { render } from "react-dom";
 
 import AceEditor from "react-ace";
-import Prism from "prismjs";
 
 const languages = [
   "javascript",
@@ -60,7 +58,6 @@ class DocViewer extends React.Component {
     this.state = {
       doc_info: [],
       fetching: true,
-      user_id: "",
       value: "",
       editable: false,
       spellCheck: true,
@@ -74,10 +71,8 @@ class DocViewer extends React.Component {
       this.setState(
         {
           doc_info: this.props.location.state.doc_info,
-          user_id: this.props.location.state.user_id,
         },
         () => {
-          console.log("doing getFile");
           this.getFile();
         }
       );
@@ -146,7 +141,6 @@ class DocViewer extends React.Component {
         mode: "cors",
       })
         .then((res) => {
-          console.log(res);
           if (res.status === 200) {
             return res.blob();
           }
@@ -165,13 +159,11 @@ class DocViewer extends React.Component {
   displayFile = (blob) => {
     this.setState({ blob: blob });
     var extension = this.checkFileExt();
-    console.log(`extension is ${extension}`);
+
     if (extension === "text") {
       var reader = new FileReader();
       reader.addEventListener("loadend", () => {
-        console.log(reader);
         this.setState({ value: reader.result });
-        console.log(this.state.value);
       });
       reader.readAsText(blob);
       console.log(this.state.value);
@@ -192,8 +184,6 @@ class DocViewer extends React.Component {
       var reader = new FileReader();
       reader.addEventListener("loadend", () => {
         this.setState({ value: reader.result });
-        console.log("reading in code file");
-        console.log(this.state.value);
         this.setState({ fetching: false });
       });
       reader.readAsText(blob);
@@ -208,23 +198,20 @@ class DocViewer extends React.Component {
     this.setState({
       value: newValue,
     });
-    // console.log(newValue);
   }
 
   handleFileSave() {
-    // const newContent = document.getElementsByClassName("textArea")[0]
-    //   .textContent;
     const newContent = this.state.value;
     var newBlob = new Blob([newContent], { type: this.state.blob.type });
     var newFile = new File([newBlob], this.state.doc_info["document_name"]);
 
-    if (newFile !== undefined) {
+    if (newFile !== undefined && this.state.doc_info["user_id"] !== undefined) {
       const data = new FormData();
       data.append("file", newFile);
       var url =
         API +
         "/documents?user=" +
-        this.state.user_id +
+        this.state.doc_info["user_id"] +
         "&uuid=" +
         this.state.doc_info["uuid_id"];
 
